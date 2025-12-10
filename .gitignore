@@ -18,3 +18,7 @@
 nxtscape-cli-access.json
 gclient.json
 .env
+
+*.log
+*.pid
+out/

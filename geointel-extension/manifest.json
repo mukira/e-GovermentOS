@@ -1,0 +1,37 @@
+{
+    "manifest_version": 3,
+    "name": "GeoIntel - Satellite Intelligence Platform",
+    "version": "2.0.0",
+    "description": "Advanced geospatial intelligence and satellite imagery analysis powered by Google Maps and Material Design",
+    "icons": {
+        "16": "icons/icon-16.png",
+        "48": "icons/icon-48.png",
+        "128": "icons/icon-128.png"
+    },
+    "action": {
+        "default_popup": "index.html",
+        "default_icon": {
+            "16": "icons/icon-16.png",
+            "48": "icons/icon-48.png",
+            "128": "icons/icon-128.png"
+        },
+        "default_title": "GeoIntel"
+    },
+    "permissions": [
+        "storage"
+    ],
+    "host_permissions": [
+        "https://maps.googleapis.com/*",
+        "https://earthengine.googleapis.com/*",
+        "https://gibs.earthdata.nasa.gov/*"
+    ],
+    "sandbox": {
+        "pages": [
+            "sandbox.html"
+        ]
+    },
+    "content_security_policy": {
+        "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'",
+        "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://maps.googleapis.com https://*.googleapis.com;"
+    }
+}

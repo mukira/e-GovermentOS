@@ -1,0 +1,105 @@
+# Copyright 2025 E-Nation OS. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
+import("//build/config/features.gni")
+
+source_set("ai") {
+  sources = [
+    "agent_executor.cc",
+    "agent_runtime.cc",
+    "agent_runtime.h",
+    "model_router.cc",
+  ]
+
+  deps = [
+    "//base",
+    "//chrome/browser/ai/providers",
+  ]
+}
+
+source_set("ai_model_download_progress_manager") {
+  sources = [
+    "ai_model_download_progress_manager.cc",
+    "ai_model_download_progress_manager.h",
+  ]
+  deps = [
+    "//base",
+    "//components/optimization_guide/core",
+  ]
+}
+
+source_set("impl") {
+  sources = [
+    "ai_context_bound_object_set.cc",
+    "ai_context_bound_object.cc",
+    "ai_create_on_device_session_task.cc",
+    "ai_data_keyed_service_factory.cc",
+    "ai_data_keyed_service.cc",
+    "ai_language_model.cc",
+    "ai_manager.cc",
+    "ai_on_device_model_component_observer.cc",
+    "ai_on_device_session.cc",
+    "ai_rewriter.cc",
+    "ai_summarizer.cc",
+    "ai_utils.cc",
+    "ai_writer.cc",
+    "built_in_ai_logger.cc",
+    "features.cc",
+  ]
+
+  deps = [
+    ":ai",
+    ":ai_model_download_progress_manager",
+    "//base",
+    "//chrome/browser/ai/providers",
+    "//components/keyed_service/core",
+    "//content/public/browser",
+    "//third_party/blink/public/common",
+  ]
+}
+
+source_set("providers") {
+  sources = [
+    "providers/claude_connector.cc",
+    "providers/gemini_connector.cc",
+    "providers/local_llm.cc",
+    "providers/openai_connector.cc",
+  ]
+
+  deps = [
+    "//base",
+    "//services/network/public/cpp",
+  ]
+}
+
+source_set("test_support") {
+  testonly = true
+  sources = [
+    "ai_test_utils.cc",
+    "ai_test_utils.h",
+  ]
+  deps = [
+    ":impl",
+    "//base",
+    "//testing/gtest",
+  ]
+}
+
+source_set("unit_tests") {
+  testonly = true
+  sources = [
+    "ai_language_model_unittest.cc",
+    "ai_manager_unittest.cc",
+    "ai_model_download_progress_manager_unittest.cc",
+    "ai_rewriter_unittest.cc",
+    "ai_summarizer_unittest.cc",
+    "ai_writer_unittest.cc",
+  ]
+  deps = [
+    ":impl",
+    ":test_support",
+    "//base",
+    "//testing/gtest",
+  ]
+}

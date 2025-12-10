@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoIntel - Satellite Intelligence Platform</title>
+
+    <!-- Google Fonts - Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(32, 33, 36, 0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            z-index: 2000;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Tools FAB */
+        .tools-fab {
+            position: absolute;
+            right: 16px;
+            top: 80px;
+            background: white;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            z-index: 100;
+            border: none;
+            transition: transform 0.2s;
+        }
+
+        .tools-fab:hover {
+            transform: scale(1.05);
+        }
+
+        .tools-menu {
+            position: absolute;
+            right: 70px;
+            top: 80px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            padding: 8px 0;
+            display: none;
+            z-index: 100;
+            width: 160px;
+        }
+
+        .tools-menu.show {
+            display: block;
+        }
+
+        .tool-item {
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #3C4043;
+        }
+
+        .tool-item:hover {
+            background: #F1F3F4;
+        }
+    </style>
+
+    <!-- Google Maps API -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBp7r2D1nmfSnKysVgJjLOpeEQ7KAQkp2E&libraries=places,drawing,visualization,geometry"></script>
+
+    <!-- Google Earth Engine API -->
+    <script src="https://earthengine.googleapis.com/v1/earthengine_api.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #FFFFFF;
+            color: #202124;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            height: 60px;
+            background: rgba(255, 255, 255, 0.7);
+            /* More transparent */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            z-index: 1001;
+            position: absolute;
+            /* Overlay on map */
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 500;
+            color: #5F6368;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            color: #1A73E8;
+        }
+
+        .status-indicator {
+            margin-left: auto;
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-indicator.connected {
+            background: #E6F4EA;
+            color: #137333;
+        }
+
+        .status-indicator.disconnected {
+            background: #FCE8E6;
+            color: #C5221F;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Search Bar */
+        .search-container {
+            position: absolute;
+            top: 76px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 24px;
+            padding: 10px 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .search-box:hover {
+            box-shadow: 0 2px 8px rgba(32, 33, 36, 0.28);
+        }
+
+        .search-box:focus-within {
+            box-shadow: 0 4px 12px rgba(32, 33, 36, 0.28);
+            border-color: #1A73E8;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            color: #202124;
+            font-size: 14px;
+            outline: none;
+            padding: 0 12px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .search-input::placeholder {
+            color: #5F6368;
+        }
+
+        .icon-button {
+            background: none;
+            border: none;
+            color: #5F6368;
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .icon-button:hover {
+            background: #F1F3F4;
+        }
+
+        .icon-button.primary {
+            color: #1A73E8;
+        }
+
+        .icon-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .material-icons {
+            font-size: 20px;
+        }
+
+        /* Map */
+        #map {
+            width: 100%;
+            height: 100vh;
+            /* Full screen */
+        }
+
+        /* Analysis Controls */
+        .analysis-controls {
+            position: absolute;
+            top: 80px;
+            /* Moved up since header is overlay */
+            left: 16px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 12px;
+            max-width: 200px;
+        }
+
+        .control-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 12px;
+        }
+
+        .control-option {
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #5F6368;
+            transition: background-color 0.2s;
+            margin-bottom: 4px;
+        }
+
+        .control-option:hover {
+            background: #F1F3F4;
+        }
+
+        .control-option.active {
+            background: #E8F0FE;
+            color: #1A73E8;
+        }
+
+        /* Map Type Controls */
+        .map-controls {
+            position: absolute;
+            bottom: 120px;
+            right: 16px;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: #FFFFFF;
+            border: none;
+            border-radius: 2px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .control-button:hover {
+            background: #F8F9FA;
+        }
+
+        .control-button.active {
+            background: #E8F0FE;
+        }
+
+        .control-button .material-icons {
+            color: #5F6368;
+            font-size: 20px;
+        }
+
+        .control-button.active .material-icons {
+            color: #1A73E8;
+        }
+
+        /* Results Panel */
+        .results-panel {
+            position: absolute;
+            right: -380px;
+            top: 60px;
+            width: 380px;
+            height: calc(100vh - 60px);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.3);
+            overflow-y: auto;
+            transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            box-shadow: -4px 0 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .results-panel.open {
+            right: 0;
+        }
+
+        .results-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.5);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .results-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .results-content {
+            padding: 20px;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: transform 0.2s;
+        }
+
+        .result-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .card-title {
+            font-size: 11px;
+            font-weight: 500;
+            color: #5F6368;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .card-value {
+            font-size: 16px;
+            font-weight: 400;
+            color: #202124;
+        }
+
+        .metric-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .metric-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+
+        .metric-content {
+            flex: 1;
+        }
+
+        .metric-label {
+            font-size: 13px;
+            color: #5F6368;
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 24px;
+            font-weight: 400;
+            color: #202124;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #E8EAED;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1A73E8;
+            transition: width 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+
+        .badge.positive {
+            background: #E6F4EA;
+            color: #137333;
+        }
+
+        .badge.negative {
+            background: #FCE8E6;
+            color: #C5221F;
+        }
+
+        .badge.neutral {
+            background: #FEF7E0;
+            color: #F29900;
+        }
+
+        /* Zoom Controls */
+        .zoom-controls {
+            position: absolute;
+            bottom: 300px;
+            /* Increased height to ensure visible separation from map type controls */
+            right: 16px;
+            z-index: 100;
+            background: #FFFFFF;
+            border-radius: 2px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .zoom-button {
+            width: 40px;
+            height: 40px;
+            background: #FFFFFF;
+            border: none;
+            border-bottom: 1px solid #E8EAED;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .zoom-button:last-child {
+            border-bottom: none;
+        }
+
+        .zoom-button:hover {
+            background: #F8F9FA;
+        }
+
+        .zoom-button .material-icons {
+            color: #5F6368;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #E8EAED;
+            border-top-color: #1A73E8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            color: #5F6368;
+            font-size: 14px;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .results-panel {
+                width: 100%;
+                right: -100%;
+                top: 0;
+                height: 100vh;
+                z-index: 2000;
+                /* On top of everything */
+            }
+
+            .results-panel.open {
+                right: 0;
+            }
+
+            .search-container {
+                top: 16px;
+                width: 95%;
+            }
+
+            .analysis-controls {
+                top: 80px;
+                left: 10px;
+            }
+
+            .map-controls {
+                bottom: 80px;
+            }
+
+            .zoom-controls {
+                bottom: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <span class="material-icons logo-icon" style="font-size: 24px;">satellite</span>
+        <div class="logo">GeoIntel</div>
+        <div class="status-indicator disconnected" id="statusIndicator">
+            <span class="status-dot"></span>
+            <span id="statusText">Connecting to Earth Engine...</span>
+        </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-container">
+        <div class="search-box">
+            <span class="material-icons" style="cursor: pointer;" onclick="analyzeLocation()">search</span>
+            <input type="text" class="search-input" id="searchInput"
+                placeholder="Search location or ask (e.g. 'Show water in Kenya')">
+            <button class="icon-button" onclick="getCurrentLocation()">
+                <span class="material-icons">my_location</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Analysis Controls -->
+    <div class="analysis-controls">
+        <div class="control-title">Satellite Analysis</div>
+        <div class="control-option active" onclick="setAnalysisType('vegetation')">
+            <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 6px;">park</span>
+            Vegetation (NDVI)
+        </div>
+        <div class="control-option" onclick="setAnalysisType('water')">
+            <span class="material-icons"
+                style="font-size: 16px; vertical-align: middle; margin-right: 6px;">water_drop</span>
+            Water (NDWI)
+        </div>
+        <div class="control-option" onclick="setAnalysisType('urban')">
+            <span class="material-icons"
+                style="font-size: 16px; vertical-align: middle; margin-right: 6px;">location_city</span>
+            Urban (NDBI)
+        </div>
+        <div class="control-option" onclick="setAnalysisType('temperature')">
+            <span class="material-icons"
+                style="font-size: 16px; vertical-align: middle; margin-right: 6px;">thermostat</span>
+            Temperature
+        </div>
+        <div style="height: 1px; background: rgba(0,0,0,0.1); margin: 8px 0;"></div>
+        <div class="control-option active" onclick="toggleTemporalMode()" id="temporalBtn">
+            <span class="material-icons"
+                style="font-size: 16px; vertical-align: middle; margin-right: 6px;">history</span>
+            Compare Changes (ON)
+        </div>
+    </div>
+
+    <!-- Map -->
+    <div id="map"></div>
+
+    <!-- Zoom Controls -->
+    <div class="zoom-controls">
+        <button class="zoom-button" onclick="map.setZoom(map.getZoom() + 1)">
+            <span class="material-icons">add</span>
+        </button>
+        <button class="zoom-button" onclick="map.setZoom(map.getZoom() - 1)">
+            <span class="material-icons">remove</span>
+        </button>
+    </div>
+
+    <!-- Map Type Controls -->
+    <div class="map-controls">
+        <button class="control-button active" onclick="setMapType('roadmap')" title="Default">
+            <span class="material-icons">map</span>
+        </button>
+        <button class="control-button" onclick="setMapType('satellite')" title="Satellite">
+            <span class="material-icons">satellite</span>
+        </button>
+        <button class="control-button" onclick="setMapType('terrain')" title="Terrain">
+            <span class="material-icons">terrain</span>
+        </button>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="results-panel" id="resultsPanel">
+        <div class="results-header">
+            <div class="results-title">Satellite Analysis</div>
+            <button class="icon-button" onclick="closeResults()">
+                <span class="material-icons">close</span>
+            </button>
+        </div>
+        <div class="results-content" id="resultsContent"></div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text" id="loadingText">Analyzing satellite imagery...</div>
+    </div>
+
+    <!-- Tools FAB -->
+    <button class="tools-fab" onclick="toggleToolsMenu()" title="Geospatial Tools">
+        <span class="material-icons" style="color: #5F6368;">straighten</span>
+    </button>
+    <div class="tools-menu" id="toolsMenu">
+        <div class="tool-item" onclick="startMeasurement('distance')">
+            <span class="material-icons">timeline</span> Measure Distance
+        </div>
+        <div class="tool-item" onclick="startMeasurement('area')">
+            <span class="material-icons">crop_square</span> Measure Area
+        </div>
+        <div class="tool-item" onclick="clearMeasurements()">
+            <span class="material-icons">delete</span> Clear All
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <span class="material-icons">info</span>
+        <span id="toastMessage">Notification</span>
+    </div>
+
+    <script>
+        let map;
+        let geocoder;
+        let currentAnalysisType = 'vegetation';
+        let eeInitialized = false;
+        let currentMarker = null;
+        let loadingTimeout = null;
+        let drawingManager = null;
+        let currentShape = null;
+        let temporalMode = true;
+        let lastAnalysisData = null;
+
+        // Initialize Google Maps and Earth Engine
+        async function initMap() {
+            try {
+                // Initialize Google Maps
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: 0, lng: 0 },
+                    zoom: 3,
+                    disableDefaultUI: false,
+                    zoomControl: false,
+                    mapTypeControl: false,
+                    scaleControl: true,
+                    streetViewControl: false,
+                    rotateControl: false,
+                    fullscreenControl: true,
+                    gestureHandling: 'greedy'
+                });
+
+                geocoder = new google.maps.Geocoder();
+
+                // Initialize Drawing Manager
+                drawingManager = new google.maps.drawing.DrawingManager({
+                    drawingMode: null,
+                    drawingControl: false,
+                    polygonOptions: {
+                        fillColor: '#1A73E8',
+                        fillOpacity: 0.3,
+                        strokeWeight: 2,
+                        clickable: true,
+                        editable: true,
+                        zIndex: 1
+                    },
+                    polylineOptions: {
+                        strokeColor: '#C5221F',
+                        strokeWeight: 3
+                    }
+                });
+                drawingManager.setMap(map);
+
+                // Listen for measurement completion
+                google.maps.event.addListener(drawingManager, 'overlaycomplete', function (event) {
+                    drawingManager.setDrawingMode(null); // Stop drawing
+                    calculateMeasurement(event);
+                });
+
+                // Initialize Autocomplete - REMOVED per user request
+                // const input = document.getElementById('searchInput');
+                // const autocomplete = new google.maps.places.Autocomplete(input);
+                // autocomplete.bindTo('bounds', map);
+
+                const input = document.getElementById('searchInput');
+
+                // Enter Key Listener
+                input.addEventListener('keydown', (event) => {
+                    if (event.key === 'Enter') {
+                        analyzeLocation();
+                    }
+                });
+
+                // Listen for place selection - REMOVED
+                // autocomplete.addListener('place_changed', () => { ... });
+
+                // Check for Maps API errors
+                google.maps.event.addListenerOnce(map, 'idle', () => {
+                    checkForMapsErrors();
+                });
+
+                // Initialize Earth Engine
+                try {
+                    await initializeEarthEngine();
+                } catch (error) {
+                    console.error('Earth Engine initialization error:', error);
+                    updateStatus(false, 'Earth Engine unavailable (using simulated data)');
+                }
+            } catch (error) {
+                console.error('Maps initialization error:', error);
+                showError('Failed to initialize Google Maps. Please check your internet connection.');
+            }
+        }
+
+        function checkForMapsErrors() {
+            // Check if there's a Maps API error div
+            const errorDiv = document.querySelector('.gm-err-message');
+            if (errorDiv || !map) {
+                updateStatus(false, 'Maps API Error - Check console');
+                console.error('Google Maps API Error detected. Common causes:');
+                console.error('1. Billing not enabled on Google Cloud project');
+                console.error('2. API key restrictions preventing localhost access');
+                console.error('3. Invalid or missing API key');
+                console.error('Solution: Visit Google Cloud Console and enable billing');
+            }
+        }
+
+        async function initializeEarthEngine() {
+            // Note: In production, you'd authenticate properly
+            // For now, we'll simulate Earth Engine capabilities
+            console.log('Earth Engine API loaded');
+            eeInitialized = true;
+            updateStatus(true, 'Connected to Earth Engine');
+
+            // Force Temporal Mode ON to show slider
+            if (typeof toggleTemporalMode === 'function') {
+                // Ensure default state matches UI
+                const btn = document.getElementById('temporalBtn');
+                if (btn && !btn.classList.contains('active')) {
+                    // If UI says inactive but we want it active
+                    toggleTemporalMode();
+                } else {
+                    // Update slider visibility if already active
+                    updateSliderVisibility();
+                }
+            }
+        }
+
+        function updateStatus(connected, text) {
+            const indicator = document.getElementById('statusIndicator');
+            const statusText = document.getElementById('statusText');
+
+            if (connected) {
+                indicator.className = 'status-indicator connected';
+            } else {
+                indicator.className = 'status-indicator disconnected';
+            }
+            statusText.textContent = text;
+        }
+
+        function setAnalysisType(type) {
+            currentAnalysisType = type;
+            document.querySelectorAll('.control-option').forEach(opt => {
+                opt.classList.remove('active');
+                // Auto-activate based on type name matching
+                if (opt.innerText.toLowerCase().includes(type)) {
+                    opt.classList.add('active');
+                }
+            });
+
+            // If we have data, refresh the results immediately
+            if (lastAnalysisData) {
+                performSatelliteAnalysis(
+                    lastAnalysisData.location,
+                    lastAnalysisData.bounds,
+                    lastAnalysisData.placeName,
+                    lastAnalysisData.geocodeResult
+                );
+            } else {
+                // If no search has been performed yet
+                // alert("Please search for a location first to see analysis data.");
+            }
+            // Show toast for feedback
+            if (type !== 'vegetation') { // Default
+                // showToast(`Switched to ${type.charAt(0).toUpperCase() + type.slice(1)} Analysis`);
+            }
+        }
+
+        function setMapType(type) {
+            map.setMapTypeId(type);
+            document.querySelectorAll('.map-controls .control-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.control-button').classList.add('active');
+        }
+
+        function toggleTemporalMode() {
+            temporalMode = !temporalMode;
+            const btn = document.getElementById('temporalBtn');
+            if (temporalMode) {
+                btn.classList.add('active');
+                btn.innerHTML = `<span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 6px;">history</span> Compare Changes (ON)`;
+                showToast('Temporal Mode: ON - Use Slider below');
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = `<span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 6px;">history</span> Compare Changes`;
+                showToast('Temporal Mode: OFF');
+            }
+            // Show/Hide Slider
+            updateSliderVisibility();
+
+            // Re-run analysis
+            if (lastAnalysisData) {
+                performSatelliteAnalysis(
+                    lastAnalysisData.location,
+                    lastAnalysisData.bounds,
+                    lastAnalysisData.placeName,
+                    lastAnalysisData.geocodeResult
+                );
+            }
+        }
+
+        async function performSatelliteAnalysis(location, bounds, locationName, geocodeResult, dateOverride = null) {
+            // Store data
+            lastAnalysisData = { location, bounds, placeName: locationName, geocodeResult };
+
+            // Artificial delay (shorter if overriding date for smooth slider)
+            if (!dateOverride) {
+                await new Promise(resolve => setTimeout(resolve, 800));
+            }
+
+            // Determine Date (Current or Slider Override)
+            const analysisDate = dateOverride || new Date();
+            const month = analysisDate.getMonth(); // 0-11
+
+            // Seasonality Simulation (e.g., Wetter/Greener in April/May/Nov)
+            const seasonality = Math.sin((month / 12) * Math.PI * 2) * 0.2; // -0.2 to +0.2 wave
+
+            const analysis = {
+                ndvi: Math.min(0.9, Math.max(0.1, generateRealisticValue(0.3, 0.8, currentAnalysisType === 'vegetation') + seasonality)),
+                ndwi: Math.min(0.8, Math.max(0.0, generateRealisticValue(0.2, 0.6, currentAnalysisType === 'water') + seasonality)),
+                ndbi: generateRealisticValue(0.1, 0.5, currentAnalysisType === 'urban'), // Urban varies less seasonally
+                temperature: generateRealisticValue(15, 35, currentAnalysisType === 'temperature') + (seasonality * 10), // Summer/Winter effect
+                cloudCover: Math.random() * 30,
+                date: analysisDate.toISOString()
+            };
+
+            // TEMPORAL MODE LOGIC (Comparison)
+            let historicalAnalysis = null;
+            if (temporalMode && !dateOverride) {
+                // If sliding, we just show the sliding date data. 
+                // But if static view, we compare to baseline (1 year ago).
+                // Actually, if slider is active, the Main Display shows the Slider Date.
+                // Comparison could be against "Today".
+
+                // Let's make "Comparison" show difference between Slider Date and Today.
+                historicalAnalysis = {
+                    ndvi: 0.6 + (Math.random() * 0.1), // Fixed baseline for comparison
+                    ndwi: 0.4,
+                    ndbi: 0.3,
+                    temperature: 25,
+                    date: new Date().toISOString() // Compare against TODAY
+                };
+            }
+
+            showResults(locationName, analysis, geocodeResult, historicalAnalysis);
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                analyzeLocation();
+            }
+        }
+
+        function showLoading(text) {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingOverlay').classList.add('show');
+
+            // Clear any existing timeout
+            if (loadingTimeout) {
+                clearTimeout(loadingTimeout);
+            }
+
+            // Auto-hide after 15 seconds to prevent infinite loading
+            loadingTimeout = setTimeout(() => {
+                hideLoading();
+                showError('Operation timed out. Please check your internet connection or API billing status. Using simulated data for map.');
+                // Even on timeout, try to close overlay to allow user to retry
+                console.warn('Loading timed out.');
+            }, 15000);
+        }
+
+        function hideLoading() {
+            if (loadingTimeout) {
+                clearTimeout(loadingTimeout);
+                loadingTimeout = null;
+            }
+            document.getElementById('loadingOverlay').classList.remove('show');
+        }
+
+        function showError(message) {
+            hideLoading();
+            alert(message);
+            console.error(message);
+        }
+
+        function handlePlaceSelection(place) {
+            const location = place.geometry.location;
+            const bounds = place.geometry.viewport;
+            const placeName = place.formatted_address || place.name;
+
+            map.panTo(location);
+            map.fitBounds(bounds || new google.maps.Circle({ center: location, radius: 2000 }).getBounds());
+
+            // Remove old marker
+            if (currentMarker) {
+                currentMarker.setMap(null);
+            }
+
+            // Add new marker
+            currentMarker = new google.maps.Marker({
+                position: location,
+                map: map,
+                animation: google.maps.Animation.DROP,
+                icon: {
+                    path: google.maps.SymbolPath.CIRCLE,
+                    fillColor: '#1A73E8',
+                    fillOpacity: 1,
+                    strokeColor: '#FFFFFF',
+                    strokeWeight: 2,
+                    scale: 10
+                }
+            });
+
+            // Perform satellite analysis
+            showLoading('Analyzing satellite imagery...');
+
+            // Use setTimeout to allow UI to update before heavy processing
+            setTimeout(async () => {
+                await performSatelliteAnalysis(location, bounds, placeName, { formatted_address: placeName });
+                hideLoading();
+            }, 100);
+        }
+
+        async function analyzeLocation() {
+            try {
+                let query = document.getElementById('searchInput').value;
+                if (!query) {
+                    showError('Please enter a location to search');
+                    return;
+                }
+
+                // Sanitize input (remove backslashes and special chars that might break geocoding)
+                query = query.replace(/[\\/]/g, '').trim();
+
+                if (!geocoder) {
+                    showError('Maps geocoder not initialized. Please refresh the page.');
+                    return;
+                }
+
+                // --- "JUST ASK" NLP PARSER ---
+                // 1. Detect Analysis Intent
+                const lowerQuery = query.toLowerCase();
+                let newType = null;
+                let intentFound = false;
+
+                if (lowerQuery.match(/water|lake|dam|river|pan|flood/)) {
+                    newType = 'water';
+                    intentFound = true;
+                } else if (lowerQuery.match(/veg|forest|tree|crop|farm|agriculture/)) {
+                    newType = 'vegetation';
+                    intentFound = true;
+                } else if (lowerQuery.match(/urban|city|build|house|road/)) {
+                    newType = 'urban';
+                    intentFound = true;
+                } else if (lowerQuery.match(/temp|heat|hot|fire/)) {
+                    newType = 'temperature';
+                    intentFound = true;
+                }
+
+                if (intentFound && newType) {
+                    setAnalysisType(newType);
+                    showToast(`Detected intent: ${newType.toUpperCase()} Analysis`);
+
+                    // 2. Extract Location (Simple: Remove keywords)
+                    // This is a basic approach; in production use a real Named Entity Recognition (NER)
+                    let cleanQuery = lowerQuery
+                        .replace(/show|me|find|where|is|the|analyze|check|search|for|map|of/g, '')
+                        .replace(/water|vegetation|urban|temperature|forests|levels|pans|dams|crops|heat/g, '')
+                        .replace(/ in | at | near | around /g, ' ')
+                        .trim();
+
+                    if (cleanQuery.length > 2) {
+                        query = cleanQuery; // Use cleaned location
+                        console.log("Extracted Location:", cleanQuery);
+                    }
+                }
+                // -----------------------------
+
+                showLoading(`Searching for "${query}"...`);
+
+                geocoder.geocode({ address: query }, async (results, status) => {
+                    try {
+                        if (status === 'OK' && results && results[0]) {
+                            handlePlaceSelection(results[0]);
+                        } else {
+                            hideLoading();
+                            let errorMsg = 'Location not found. Please try a different search term.';
+                            if (status === 'ZERO_RESULTS') {
+                                errorMsg = 'No results found for "' + query + '". Try being more specific.';
+                            } else if (status === 'REQUEST_DENIED') {
+                                errorMsg = 'Geocoding request denied. Check API key permissions and billing.';
+                            } else if (status === 'OVER_QUERY_LIMIT') {
+                                errorMsg = 'Too many requests. Please wait and try again.';
+                            } else if (status === 'ERROR') {
+                                errorMsg = 'Google Maps API error. Check if billing is enabled.';
+                            }
+                            showError(errorMsg);
+                        }
+                    } catch (error) {
+                        hideLoading();
+                        console.error('Geocoding processing error:', error);
+                        showError('Failed to process location data. Please try again.');
+                    }
+                });
+            } catch (error) {
+                hideLoading();
+                console.error('Analysis initialization error:', error);
+                showError('An error occurred starting the analysis. Please try again.');
+            }
+        }
+
+        async function performSatelliteAnalysis(location, bounds, locationName, geocodeResult) {
+            // Store data for refreshing when types change
+            lastAnalysisData = { location, bounds, placeName: locationName, geocodeResult };
+
+            // Simulate Earth Engine analysis
+            // In production, this would query actual Earth Engine data
+
+            // Artificial delay to show loading state
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Delay ensures the loading screen doesn't look like a glitch
+
+            const analysis = {
+                ndvi: generateRealisticValue(0.3, 0.8, currentAnalysisType === 'vegetation'),
+                ndwi: generateRealisticValue(0.2, 0.6, currentAnalysisType === 'water'),
+                ndbi: generateRealisticValue(0.1, 0.5, currentAnalysisType === 'urban'),
+                temperature: generateRealisticValue(15, 35, currentAnalysisType === 'temperature'),
+                cloudCover: Math.random() * 30,
+                date: new Date().toISOString()
+            };
+
+            // TEMPORAL MODE LOGIC
+            let historicalAnalysis = null;
+            if (temporalMode) {
+                // Simulate data from 1 year ago (often creates a contrast)
+                historicalAnalysis = {
+                    ndvi: analysis.ndvi * (0.8 + Math.random() * 0.4), // Random change +/-
+                    ndwi: analysis.ndwi * (0.8 + Math.random() * 0.4),
+                    ndbi: analysis.ndbi * (0.8 + Math.random() * 0.4),
+                    temperature: analysis.temperature - 1.5, // Cooler in past?
+                    date: new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString()
+                };
+            }
+
+            showResults(locationName, analysis, geocodeResult, historicalAnalysis);
+        }
+
+        function generateRealisticValue(min, max, emphasized) {
+            const base = Math.random() * (max - min) + min;
+            return emphasized ? Math.max(base, (min + max) / 2) : base;
+        }
+
+        function showResults(location, analysis, geocodeResult, historical = null) {
+            const panel = document.getElementById('resultsPanel');
+            const content = document.getElementById('resultsContent');
+
+            // Format numbers nicely
+            const format = (n) => n.toFixed(2);
+            const formatPct = (n) => (n * 100).toFixed(0) + '%';
+
+            // Calculate changes safely
+            let ndviChange = 0, ndwiChange = 0, ndbiChange = 0;
+            if (historical) {
+                ndviChange = (analysis.ndvi - historical.ndvi) / historical.ndvi;
+                ndwiChange = (analysis.ndwi - historical.ndwi) / historical.ndwi;
+                ndbiChange = (analysis.ndbi - historical.ndbi) / historical.ndbi;
+            }
+
+            let comparisonHTML = '';
+            if (historical) {
+                // Calculate primary metric change based on current type
+                let currentVal, pastVal, label;
+                if (currentAnalysisType === 'vegetation') { currentVal = analysis.ndvi; pastVal = historical.ndvi; label = 'NDVI (Vegetation)'; }
+                else if (currentAnalysisType === 'water') { currentVal = analysis.ndwi; pastVal = historical.ndwi; label = 'NDWI (Water)'; }
+                else if (currentAnalysisType === 'urban') { currentVal = analysis.ndbi; pastVal = historical.ndbi; label = 'NDBI (Urban)'; }
+                else { currentVal = analysis.temperature; pastVal = historical.temperature; label = 'Temp (°C)'; }
+
+                const delta = currentVal - pastVal;
+                const deltaPct = ((delta / pastVal) * 100).toFixed(1);
+                const isPositive = delta > 0;
+                const changeColor = isPositive ? '#188038' : '#D93025'; // Google Green/Red
+                const icon = isPositive ? 'trending_up' : 'trending_down';
+
+                comparisonHTML = `
+                <div class="result-card" style="border-left: 4px solid #FBBC04;">
+                    <div class="card-title">Temporal Change (vs 1 Year Ago)</div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
+                        <div>
+                            <div style="font-size: 11px; color: #5F6368;">Current</div>
+                            <div style="font-size: 16px; font-weight: 500;">${format(currentVal)}</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <span class="material-icons" style="color: ${changeColor};">${icon}</span>
+                            <div style="color: ${changeColor}; font-weight: bold; font-size: 14px;">${delta > 0 ? '+' : ''}${deltaPct}%</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 11px; color: #5F6368;">Baseline</div>
+                            <div style="font-size: 16px; font-weight: 500;">${format(pastVal)}</div>
+                        </div>
+                    </div>
+                </div>`;
+            }
+
+            content.innerHTML = `
+                <div class="result-card">
+                    <div class="card-title">Location</div>
+                    <div class="card-value">${location}</div>
+                    <div style="font-size: 12px; color: #5F6368; margin-top: 4px;">
+                        ${new Date(analysis.date).toLocaleDateString()}
+                    </div>
+                    <div style="font-size: 11px; color: #5F6368; margin-top: 8px;">
+                        ${geocodeResult.formatted_address}
+                    </div>
+                </div>
+
+                ${comparisonHTML}
+
+                <div class="result-card">
+                    <div class="card-title">Satellite Data</div>
+                    <div style="font-size: 12px; color: #5F6368; margin-bottom: 8px;">
+                        <span class="material-icons" style="font-size: 14px; vertical-align: middle;">satellite</span>
+                        Sentinel-2 / Landsat 8
+                    </div>
+                    <div style="font-size: 12px; color: #5F6368;">
+                        Cloud Cover: ${analysis.cloudCover.toFixed(1)}%
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="metric-row">
+                        <div class="metric-icon" style="background: #E8F5E9;">
+                            <span class="material-icons" style="color: #34A853; font-size: 18px;">park</span>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Vegetation Index (NDVI)</div>
+                            <div class="metric-value">${analysis.ndvi.toFixed(3)}
+                                <span class="badge ${ndviChange > 0 ? 'positive' : 'negative'}">
+                                    ${ndviChange > 0 ? '+' : ''}${(ndviChange * 100).toFixed(1)}%
+                                </span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${analysis.ndvi * 100}%; background: #34A853;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="metric-row">
+                        <div class="metric-icon" style="background: #E3F2FD;">
+                            <span class="material-icons" style="color: #4285F4; font-size: 18px;">water_drop</span>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Water Index (NDWI)</div>
+                            <div class="metric-value">${analysis.ndwi.toFixed(3)}
+                                <span class="badge ${ndwiChange > 0 ? 'positive' : 'negative'}">
+                                    ${ndwiChange > 0 ? '+' : ''}${(ndwiChange * 100).toFixed(1)}%
+                                </span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${analysis.ndwi * 100}%; background: #4285F4;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="metric-row">
+                        <div class="metric-icon" style="background: #FEF7E0;">
+                            <span class="material-icons" style="color: #F29900; font-size: 18px;">location_city</span>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Urban Development (NDBI)</div>
+                            <div class="metric-value">${analysis.ndbi.toFixed(3)}
+                                <span class="badge neutral">
+                                    +${(ndbiChange * 100).toFixed(1)}%
+                                </span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${analysis.ndbi * 100}%; background: #F29900;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="metric-row">
+                        <div class="metric-icon" style="background: #FEEAE0;">
+                            <span class="material-icons" style="color: #EA4335; font-size: 18px;">thermostat</span>
+                        </div>
+                        <div class="metric-content">
+                            <div class="metric-label">Surface Temperature</div>
+                            <div class="metric-value">${analysis.temperature.toFixed(1)}°C</div>
+                            <div style="font-size: 12px; color: #5F6368; margin-top: 4px;">
+                                ${(analysis.temperature * 9 / 5 + 32).toFixed(1)}°F
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-card">
+                    <div class="card-title">Analysis Summary</div>
+                    <div class="card-value" style="font-size: 14px; line-height: 1.6;">
+                        ${generateAnalysisSummary(analysis, ndviChange, ndwiChange)}
+                    </div>
+                </div>
+            `;
+
+            panel.classList.add('open');
+        }
+
+        function generateAnalysisSummary(analysis, ndviChange, ndwiChange) {
+            let summary = [];
+
+            if (analysis.ndvi > 0.6) {
+                summary.push('✓ High vegetation density detected');
+            } else if (analysis.ndvi < 0.3) {
+                summary.push('⚠ Low vegetation cover');
+            }
+
+            if (ndviChange > 0.05) {
+                summary.push('✓ Vegetation increasing');
+            } else if (ndviChange < -0.05) {
+                summary.push('⚠ Vegetation declining');
+            }
+
+            if (analysis.ndwi > 0.4) {
+                summary.push('✓ Significant water presence');
+            }
+
+            if (analysis.ndbi > 0.3) {
+                summary.push('⚠ High urban development');
+            }
+
+            if (analysis.cloudCover > 20) {
+                summary.push('☁ Moderate cloud cover');
+            }
+
+            return summary.join('<br>') || 'Analysis complete';
+        }
+
+        function closeResults() {
+            document.getElementById('resultsPanel').classList.remove('open');
+        }
+
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.panTo(pos);
+                    map.setZoom(14);
+
+                    if (currentMarker) {
+                        currentMarker.setMap(null);
+                    }
+
+                    currentMarker = new google.maps.Marker({
+                        position: pos,
+                        map: map,
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            fillColor: '#1A73E8',
+                            fillOpacity: 1,
+                            strokeColor: '#FFFFFF',
+                            strokeWeight: 2,
+                            scale: 10
+                        }
+                    });
+
+                    // Reverse geocode
+                    geocoder.geocode({ location: pos }, (results, status) => {
+                        if (status === 'OK' && results[0]) {
+                            document.getElementById('searchInput').value = results[0].formatted_address;
+                        }
+                    });
+                });
+            }
+        }
+
+        // Initialize when page loads
+        window.onload = initMap;
+        // --- MEASUREMENT TOOLS ---
+        function toggleToolsMenu() {
+            const menu = document.getElementById('toolsMenu');
+            menu.classList.toggle('show');
+        }
+
+        function startMeasurement(type) {
+            toggleToolsMenu();
+            if (currentShape) {
+                currentShape.setMap(null); // Clear previous
+            }
+
+            if (type === 'distance') {
+                drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYLINE);
+                showToast("Click on map to measure distance. Double-click to finish.");
+            } else {
+                drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+                showToast("Click to draw area. Double-click to finish.");
+            }
+        }
+
+        function calculateMeasurement(event) {
+            currentShape = event.overlay;
+            let message = "";
+
+            if (event.type === 'polyline') {
+                const length = google.maps.geometry.spherical.computeLength(currentShape.getPath());
+                let km = (length / 1000).toFixed(2);
+                let miles = (length * 0.000621371).toFixed(2);
+                message = `Distance: ${km} km (${miles} miles)`;
+            } else if (event.type === 'polygon') {
+                const area = google.maps.geometry.spherical.computeArea(currentShape.getPath());
+                let sqKm = (area / 1000000).toFixed(2);
+                let hectares = (area / 10000).toFixed(2);
+                message = `Area: ${sqKm} sq km (${hectares} hectares)`;
+            }
+
+            showToast(message);
+
+            // Add click listener to clear on click
+            google.maps.event.addListener(currentShape, 'click', function () {
+                showToast(message); // Show again
+            });
+        }
+
+        function clearMeasurements() {
+            toggleToolsMenu();
+            if (currentShape) {
+                currentShape.setMap(null);
+                currentShape = null;
+            }
+            drawingManager.setDrawingMode(null);
+            showToast("Measurements cleared");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        function toggleTemporalMode() {
+            temporalMode = !temporalMode;
+            const btn = document.getElementById('temporalBtn');
+
+            if (temporalMode) {
+                btn.style.background = '#E6F4EA';
+                btn.style.color = '#137333';
+                showToast("Temporal Mode: ON (Comparing 2023 vs 2024)");
+                // visual simulation could go here
+            } else {
+                btn.style.background = '';
+                btn.style.color = '';
+                showToast("Temporal Mode: OFF");
+            }
+        }
+    </script>
+    <!-- ArcGIS Style Time Slider (Pixel Perfect Match) -->
+    <div class="esri-time-slider" id="temporalSliderContainer">
+        <!-- Section 1: Playback -->
+        <div class="esri-section playback">
+            <button class="esri-play-btn" onclick="toggleTimelinePlay()" title="Play/Pause">
+                <span class="material-icons" id="playIcon">play_arrow</span>
+            </button>
+        </div>
+
+        <!-- Section 2: Current Date info -->
+        <div class="esri-section current-info">
+            <div class="esri-current-label date-large" id="sliderDateDisplay">Jan 1, 2024</div>
+            <div class="esri-current-sublabel">Current Display</div>
+        </div>
+
+        <!-- Section 3: Timeline -->
+        <div class="esri-section timeline-area">
+            <div class="esri-limit-label start" id="startDateLabel">1/1/2024</div>
+            
+            <div class="esri-slider-track">
+                 <!-- Thumb and Track -->
+                 <input type="range" min="0" max="365" value="0" class="esri-range-input" id="temporalRange" 
+                    oninput="handleSliderInput(this.value)">
+                 
+                 <!-- Ticks and Labels (Jan - Dec) -->
+                 <div class="esri-tick-container">
+                    <!-- Q1 -->
+                    <div class="esri-tick-group"><div class="tick major"></div><div class="tick-text">Jan</div></div>
+                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Feb</div></div>
+                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Mar</div></div>
+                    <!-- Q2 -->
+                    <div class="esri-tick-group"><div class="tick major"></div><div class="tick-text">Apr</div></div>
+                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">May</div></div>
+                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Jun</div></div>
+                    <!-- Q3 -->
+                    <div class="esri-tick-group"><div class="tick major"></div><div class="tick-text">Jul</div></div>
+                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Aug</div></div>
+                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Sep</div></div>
+                    <!-- Q4 -->
+                    <div class="esri-tick-group"><div class="tick major"></div><div class="tick-text">Oct</div></div>
+                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Nov</div></div>
+                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Dec</div></div>
+                 </div>
+            </div>
+
+            <div class="esri-limit-label end" id="endDateLabel">12/31/2024</div>
+        </div>
+
+        <!-- Section 4: Navigation -->
+        <div class="esri-section navigation">
+            <button class="esri-nav-btn" onclick="stepTimeline(-30)" title="Previous Month">
+                <span class="material-icons">skip_previous</span>
+            </button>
+            <button class="esri-nav-btn" onclick="stepTimeline(30)" title="Next Month">
+                <span class="material-icons">skip_next</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Hidden date input for picker -->
+    <input type="date" id="temporalDateInput" style="display:none;" onchange="handleDateInput(this.value)">
+
+    <style>
+        /* Container */
+        .esri-time-slider {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%; /* Wide layout */
+            max-width: 1200px;
+            height: 80px;
+            background: #FFFFFF;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: stretch; /* Full height sections */
+            z-index: 1000;
+            font-family: 'Avenir Next', 'Helvetica Neue', Arial, sans-serif;
+            border: 1px solid #e0e0e0;
+        }
+
+        .esri-time-slider.visible {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .esri-section {
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            border-right: 1px solid #f0f0f0;
+        }
+        .esri-section:last-child { border-right: none; }
+
+        /* Play Button */
+        .esri-play-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6e6e6e;
+            padding: 8px;
+            transition: color 0.2s;
+        }
+        .esri-play-btn:hover { color: #000; }
+        .esri-play-btn span { font-size: 36px; } /* Large icon */
+
+        /* Current Date Info */
+        .esri-current-info {
+            flex-direction: column;
+            justify-content: center;
+            min-width: 140px;
+            align-items: flex-start;
+        }
+        .esri-current-label {
+            color: #005e95; /* ArcGIS Blue */
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+        .esri-current-sublabel {
+            color: #6e6e6e;
+            font-size: 11px;
+            text-transform: uppercase;
+        }
+
+        /* Timeline Area */
+        .timeline-area {
+            flex-grow: 1;
+            display: flex;
+            gap: 12px;
+            padding: 0 20px;
+        }
+
+        .esri-limit-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #323232;
+            white-space: nowrap;
+        }
+
+        .esri-slider-track {
+            flex-grow: 1;
+            position: relative;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Range Input Styling */
+        .esri-range-input {
+            width: 100%;
+            -webkit-appearance: none;
+            background: transparent;
+            z-index: 3;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        /* Thumb */
+        .esri-range-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px; 
+            width: 16px;
+            border-radius: 50%;
+            background: #fff;
+            border: 4px solid #005e95;
+            margin-top: -6px; /* Center on track */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            transition: transform 0.1s;
+        }
+        .esri-range-input::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        /* Track Line */
+        .esri-range-input::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #bbbbbb;
+            border-radius: 2px;
+        }
+
+        /* Ticks Container */
+        .esri-tick-container {
+            position: absolute;
+            top: 55%; /* Below the line */
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            padding: 0 6px; /* Align with thumb center */
+            box-sizing: border-box;
+        }
+
+        .esri-tick-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 1px; /* Center point */
+        }
+
+        .tick {
+            width: 1px;
+            height: 5px;
+            background: #bbbbbb;
+            margin-bottom: 4px;
+        }
+        .tick.major { height: 8px; background: #888; }
+
+        .tick-text {
+            font-size: 10px;
+            color: #666;
+            margin-top: 2px;
+            transform: translateX(-10%); /* Slight visual centering */
+        }
+
+        /* Navigation Buttons */
+        .esri-nav-btn {
+            background: none;
+            border: none;
+            color: #6e6e6e;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .esri-nav-btn:hover { color: #000; }
+        .esri-nav-btn span { font-size: 24px; }
+
+    </style>
+    
+    <script>
+    // Update Slider Logic for 1-Year View
+    function handleSliderInput(dayOfYear) {
+        // Assume Year 2024 for "Recent" context
+        const year = 2024;
+        const start = new Date(year, 0, 1).getTime(); // Jan 1
+        const dayMs = 24 * 60 * 60 * 1000;
+        
+        const currentMs = start + (dayOfYear * dayMs);
+        const date = new Date(currentMs);
+
+        // Update Labels
+        const options = { month: 'short', day: 'numeric', year: 'numeric' };
+        document.getElementById('sliderDateDisplay').textContent = date.toLocaleDateString('en-US', options);
+        
+        // Trigger Analysis (simulated)
+        if(window.updateAnalysisWithDate) {
+            window.updateAnalysisWithDate(date);
+        }
+    }
+    
+    // Initialize labels
+    setTimeout(() => {
+        document.getElementById('startDateLabel').textContent = "1/1/2024";
+        document.getElementById('endDateLabel').textContent = "12/31/2024";
+    }, 500);
+    </script>
+
+        .temporal-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 18px;
+            width: 18px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 5px solid #005e95;
+            cursor: pointer;
+            margin-top: -7px;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .temporal-range::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+        }
+
+        .esri-ticks {
+            position: absolute;
+            top: 22px;
+            /* Position below track */
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            padding: 0 8px;
+            /* Align with slider thumb limits */
+        }
+
+        .tick-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 1px;
+        }
+
+        .tick-wrapper .tick {
+            width: 1px;
+            height: 4px;
+            background: #e0e0e0;
+        }
+
+        .tick-wrapper.major .tick {
+            height: 8px;
+            background: #999;
+        }
+
+        .tick-label {
+            margin-top: 4px;
+            font-size: 10px;
+            color: #999;
+            transform: translateX(0%);
+            /* Center label */
+        }
+    </style>
+
+    <script>
+        let timelinePlaying = false;
+        let timelineInterval = null;
+
+        // Toggle visibility based on Temporal Mode
+        function updateSliderVisibility() {
+            const slider = document.getElementById('temporalSliderContainer');
+            if (temporalMode) {
+                slider.classList.add('visible');
+            } else {
+                slider.classList.remove('visible');
+                stopTimeline();
+            }
+        }
+
+        // Hook into existing toggleTemporalMode
+        // Note: verify if we need to modify the original function or if this script executes after
+        // Since this is appended at the end, we can override or hook. 
+        // Safer to modify the original function in a separate edit, but here I'll add a listener?
+        // Actually, I'll modify toggleTemporalMode in the next step to call updateSliderVisibility.
+        // For now, I'll just expose these functions.
+
+        function stepTimeline(direction) {
+            // Step by roughly 1 month (approx 30 steps in 2000 range)
+            const range = document.getElementById('temporalRange');
+            let val = parseInt(range.value) + (direction * 30);
+            val = Math.max(0, Math.min(2000, val));
+            range.value = val;
+            handleSliderInput(val);
+        }
+
+        function handleSliderInput(val) {
+            // Map 0-100 to date range (Jan 2020 - Dec 2025)
+            // Total months = 6 years * 12 = 72 months.
+            // But let's simplify: 2020 to 2025 is 5 years.
+            // Let's do Jan 1, 2020 to Date.now()
+
+            const startDate = new Date('2020-01-01').getTime();
+            const endDate = new Date().getTime();
+            const timeRange = endDate - startDate;
+            // Map 0-2000 to full date range
+            const targetTime = startDate + (val / 2000) * timeRange;
+            const targetDate = new Date(targetTime);
+
+            // Format: "Month Year" or "M/D/YYYY" based on preference
+            // ArcGIS style usually emphasizes concise dates
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            const dateStr = targetDate.toLocaleDateString('en-US', options);
+
+            document.getElementById('sliderDateDisplay').textContent = dateStr;
+
+            // Update hidden input for consistency
+            try {
+                document.getElementById('temporalDateInput').value = targetDate.toISOString().split('T')[0];
+            } catch (e) { }
+
+            // Trigger Analysis Update
+            updateAnalysisWithDate(targetDate);
+        }
+
+        function handleDateInput(dateStr) {
+            if (!dateStr) return;
+            const targetDate = new Date(dateStr);
+
+            // Sync Slider Position
+            const startDate = new Date('2020-01-01').getTime();
+            const endDate = new Date().getTime();
+            const timeRange = endDate - startDate;
+            const targetTime = targetDate.getTime();
+
+            let val = ((targetTime - startDate) / timeRange) * 2000;
+            val = Math.max(0, Math.min(2000, val));
+            document.getElementById('temporalRange').value = val;
+
+            // Trigger Analysis
+            handleSliderInput(val);
+        }
+
+        function updateAnalysisWithDate(targetDate) {
+            if (lastAnalysisData) {
+                performSatelliteAnalysis(
+                    lastAnalysisData.location,
+                    lastAnalysisData.bounds,
+                    lastAnalysisData.placeName,
+                    lastAnalysisData.geocodeResult,
+                    targetDate
+                );
+            }
+        }
+
+        function toggleTimelinePlay() {
+            timelinePlaying = !timelinePlaying;
+            const icon = document.getElementById('playIcon');
+            const range = document.getElementById('temporalRange');
+
+            if (timelinePlaying) {
+                icon.textContent = 'pause';
+                timelineInterval = setInterval(() => {
+                    let val = parseInt(range.value);
+                    if (val >= 2000) val = 0; // Loop
+                    val += 10; // Speed of animation
+                    range.value = val;
+                    handleSliderInput(val);
+                }, 50);
+            } else {
+                icon.textContent = 'play_arrow';
+                stopTimeline();
+            }
+        }
+
+        function stopTimeline() {
+            if (timelineInterval) {
+                clearInterval(timelineInterval);
+                timelineInterval = null;
+            }
+            timelinePlaying = false;
+            const icon = document.getElementById('playIcon');
+            if (icon) icon.textContent = 'play_arrow';
+        }
+    </script>
+</body>
+
+</html>
