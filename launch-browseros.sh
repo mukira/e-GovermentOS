@@ -220,9 +220,8 @@ start_browser() {
         --enable-logging --v=1 \
         --allow-insecure-localhost \
         --no-default-browser-check \
-        2>&1 | grep -v "Failed to open lock file" \
-             | grep -v "Error parsing certificate" \
-             | grep -v "NewTabPage loaded into" &
+        --no-default-browser-check \
+        > "$SCRIPT_DIR/browser_console.log" 2>&1 &
         
     BROWSER_PID=$!
     log_success "BrowserOS launched (PID: $BROWSER_PID)"
