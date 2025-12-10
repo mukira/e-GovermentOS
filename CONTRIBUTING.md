@@ -1,8 +1,8 @@
-# Contributing to BrowserOS
+# Contributing to e-GovernmentOS
 
-Hey there! Thanks for your interest in BrowserOS. Whether you're fixing bugs, adding features, improving docs, or just poking around the code, we're glad you're here.
+Hey there! Thanks for your interest in e-GovernmentOS. Whether you're fixing bugs, adding features, improving docs, or just poking around the code, we're glad you're here.
 
-BrowserOS is a monorepo with two main parts:
+e-GovernmentOS is a monorepo with two main parts:
 - **Agent** - The Chrome extension with AI features (TypeScript/React)
 - **Browser** - The custom Chromium build (C++/Python)
 
@@ -76,7 +76,7 @@ cp .env.example .env
 yarn build:dev       # One-time build
 ```
 
-### Load in BrowserOS 
+### Load in e-GovernmentOS 
 
 1. Open `chrome://extensions/`
 2. Enable **Developer mode** (top right toggle)
@@ -108,7 +108,7 @@ First, follow the official Chromium guide for your platform:
 
 This will set up `depot_tools` and fetch the ~100GB Chromium source tree. This typically takes 2-3 hours depending on your internet speed.
 
-**2. Build BrowserOS**
+**2. Build e-GovernmentOS**
 
 Once you have Chromium checked out, navigate to our build system:
 
@@ -229,16 +229,16 @@ You don't need to write code to help out! Here are other ways:
 
 ### 🐛 Report Bugs
 
-Found a bug? [Open an issue](https://github.com/browseros-ai/BrowserOS/issues/new) with:
+Found a bug? [Open an issue](https://github.com/mukira/e-GovermentOS/issues/new) with:
 - Clear description
 - Steps to reproduce
 - Expected vs actual behavior
 - Screenshots/videos
-- Environment details (OS, browser version, BrowserOS version)
+- Environment details (OS, browser version, e-GovernmentOS version)
 
 ### 💡 Suggest Features
 
-Have an idea? [Share it here](https://github.com/browseros-ai/BrowserOS/issues/99) or chat with us on [Discord](https://discord.gg/YKwjt5vuKr).
+Have an idea? [Share it here](https://github.com/mukira/e-GovermentOS/issues/99) or chat with us on [Discord](https://discord.gg/YKwjt5vuKr).
 
 ### 📚 Improve Documentation
 
@@ -263,8 +263,8 @@ Have an idea? [Share it here](https://github.com/browseros-ai/BrowserOS/issues/9
 Stuck? Need clarification? We're here to help.
 
 - **[Discord](https://discord.gg/YKwjt5vuKr)** - Real-time chat and support
-- **[GitHub Issues](https://github.com/browseros-ai/BrowserOS/issues)** - Bug reports and features
-- **[GitHub Discussions](https://github.com/browseros-ai/BrowserOS/discussions)** - General questions
+- **[GitHub Issues](https://github.com/mukira/e-GovermentOS/issues)** - Bug reports and features
+- **[GitHub Discussions](https://github.com/mukira/e-GovermentOS/discussions)** - General questions
 
 ## Recognition
 

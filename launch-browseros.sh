@@ -1,10 +1,10 @@
 #!/bin/bash
 ################################################################################
-# BrowserOS Unified Launcher
+# e-GovernmentOS Unified Launcher
 #
-# Starts all BrowserOS components together:
-# 1. BrowserOS-server (MCP server for browser automation)
-# 2. BrowserOS browser with agent extension loaded
+# Starts all e-GovernmentOS components together:
+# 1. e-GovernmentOS-server (MCP server for browser automation)
+# 2. e-GovernmentOS browser with agent extension loaded
 #
 # Usage:
 #   ./launch-browseros.sh              # Start everything
@@ -55,9 +55,9 @@ log_warning() {
 
 show_help() {
     cat << EOF
-BrowserOS Unified Launcher
+e-GovernmentOS Unified Launcher
 
-Starts BrowserOS browser with agent extension and MCP server.
+Starts e-GovernmentOS browser with agent extension and MCP server.
 
 USAGE:
     ./launch-browseros.sh [OPTIONS]
@@ -89,7 +89,7 @@ check_dependencies() {
     
     # Check bun
     if ! command -v bun &> /dev/null; then
-        log_error "Bun is required for BrowserOS-server"
+        log_error "Bun is required for e-GovernmentOS-server"
         log_error "Install from: https://bun.sh"
         exit 1
     fi
@@ -97,7 +97,7 @@ check_dependencies() {
     
     # Check server directory
     if [[ ! -d "$SERVER_DIR" ]]; then
-        log_error "BrowserOS-server not found at: $SERVER_DIR"
+        log_error "e-GovernmentOS-server not found at: $SERVER_DIR"
         log_error "Run: git clone https://github.com/browseros-ai/BrowserOS-server.git"
         exit 1
     fi
@@ -119,15 +119,15 @@ check_dependencies() {
     
     # Check browser binary
     if [[ ! -f "$BROWSER_BINARY" ]]; then
-        log_error "BrowserOS browser not found at: $BROWSER_BINARY"
+        log_error "e-GovernmentOS browser not found at: $BROWSER_BINARY"
         log_error "Run: ./build.sh"
         exit 1
     fi
-    log_success "BrowserOS browser found"
+    log_success "e-GovernmentOS browser found"
 }
 
 start_server() {
-    log_info "Starting BrowserOS-server..."
+    log_info "Starting e-GovernmentOS-server..."
     
     cd "$SERVER_DIR"
     
@@ -203,16 +203,16 @@ check_server_status() {
 }
 
 start_browser() {
-    log_info "Starting BrowserOS with agent extension..."
+    log_info "Starting e-GovernmentOS with agent extension..."
     
     # Create temp profile for clean start
-    PROFILE_DIR="$HOME/Library/Application Support/BrowserOS"
+    PROFILE_DIR="$HOME/Library/Application Support/e-GovernmentOS"
     
     log_info "Profile directory: $PROFILE_DIR"
     log_info "Agent extension: $AGENT_DIR"
     
-    # Launch BrowserOS with extension
-    # Launch BrowserOS (verbose but filtered)
+    # Launch e-GovernmentOS with extension
+    # Launch e-GovernmentOS (verbose but filtered)
     # Filter out known benign errors (Lock file, SSL, NewTabPage context)
     "$BROWSER_BINARY" \
         --user-data-dir="$PROFILE_DIR" \
@@ -225,7 +225,7 @@ start_browser() {
              | grep -v "NewTabPage loaded into" &
         
     BROWSER_PID=$!
-    log_success "BrowserOS launched (PID: $BROWSER_PID)"
+    log_success "e-GovernmentOS launched (PID: $BROWSER_PID)"
     # log_info "Browser logs hidden..."
 }
 
@@ -291,7 +291,7 @@ fi
 trap cleanup SIGINT SIGTERM
 
 echo "════════════════════════════════════════════════════════════════════════"
-echo "  BrowserOS Unified Launcher"
+echo "  e-GovernmentOS Unified Launcher"
 echo "════════════════════════════════════════════════════════════════════════"
 echo ""
 
@@ -316,7 +316,7 @@ else
     
     echo ""
     echo "════════════════════════════════════════════════════════════════════════"
-    log_success "BrowserOS stack is running!"
+    log_success "e-GovernmentOS stack is running!"
     echo "════════════════════════════════════════════════════════════════════════"
     echo ""
     log_info "Components:"

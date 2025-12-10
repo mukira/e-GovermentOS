@@ -1,4 +1,4 @@
-# BrowserOS macOS Release Build Configuration (Universal Binary)
+# e-GovernmentOS macOS Release Build Configuration (Universal Binary)
 #
 # This config builds a universal binary (arm64 + x64).
 # For single-architecture builds, use --arch flag to override.

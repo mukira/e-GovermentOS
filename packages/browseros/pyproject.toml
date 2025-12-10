@@ -3,9 +3,9 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "browseros"
+name = "e-governmentos"
 version = "0.0.1"
-description = "BrowserOS Build System"
+description = "e-GovernmentOS Build System"
 requires-python = ">=3.12"
 dependencies = [
   "click>=8.0.0",
