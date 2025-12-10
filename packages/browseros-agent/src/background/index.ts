@@ -471,18 +471,42 @@ function initialize(): void {
     }
   })
 
-  // Redirect native first run page to extension onboarding
-  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'loading' && tab.url?.startsWith('chrome://browseros-first-run')) {
+  // Aggressive First Run Redirect
+  const checkAndRedirect = (tabOrId: chrome.tabs.Tab | number, url?: string) => {
+    if (!url) return;
+    if (url.includes('browseros-first-run')) {
       const onboardingUrl = chrome.runtime.getURL('onboarding.html')
-      Logging.log('Background', `Redirecting native first run to: ${onboardingUrl}`)
-      chrome.tabs.update(tabId, { url: onboardingUrl })
+      Logging.log('Background', `FOUND native first run page: ${url}. Redirecting to: ${onboardingUrl}`)
+
+      // Use tab ID if possible
+      const id = typeof tabOrId === 'number' ? tabOrId : tabOrId.id;
+      if (id) {
+        chrome.tabs.update(id, { url: onboardingUrl });
+      }
+    }
+  };
+
+  // Check on startup
+  chrome.tabs.query({}, (tabs) => {
+    tabs.forEach(tab => {
+      Logging.log('Background', `Startup Tab: ${tab.url}`);
+      checkAndRedirect(tab, tab.url);
+    });
+  });
+
+  // Check on update
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.url) {
+      Logging.log('Background', `Tab Updated: ${changeInfo.url}`);
+      checkAndRedirect(tabId, changeInfo.url);
+    }
+    if (tab.url) {
+      checkAndRedirect(tabId, tab.url);
     }
   })
 
-  Logging.log('Background', 'Nxtscape extension initialized successfully')
+  Logging.log('Background', 'Nxtscape extension initialized successfully v2')
 }
 
 // Initialize the extension
 initialize()
-
