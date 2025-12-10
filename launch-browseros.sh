@@ -2,9 +2,9 @@
 ################################################################################
 # e-GovernmentOS Unified Launcher
 #
-# Starts all e-GovernmentOS components together:
-# 1. e-GovernmentOS-server (MCP server for browser automation)
-# 2. e-GovernmentOS browser with agent extension loaded
+# Starts all BrowserOS components together:
+# 1. BrowserOS-server (MCP server for browser automation)
+# 2. e-GovernmentOS browser with Browser OS Agent extension loaded
 #
 # Usage:
 #   ./launch-browseros.sh              # Start everything
@@ -57,7 +57,7 @@ show_help() {
     cat << EOF
 e-GovernmentOS Unified Launcher
 
-Starts e-GovernmentOS browser with agent extension and MCP server.
+Starts e-GovernmentOS browser with Browser OS Agent extension and MCP server.
 
 USAGE:
     ./launch-browseros.sh [OPTIONS]
@@ -89,7 +89,7 @@ check_dependencies() {
     
     # Check bun
     if ! command -v bun &> /dev/null; then
-        log_error "Bun is required for e-GovernmentOS-server"
+        log_error "Bun is required for BrowserOS-server"
         log_error "Install from: https://bun.sh"
         exit 1
     fi
@@ -97,7 +97,7 @@ check_dependencies() {
     
     # Check server directory
     if [[ ! -d "$SERVER_DIR" ]]; then
-        log_error "e-GovernmentOS-server not found at: $SERVER_DIR"
+        log_error "BrowserOS-server not found at: $SERVER_DIR"
         log_error "Run: git clone https://github.com/browseros-ai/BrowserOS-server.git"
         exit 1
     fi
@@ -127,7 +127,7 @@ check_dependencies() {
 }
 
 start_server() {
-    log_info "Starting e-GovernmentOS-server..."
+    log_info "Starting BrowserOS-server..."
     
     cd "$SERVER_DIR"
     
@@ -203,10 +203,10 @@ check_server_status() {
 }
 
 start_browser() {
-    log_info "Starting e-GovernmentOS with agent extension..."
+    log_info "Starting e-GovernmentOS with Browser OS Agent extension..."
     
     # Create temp profile for clean start
-    PROFILE_DIR="$HOME/Library/Application Support/e-GovernmentOS"
+    PROFILE_DIR="$HOME/Library/Application Support/BrowserOS"
     
     log_info "Profile directory: $PROFILE_DIR"
     log_info "Agent extension: $AGENT_DIR"

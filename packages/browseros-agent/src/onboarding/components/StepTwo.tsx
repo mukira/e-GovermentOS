@@ -6,7 +6,7 @@ export function StepTwo() {
   const { nextStep, previousStep } = useOnboardingStore()
 
   const handleOpenSettings = () => {
-    chrome.tabs.create({ url: 'chrome://settings/e-governmentos' })
+    chrome.tabs.create({ url: 'chrome://settings/browseros' })
   }
 
   return (
@@ -79,7 +79,7 @@ export function StepTwo() {
         </button>
 
         <p className="text-center text-xs text-muted-foreground">
-          💡 Access settings anytime: <code className="px-2 py-1 bg-background/90 border border-border/50 rounded font-mono text-xs">chrome://settings/e-governmentos</code>
+          💡 Access settings anytime: <code className="px-2 py-1 bg-background/90 border border-border/50 rounded font-mono text-xs">chrome://settings/browseros</code>
         </p>
       </div>
 

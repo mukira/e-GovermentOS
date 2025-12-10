@@ -7,16 +7,16 @@
 [![Twitter](https://img.shields.io/twitter/follow/browserOS_ai?style=social)](https://twitter.com/browseros_ai)
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
 <br></br>
-<a href="https://files.browseros.com/download/e-GovernmentOS.dmg">
+<a href="https://files.browseros.com/download/BrowserOS.dmg">
   <img src="https://img.shields.io/badge/Download-macOS-black?style=flat&logo=apple&logoColor=white" alt="Download for macOS (beta)" />
 </a>
-<a href="https://files.browseros.com/download/e-GovernmentOS_installer.exe">
+<a href="https://files.browseros.com/download/BrowserOS_installer.exe">
   <img src="https://img.shields.io/badge/Download-Windows-0078D4?style=flat&logo=windows&logoColor=white" alt="Download for Windows (beta)" />
 </a>
-<a href="https://files.browseros.com/download/e-GovernmentOS.AppImage">
+<a href="https://files.browseros.com/download/BrowserOS.AppImage">
   <img src="https://img.shields.io/badge/Download-Linux-FCC624?style=flat&logo=linux&logoColor=black" alt="Download for Linux (beta)" />
 </a>
-<a href="https://cdn.browseros.com/download/e-GovernmentOS.deb">
+<a href="https://cdn.browseros.com/download/BrowserOS.deb">
   <img src="https://img.shields.io/badge/Download-Debian-D70A53?style=flat&logo=debian&logoColor=white" alt="Download Debian package" />
 </a>
 <br />
@@ -27,15 +27,15 @@
 
 🔒 Privacy first - use your own API keys or run local models with Ollama. Your data stays on your computer.
 
-💡 Join our [Discord](https://discord.gg/YKwjt5vuKr) or [Slack](https://dub.sh/browserOS-slack) and help us build! Have feature requests? [Suggest here](https://github.com/mukira/e-GovermentOS/issues/99).
+💡 Join our [Discord](https://discord.gg/YKwjt5vuKr) or [Slack](https://dub.sh/browserOS-slack) and help us build! Have feature requests? [Suggest here](https://github.com/browseros-ai/BrowserOS/issues/99).
 
 ## Quick start
 
 1. Download and install e-GovernmentOS:
-   - [macOS](https://files.browseros.com/download/e-GovernmentOS.dmg)
-   - [Windows](https://files.browseros.com/download/e-GovernmentOS_installer.exe)
-   - [Linux (AppImage)](https://files.browseros.com/download/e-GovernmentOS.AppImage)
-   - [Linux (Debian)](https://cdn.browseros.com/download/e-GovernmentOS.deb)
+   - [macOS](https://files.browseros.com/download/BrowserOS.dmg)
+   - [Windows](https://files.browseros.com/download/BrowserOS_installer.exe)
+   - [Linux (AppImage)](https://files.browseros.com/download/BrowserOS.AppImage)
+   - [Linux (Debian)](https://cdn.browseros.com/download/BrowserOS.deb)
 
 2. Import your Chrome data (optional)
 
@@ -48,16 +48,16 @@
 - 🤖 AI agents that run on YOUR browser, not in the cloud
 - 🔒 Privacy first - bring your own keys or use local models with Ollama. Your browsing history stays on your computer
 - 🚀 Open source and community driven - see exactly what's happening under the hood
-- 🤝 e-GovernmentOS as MCP server - you can install our MCP server and use the browser from within `claude-code` or `gemini-cli`.
+- 🤝 BrowserOS-Server as MCP server - you can install our MCP server and use the browser from within `claude-code` or `gemini-cli`.
 - 🛡️ (coming soon) Built-in AI ad blocker that works across more scenarios!  
 
 ## Demos
 
-### 🤖 e-GovernmentOS agent in action
-[![e-GovernmentOS agent in action](docs/videos/browserOS-agent-in-action.gif)](https://www.youtube.com/watch?v=SoSFev5R5dI)
+### 🤖 Browser OS Agent in action
+[![Browser OS Agent in action](docs/videos/browserOS-agent-in-action.gif)](https://www.youtube.com/watch?v=SoSFev5R5dI)
 <br/><br/>
 
-### 🎇 Install [e-GovernmentOS as MCP](https://docs.browseros.com/browseros-mcp/how-to-guide) and control it from `claude-code`
+### 🎇 Install [BrowserOS-Server](https://docs.browseros.com/browseros-mcp/how-to-guide) and control it from `claude-code`
 
 https://github.com/user-attachments/assets/c725d6df-1a0d-40eb-a125-ea009bf664dc
 
@@ -120,7 +120,7 @@ Your browsing data could be used for ads or to train their models. We keep your 
 We'd love your help making e-GovernmentOS better!
 
 - 🐛 [Report bugs](https://github.com/nxtscape/nxtscape/issues)
-- 💡 [Suggest features](https://github.com/mukira/e-GovermentOS/issues/99)
+- 💡 [Suggest features](https://github.com/browseros-ai/BrowserOS/issues/99)
 - 💬 [Join Discord](https://discord.gg/YKwjt5vuKr)
 - 🐦 [Follow on Twitter](https://x.com/browserOS_ai)
 
@@ -136,7 +136,7 @@ e-GovernmentOS is open source under the [AGPL-3.0 license](LICENSE).
 ## Stargazers
 Thank you to all our supporters!
 
-[![Star History Chart](https://api.star-history.com/svg?repos=mukira/e-GovermentOS&type=Date)](https://www.star-history.com/#mukira/e-GovermentOS&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=browseros-ai/BrowserOS&type=Date)](https://www.star-history.com/#browseros-ai/BrowserOS&Date)
 
 ## 
 <p align="center">

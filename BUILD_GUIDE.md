@@ -1,13 +1,13 @@
-# e-GovernmentOS Build Script Documentation
+# BrowserOS Build Script Documentation
 
 ## Overview
 
-The new `build.sh` script provides an optimized build system for e-GovernmentOS with:
+The new `build.sh` script provides an optimized build system for BrowserOS with:
 - **Incremental builds** - Only rebuilds changed files (via ninja)
-- **Official build system** - Uses the Python-based e-GovernmentOS build system
+- **Official build system** - Uses the Python-based BrowserOS build system
 - **Auto-configuration** - Detects Chromium source and build settings
-- **Proper customizations** - Applies all patches and e-GovernmentOS customizations
-- **Agent building** - Builds the e-GovernmentOS agent extension
+- **Proper customizations** - Applies all patches and BrowserOS customizations
+- **Agent building** - Builds the BrowserOS agent extension
 
 ## Quick Start
 
@@ -18,13 +18,13 @@ The new `build.sh` script provides an optimized build system for e-GovernmentOS 
 export CHROMIUM_SRC=$HOME/chromium/src
 
 # Run full build - builds ALL components:
-#   1. e-GovernmentOS-server (MCP server binary)
-#   2. e-GovernmentOS-agent (Chrome extension)  
-#   3. e-GovernmentOS browser (Chromium with patches)
+#   1. BrowserOS-server (MCP server binary)
+#   2. BrowserOS-agent (Chrome extension)  
+#   3. BrowserOS browser (Chromium with patches)
 ./build.sh --full
 ```
 
-This single command builds the complete e-GovernmentOS stack!
+This single command builds the complete BrowserOS stack!
 
 ### Daily Development (Incremental)
 
@@ -93,7 +93,7 @@ export ARCHITECTURE=arm64
 
 **What it does:**
 - Builds agent extension (if needed)
-- Checks if e-GovernmentOS is already configured
+- Checks if BrowserOS is already configured
 - If configured: Only runs compile phase (ninja)
 - If not configured: Runs setup + prep + compile
 
@@ -132,7 +132,7 @@ export ARCHITECTURE=arm64
 ```
 
 **What it does:**
-- Only builds the e-GovernmentOS agent extension
+- Only builds the BrowserOS agent extension
 - Skips Chromium build entirely
 
 **Use when:**
@@ -186,7 +186,7 @@ export CHROMIUM_SRC=$HOME/chromium/src
 
 ### Build Phases
 
-The script uses the official e-GovernmentOS build system with these phases:
+The script uses the official BrowserOS build system with these phases:
 
 1. **Setup Phase** (`--setup`)
    - Cleans previous builds
@@ -195,7 +195,7 @@ The script uses the official e-GovernmentOS build system with these phases:
 
 2. **Prep Phase** (`--prep`)
    - Applies Chromium patches
-   - Copies e-GovernmentOS resources
+   - Copies BrowserOS resources
    - Replaces strings and branding
    - Applies series patches
 
@@ -259,7 +259,7 @@ cd $CHROMIUM_SRC
 rm -rf out/
 
 # Run full build
-cd /path/to/e-GovernmentOS
+cd /path/to/BrowserOS
 ./build.sh --full
 ```
 
@@ -268,19 +268,19 @@ cd /path/to/e-GovernmentOS
 After a successful build:
 
 ```
-e-GovernmentOS/
+BrowserOS/
 ├── packages/browseros-agent/dist/     # Agent extension
-└── (Chromium source)/out/Release/     # e-GovernmentOS binary
-    ├── e-GovernmentOS.app/                 # macOS
+└── (Chromium source)/out/Release/     # BrowserOS binary
+    ├── BrowserOS.app/                 # macOS
     ├── chrome.exe                     # Windows
     └── chrome                         # Linux
 ```
 
-## Running e-GovernmentOS
+## Running BrowserOS
 
 ### macOS
 ```bash
-$CHROMIUM_SRC/out/Release/e-GovernmentOS.app/Contents/MacOS/e-GovernmentOS
+$CHROMIUM_SRC/out/Release/BrowserOS.app/Contents/MacOS/BrowserOS
 ```
 
 ### Linux
@@ -295,7 +295,7 @@ $CHROMIUM_SRC/out/Release/chrome.exe
 
 ### Load Agent Extension
 
-1. Open e-GovernmentOS
+1. Open BrowserOS
 2. Go to `chrome://extensions/`
 3. Enable "Developer mode"
 4. Click "Load unpacked"
@@ -310,7 +310,7 @@ $CHROMIUM_SRC/out/Release/chrome.exe
 
 ### Old build_worker.sh
 - Hardcoded paths for single machine
-- Referenced e-GovernmentOS-agent and e-GovernmentOS-server (don't exist)
+- Referenced BrowserOS-agent and BrowserOS-server (don't exist)
 - Only ran ninja (no patches, no setup)
 - No validation or error handling
 

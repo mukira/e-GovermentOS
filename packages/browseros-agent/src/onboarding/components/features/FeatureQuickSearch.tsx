@@ -31,7 +31,7 @@ export function FeatureQuickSearch() {
   }
 
   const handleOpenSettings = () => {
-    chrome.tabs.create({ url: 'chrome://settings/e-governmentos' })
+    chrome.tabs.create({ url: 'chrome://settings/browseros' })
   }
 
   return (
@@ -133,7 +133,7 @@ export function FeatureQuickSearch() {
       <NavigationControls
         onPrevious={previousStep}
         onNext={handleStartUsing}
-        nextLabel="Start Using e-GovernmentOS"
+        nextLabel="Start Using BrowserOS"
         nextButtonPrimary
       />
     </div>

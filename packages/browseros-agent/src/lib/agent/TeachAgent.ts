@@ -47,7 +47,7 @@ import {
   MoondreamVisualClickTool,
   MoondreamVisualTypeTool,
   GroupTabsTool,
-  eGovernmentOSInfoTool,
+  BrowserOSInfoTool,
   GetSelectedTabsTool,
   DateTool,
   MCPTool,
@@ -266,7 +266,7 @@ export class TeachAgent {
     this.toolManager.register(ExtractTool(this.executionContext));
     this.toolManager.register(HumanInputTool(this.executionContext));
     this.toolManager.register(DateTool(this.executionContext)); // Date/time utilities
-    this.toolManager.register(eGovernmentOSInfoTool(this.executionContext)); // BrowserOS info tool
+    this.toolManager.register(BrowserOSInfoTool(this.executionContext)); // BrowserOS info tool
 
     // External integration tools
     this.toolManager.register(MCPTool(this.executionContext)); // MCP server integration

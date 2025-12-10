@@ -1,10 +1,10 @@
 #!/bin/bash
 ################################################################################
-# e-GovernmentOS First Run Simulator
+# BrowserOS First Run Simulator
 #
 # Simulates a brand new installation by:
 # 1. Wiping the user data/profile directory
-# 2. Launching the e-GovernmentOS stack
+# 2. Launching the BrowserOS stack
 ################################################################################
 
 set -e
@@ -15,14 +15,14 @@ GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-PROFILE_DIR="$HOME/Library/Application Support/e-GovernmentOS"
+PROFILE_DIR="$HOME/Library/Application Support/BrowserOS"
 
 echo -e "${BLUE}════════════════════════════════════════════════════════════════════════${NC}"
-echo -e "  e-GovernmentOS First Run Simulator"
+echo -e "  BrowserOS First Run Simulator"
 echo -e "${BLUE}════════════════════════════════════════════════════════════════════════${NC}"
 echo ""
 
-echo -e "${RED}WARNING: This will delete all e-GovernmentOS user data.${NC}"
+echo -e "${RED}WARNING: This will delete all BrowserOS user data.${NC}"
 echo -e "Profile Directory: $PROFILE_DIR"
 echo ""
 
@@ -36,7 +36,7 @@ else
 fi
 
 echo ""
-echo -e "${BLUE}ℹ${NC} Launching e-GovernmentOS..."
+echo -e "${BLUE}ℹ${NC} Launching BrowserOS..."
 echo ""
 
 # Execute the main launcher

@@ -1,7 +1,7 @@
 {
   "name": "Agent",
   "version": "0.1.0",
-  "description": "e-GovernmentOS Agent",
+  "description": "Browser OS Agent",
   "main": "dist/background.js",
   "scripts": {
     "build": "yarn run clean && cross-env NODE_ENV=production webpack --config webpack.config.js",

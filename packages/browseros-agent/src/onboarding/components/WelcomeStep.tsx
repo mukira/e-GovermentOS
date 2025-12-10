@@ -13,7 +13,7 @@ export function WelcomeStep() {
           <div className="absolute inset-0 bg-brand/10 blur-3xl rounded-full animate-pulse" />
           <img
             src="/assets/product_logo_svg.svg"
-            alt="e-GovernmentOS Logo"
+            alt="BrowserOS Logo"
             className="h-24 w-auto relative z-10 drop-shadow-2xl transition-transform duration-300 hover:scale-110"
           />
         </div>

@@ -1,8 +1,8 @@
 #!/bin/bash
 ################################################################################
-# e-GovernmentOS Optimized Incremental Build Script
+# BrowserOS Optimized Incremental Build Script
 # 
-# This script builds e-GovernmentOS with all customizations using the official
+# This script builds BrowserOS with all customizations using the official
 # Python build system. It supports incremental builds via ninja.
 #
 # Usage:
@@ -68,7 +68,7 @@ log_warning() {
 
 show_help() {
     cat << EOF
-e-GovernmentOS Optimized Incremental Build Script
+BrowserOS Optimized Incremental Build Script
 
 USAGE:
     ./build.sh [OPTIONS]
@@ -163,7 +163,7 @@ ARCH="${CLI_ARCH:-$DEFAULT_ARCH}"
 #===============================================================================
 
 echo "════════════════════════════════════════════════════════════════════════"
-echo "  e-GovernmentOS Optimized Build System"
+echo "  BrowserOS Optimized Build System"
 echo "════════════════════════════════════════════════════════════════════════"
 
 log_info "Validating build environment..."
@@ -260,13 +260,13 @@ echo "  • Mode:         $([ "$FULL_BUILD" = true ] && echo "FULL REBUILD" || e
 #===============================================================================
 
 build_server() {
-    log_info "Building e-GovernmentOS-server..."
+    log_info "Building BrowserOS-server..."
     
     SERVER_DIR="$SCRIPT_DIR/BrowserOS-server"
     
     # Check if server directory exists
     if [[ ! -d "$SERVER_DIR" ]]; then
-        log_warning "e-GovernmentOS-server not found at: $SERVER_DIR"
+        log_warning "BrowserOS-server not found at: $SERVER_DIR"
         log_info "Cloning BrowserOS-server repository..."
         git clone https://github.com/browseros-ai/BrowserOS-server.git "$SERVER_DIR"
     fi
@@ -275,7 +275,7 @@ build_server() {
     
     # Check for bun
     if ! command -v bun &> /dev/null; then
-        log_error "Bun is required for e-GovernmentOS-server"
+        log_error "Bun is required for BrowserOS-server"
         log_error "Install from: https://bun.sh"
         return 1
     fi
@@ -290,7 +290,7 @@ build_server() {
     if [[ ! -f ".env.dev" ]]; then
         log_info "Creating server configuration (.env.dev)..."
         cat > .env.dev << 'EOF'
-# e-GovernmentOS Server Configuration
+# BrowserOS Server Configuration
 HTTP_MCP_PORT=9223
 AGENT_PORT=3000
 EXTENSION_PORT=9224
@@ -315,7 +315,7 @@ EOF
 #===============================================================================
 
 build_agent() {
-    log_info "Building e-GovernmentOS Agent extension..."
+    log_info "Building BrowserOS Agent extension..."
     
     AGENT_DIR="$SCRIPT_DIR/packages/browseros-agent"
     
@@ -371,7 +371,7 @@ build_agent() {
 #===============================================================================
 
 build_browseros() {
-    log_info "Building e-GovernmentOS Chromium..."
+    log_info "Building BrowserOS Chromium..."
     
     cd "$SCRIPT_DIR/packages/browseros"
     
@@ -423,7 +423,7 @@ build_browseros() {
     
     # Verify build output
     if [[ -d "$OUT_DIR/BrowserOS.app" ]] || [[ -f "$OUT_DIR/chrome" ]]; then
-        log_success "e-GovernmentOS built successfully!"
+        log_success "BrowserOS built successfully!"
         log_info "Output directory: $OUT_DIR"
     else
         log_error "Build completed but output not found in: $OUT_DIR"
