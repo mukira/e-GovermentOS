@@ -17,7 +17,7 @@ export function StepOne() {
           Seamless Migration
         </h2>
         <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-          Bring your data from Google Chrome or other browsers to BrowserOS!
+          Bring your data from Google Chrome or other browsers to e-GovernmentOS!
         </p>
       </div>
 
@@ -44,11 +44,11 @@ export function StepOne() {
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-gradient-to-br from-brand/20 to-orange-500/20 border-2 border-brand/40 flex items-center justify-center shadow-xl p-4">
             <img
               src="/assets/product_logo_svg.svg"
-              alt="BrowserOS"
+              alt="e-GovernmentOS"
               className="w-full h-full object-contain"
             />
           </div>
-          <p className="text-sm font-semibold text-brand">BrowserOS</p>
+          <p className="text-sm font-semibold text-brand">e-GovernmentOS</p>
         </div>
       </div>
 

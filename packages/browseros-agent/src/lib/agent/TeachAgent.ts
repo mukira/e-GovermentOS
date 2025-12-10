@@ -47,7 +47,7 @@ import {
   MoondreamVisualClickTool,
   MoondreamVisualTypeTool,
   GroupTabsTool,
-  BrowserOSInfoTool,
+  eGovernmentOSInfoTool,
   GetSelectedTabsTool,
   DateTool,
   MCPTool,
@@ -266,7 +266,7 @@ export class TeachAgent {
     this.toolManager.register(ExtractTool(this.executionContext));
     this.toolManager.register(HumanInputTool(this.executionContext));
     this.toolManager.register(DateTool(this.executionContext)); // Date/time utilities
-    this.toolManager.register(BrowserOSInfoTool(this.executionContext)); // BrowserOS info tool
+    this.toolManager.register(eGovernmentOSInfoTool(this.executionContext)); // BrowserOS info tool
 
     // External integration tools
     this.toolManager.register(MCPTool(this.executionContext)); // MCP server integration
@@ -308,7 +308,7 @@ export class TeachAgent {
       });
       this._logMetrics();
       this._cleanup();
-      
+
       // Ensure glow animation is stopped at the end of execution
       try {
         // Get all active glow tabs from the service
@@ -416,7 +416,7 @@ export class TeachAgent {
       if (executorResult.requiresHumanInput) {
         // Human input requested - wait for response
         const humanResponse = await this._waitForHumanInput();
-        
+
         if (humanResponse === 'abort') {
           // Human aborted the task
           this.pubsub.publishMessage(PubSub.createMessage('Task aborted by human', 'assistant'));
@@ -509,7 +509,7 @@ export class TeachAgent {
 
       // Get execution metrics for analysis
       const metrics = this.executionContext.getExecutionMetrics();
-      const errorRate = metrics.toolCalls > 0 
+      const errorRate = metrics.toolCalls > 0
         ? ((metrics.errors / metrics.toolCalls) * 100).toFixed(1)
         : "0";
       const elapsed = Date.now() - metrics.startTime;
@@ -689,7 +689,7 @@ ${fullHistory}
           this.plannerExecutionHistory.push({
             plannerOutput,
             toolMessages: currentIterationToolMessages,
-            plannerIterations : this.iterations,
+            plannerIterations: this.iterations,
           });
 
           // Add all messages to message manager
@@ -708,7 +708,7 @@ ${fullHistory}
           this.plannerExecutionHistory.push({
             plannerOutput,
             toolMessages: currentIterationToolMessages,
-            plannerIterations : this.iterations,
+            plannerIterations: this.iterations,
           });
 
           // Add all messages to message manager
@@ -745,7 +745,7 @@ ${fullHistory}
     this.plannerExecutionHistory.push({
       plannerOutput,
       toolMessages: currentIterationToolMessages,
-      plannerIterations : this.iterations,
+      plannerIterations: this.iterations,
     });
 
     return { completed: false };
@@ -790,23 +790,23 @@ ${fullHistory}
           const detectedTag = PROHIBITED_TAGS.find(tag => accumulatedText.includes(tag));
           if (detectedTag) {
             hasProhibitedContent = true;
-            
+
             // If we were streaming, replace with "Processing..."
             if (currentMsgId) {
               this._emitThinking(currentMsgId, "Processing...");
             }
-            
+
             // Queue warning for agent's next iteration
             mm.queueSystemReminder(
               "I will never output <browser-state> or <system-reminder> tags or their contents. These are for my internal reference only. If I have completed all actions, I will complete the task and call 'done' tool."
             );
-            
+
             // Log for debugging
-            Logging.log("TeachAgent", 
-              "LLM output contained prohibited tags, streaming stopped", 
+            Logging.log("TeachAgent",
+              "LLM output contained prohibited tags, streaming stopped",
               "warning"
             );
-            
+
             // Increment error metric
             this.executionContext.incrementMetric("errors");
           }
@@ -827,7 +827,7 @@ ${fullHistory}
           }
         }
       }
-      
+
       // Always accumulate chunks for final AIMessage (even with prohibited content)
       accumulatedChunk = !accumulatedChunk
         ? chunk
@@ -991,9 +991,9 @@ ${fullHistory}
     const successRate =
       metrics.toolCalls > 0
         ? (
-            ((metrics.toolCalls - metrics.errors) / metrics.toolCalls) *
-            100
-          ).toFixed(1)
+          ((metrics.toolCalls - metrics.errors) / metrics.toolCalls) *
+          100
+        ).toFixed(1)
         : "0";
 
     // Convert tool frequency Map to object for logging
@@ -1005,8 +1005,8 @@ ${fullHistory}
     Logging.log(
       "TeachAgent",
       `Execution complete: ${this.iterations} iterations, ${metrics.toolCalls} tool calls, ` +
-        `${metrics.observations} observations, ${metrics.errors} errors, ` +
-        `${successRate}% success rate, ${duration}ms duration`,
+      `${metrics.observations} observations, ${metrics.errors} errors, ` +
+      `${successRate}% success rate, ${duration}ms duration`,
       "info",
     );
 
@@ -1049,7 +1049,7 @@ ${fullHistory}
     try {
       const currentPage = await this.executionContext.browserContext.getCurrentPage();
       const tabId = currentPage.tabId;
-      
+
       if (tabId && !this.glowService.isGlowActive(tabId)) {
         await this.glowService.startGlow(tabId);
         return true;
@@ -1069,12 +1069,12 @@ ${fullHistory}
   private async _waitForHumanInput(): Promise<'done' | 'abort' | 'timeout'> {
     const startTime = Date.now();
     const requestId = this.executionContext.getHumanInputRequestId();
-    
+
     if (!requestId) {
       console.error('No human input request ID found');
       return 'abort';
     }
-    
+
     // Subscribe to human input responses
     const subscription = this.pubsub.subscribe((event: PubSubEvent) => {
       if (event.type === 'human-input-response') {
@@ -1084,7 +1084,7 @@ ${fullHistory}
         }
       }
     });
-    
+
     try {
       // Poll for response or timeout
       while (!this.executionContext.shouldAbort()) {
@@ -1093,21 +1093,21 @@ ${fullHistory}
         if (response) {
           return response.action;  // 'done' or 'abort'
         }
-        
+
         // Check timeout
         if (Date.now() - startTime > HUMAN_INPUT_TIMEOUT) {
           const timeoutMsgId = PubSub.generateId('teach_thinking');
           this._emitThinking(timeoutMsgId, 'Human input timed out after 10 minutes');
           return 'timeout';
         }
-        
+
         // Wait before checking again
         await new Promise(resolve => setTimeout(resolve, HUMAN_INPUT_CHECK_INTERVAL));
       }
-      
+
       // Aborted externally
       return 'abort';
-      
+
     } finally {
       // Clean up subscription
       subscription.unsubscribe();

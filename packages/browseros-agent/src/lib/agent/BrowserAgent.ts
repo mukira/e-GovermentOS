@@ -49,7 +49,7 @@ import {
   GrepElementsTool,
   CelebrationTool,
   GroupTabsTool,
-  BrowserOSInfoTool,
+  eGovernmentOSInfoTool,
   GetSelectedTabsTool,
   DateTool,
   MCPTool,
@@ -287,7 +287,8 @@ export class BrowserAgent {
     this.toolManager.register(HumanInputTool(this.executionContext));
     this.toolManager.register(CelebrationTool(this.executionContext)); // Celebration/confetti tool
     this.toolManager.register(DateTool(this.executionContext)); // Date/time utilities
-    this.toolManager.register(BrowserOSInfoTool(this.executionContext)); // BrowserOS info tool
+    this.toolManager.register(
+      eGovernmentOSInfoTool(this.executionContext),); // BrowserOS info tool
 
     // External integration tools
     this.toolManager.register(MCPTool(this.executionContext)); // MCP server integration
@@ -316,7 +317,7 @@ export class BrowserAgent {
    * @param task - The original task string
    * @returns Metadata with predefined plan or null if not a special task
    */
-  private _getSpecialTaskMetadata(task: string): {task: string, metadata: ExecutionMetadata} | null {
+  private _getSpecialTaskMetadata(task: string): { task: string, metadata: ExecutionMetadata } | null {
     // Case-insensitive comparison
     const taskLower = task.toLowerCase();
 
@@ -405,7 +406,7 @@ export class BrowserAgent {
       });
       this._logMetrics();
       this._cleanup();
-      
+
       // Ensure glow animation is stopped at the end of execution
       try {
         // Get all active glow tabs from the service
@@ -618,13 +619,13 @@ export class BrowserAgent {
       if (executorResult.requiresHumanInput) {
         // Human input requested - wait for response
         const humanResponse = await this._waitForHumanInput();
-        
+
         if (humanResponse === 'abort') {
           // Human aborted the task
           this._publishMessage('❌ Task aborted by human', 'assistant');
           throw new AbortError('Task aborted by human');
         }
-        
+
         // Human clicked "Done" - continue with next planning iteration
         this._publishMessage('✅ Human completed manual action. Re-planning...', 'thinking');
         // Note: Human input response will be included in next iteration's planner context
@@ -671,15 +672,15 @@ export class BrowserAgent {
         // then again check if it still exceeds 50% of model's max tokens, if it does, truncate the string to 50% of model's max tokens
         const tokens = TokenCounter.countMessage(new HumanMessage(browserStateString));
         if (tokens > browserStateTokensLimit) {
-            // Calculate the ratio to truncate by
-            const truncationRatio = browserStateTokensLimit / tokens;
-            
-            // Truncate the string (rough approximation based on character length)
-            const targetLength = Math.floor(browserStateString.length * truncationRatio);
-            browserStateString = browserStateString.substring(0, targetLength);
-            
-            // Optional: Add truncation indicator
-            browserStateString += "\n\n-- IMPORTANT: TRUNCATED DUE TO TOKEN LIMIT, USE GREP ELEMENTS TOOL TO SEARCH FOR ELEMENTS IF NEEDED --\n";
+          // Calculate the ratio to truncate by
+          const truncationRatio = browserStateTokensLimit / tokens;
+
+          // Truncate the string (rough approximation based on character length)
+          const targetLength = Math.floor(browserStateString.length * truncationRatio);
+          browserStateString = browserStateString.substring(0, targetLength);
+
+          // Optional: Add truncation indicator
+          browserStateString += "\n\n-- IMPORTANT: TRUNCATED DUE TO TOKEN LIMIT, USE GREP ELEMENTS TOOL TO SEARCH FOR ELEMENTS IF NEEDED --\n";
         }
       }
     }
@@ -725,7 +726,7 @@ export class BrowserAgent {
 
       // Get execution metrics for analysis
       const metrics = this.executionContext.getExecutionMetrics();
-      const errorRate = metrics.toolCalls > 0 
+      const errorRate = metrics.toolCalls > 0
         ? ((metrics.errors / metrics.toolCalls) * 100).toFixed(1)
         : "0";
       const elapsed = Date.now() - metrics.startTime;
@@ -785,7 +786,7 @@ ${fullHistory}
         /* simplified */ true,
         /* screenshotSize */ "large",
         /* includeBrowserState */ true,
-        /* browserStateTokensLimit */ (this.executionContext.getMaxTokens() - systemPromptTokens - userPromptTokens)*0.8
+        /* browserStateTokensLimit */(this.executionContext.getMaxTokens() - systemPromptTokens - userPromptTokens) * 0.8
       );
       // Build messages
       const messages = [
@@ -862,14 +863,14 @@ ${fullHistory}
         const plannerOutputForExecutor = this._formatPlannerOutputForExecutor(plannerOutput);
 
         const executionContext = this._buildExecutionContext();
-        const additionalTokens = TokenCounter.countMessage(new HumanMessage(executionContext + '\n'+ plannerOutputForExecutor));
+        const additionalTokens = TokenCounter.countMessage(new HumanMessage(executionContext + '\n' + plannerOutputForExecutor));
 
         const browserStateMessage = await this._getBrowserStateMessage(
           /* includeScreenshot */ this.executionContext.supportsVision() && !this.executionContext.isLimitedContextMode(),
           /* simplified */ true,
           /* screenshotSize */ "medium",
           /* includeBrowserState */ true,
-          /* browserStateTokensLimit */ (this.executionContext.getMaxTokens() - systemPromptTokens - additionalTokens)*0.8
+          /* browserStateTokensLimit */(this.executionContext.getMaxTokens() - systemPromptTokens - additionalTokens) * 0.8
         );
         executorMM.add(browserStateMessage);
         executorMM.addSystemReminder(executionContext + '\n I will never output <browser-state> or <system-reminder> tags or their contents. These are for my internal reference only. I will provide what tools to be executed based on provided actions in sequence until I call "done" tool.');
@@ -910,7 +911,7 @@ ${fullHistory}
           this.plannerExecutionHistory.push({
             plannerOutput,
             toolMessages: currentIterationToolMessages,
-            plannerIterations : this.iterations,
+            plannerIterations: this.iterations,
           });
 
           // Add all messages to message manager
@@ -929,7 +930,7 @@ ${fullHistory}
           this.plannerExecutionHistory.push({
             plannerOutput,
             toolMessages: currentIterationToolMessages,
-            plannerIterations : this.iterations,
+            plannerIterations: this.iterations,
           });
 
           // Add all messages to message manager
@@ -966,7 +967,7 @@ ${fullHistory}
     this.plannerExecutionHistory.push({
       plannerOutput,
       toolMessages: currentIterationToolMessages,
-      plannerIterations : this.iterations,
+      plannerIterations: this.iterations,
     });
 
     return { completed: false };
@@ -1011,7 +1012,7 @@ ${fullHistory}
           const detectedTag = PROHIBITED_TAGS.find(tag => accumulatedText.includes(tag));
           if (detectedTag) {
             hasProhibitedContent = true;
-            
+
             // If we were streaming, replace with "Processing..."
             if (currentMsgId) {
               this.pubsub.publishMessage(
@@ -1022,18 +1023,18 @@ ${fullHistory}
                 ),
               );
             }
-            
+
             // Queue warning for agent's next iteration
             mm.queueSystemReminder(
               "I will never output <browser-state> or <system-reminder> tags or their contents. These are for my internal reference only. If I have completed all actions, I will complete the task and call 'done' tool."
             );
-            
+
             // Log for debugging
-            Logging.log("BrowserAgent", 
-              "LLM output contained prohibited tags, streaming stopped", 
+            Logging.log("BrowserAgent",
+              "LLM output contained prohibited tags, streaming stopped",
               "warning"
             );
-            
+
             // Increment error metric
             this.executionContext.incrementMetric("errors");
           }
@@ -1060,7 +1061,7 @@ ${fullHistory}
           }
         }
       }
-      
+
       // Always accumulate chunks for final AIMessage (even with prohibited content)
       accumulatedChunk = !accumulatedChunk
         ? chunk
@@ -1189,8 +1190,8 @@ ${fullHistory}
     if (isDevelopmentMode()) {
       let message = action;
       if (details) {
-        const truncated = details.length > maxLength 
-          ? details.substring(0, maxLength) + "..." 
+        const truncated = details.length > maxLength
+          ? details.substring(0, maxLength) + "..."
           : details;
         message = `${action}: ${truncated}`;
       }
@@ -1218,9 +1219,9 @@ ${fullHistory}
     const successRate =
       metrics.toolCalls > 0
         ? (
-            ((metrics.toolCalls - metrics.errors) / metrics.toolCalls) *
-            100
-          ).toFixed(1)
+          ((metrics.toolCalls - metrics.errors) / metrics.toolCalls) *
+          100
+        ).toFixed(1)
         : "0";
 
     // Convert tool frequency Map to object for logging
@@ -1232,8 +1233,8 @@ ${fullHistory}
     Logging.log(
       "BrowserAgent",
       `Execution complete: ${this.iterations} iterations, ${metrics.toolCalls} tool calls, ` +
-        `${metrics.observations} observations, ${metrics.errors} errors, ` +
-        `${successRate}% success rate, ${duration}ms duration`,
+      `${metrics.observations} observations, ${metrics.errors} errors, ` +
+      `${successRate}% success rate, ${duration}ms duration`,
       "info",
     );
 
@@ -1276,7 +1277,7 @@ ${fullHistory}
     try {
       const currentPage = await this.executionContext.browserContext.getCurrentPage();
       const tabId = currentPage.tabId;
-      
+
       if (tabId && !this.glowService.isGlowActive(tabId)) {
         await this.glowService.startGlow(tabId);
         return true;
@@ -1296,12 +1297,12 @@ ${fullHistory}
   private async _waitForHumanInput(): Promise<'done' | 'abort' | 'timeout'> {
     const startTime = Date.now();
     const requestId = this.executionContext.getHumanInputRequestId();
-    
+
     if (!requestId) {
       console.error('No human input request ID found');
       return 'abort';
     }
-    
+
     // Subscribe to human input responses
     const subscription = this.pubsub.subscribe((event: PubSubEvent) => {
       if (event.type === 'human-input-response') {
@@ -1311,7 +1312,7 @@ ${fullHistory}
         }
       }
     });
-    
+
     try {
       // Poll for response or timeout
       while (!this.executionContext.shouldAbort()) {
@@ -1320,20 +1321,20 @@ ${fullHistory}
         if (response) {
           return response.action;  // 'done' or 'abort'
         }
-        
+
         // Check timeout
         if (Date.now() - startTime > HUMAN_INPUT_TIMEOUT) {
           this._publishMessage('⏱️ Human input timed out after 10 minutes', 'error');
           return 'timeout';
         }
-        
+
         // Wait before checking again
         await new Promise(resolve => setTimeout(resolve, HUMAN_INPUT_CHECK_INTERVAL));
       }
-      
+
       // Aborted externally
       return 'abort';
-      
+
     } finally {
       // Clean up subscription
       subscription.unsubscribe();
@@ -1406,7 +1407,7 @@ ${fullHistory}
         /* simplified */ true,
         /* screenshotSize */ "large",
         /* includeBrowserState */ true,
-        /* browserStateTokensLimit */ (this.executionContext.getMaxTokens() - systemPromptTokens - userPromptTokens)*0.8
+        /* browserStateTokensLimit */(this.executionContext.getMaxTokens() - systemPromptTokens - userPromptTokens) * 0.8
       );
       const messages = [
         new SystemMessage(systemPrompt),
