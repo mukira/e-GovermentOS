@@ -25,7 +25,7 @@ NC='\033[0m'
 
 # Paths
 SERVER_DIR="$SCRIPT_DIR/BrowserOS-server"
-AGENT_DIR="$SCRIPT_DIR/BrowserOS-agent/dist"
+AGENT_DIR="$SCRIPT_DIR/packages/browseros-agent/dist"
 BROWSER_APP="/Users/Mukira/chromium/src/out/Release/BrowserOS.app"
 BROWSER_BINARY="$BROWSER_APP/Contents/MacOS/BrowserOS"
 
