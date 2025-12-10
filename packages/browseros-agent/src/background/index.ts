@@ -58,7 +58,7 @@ function registerHandlers(): void {
       // Security: Validate origin to prevent IPC spoofing
       const EXTENSION_ORIGIN = new URL(chrome.runtime.getURL("/")).origin
       const SIDE_PANEL_URL = chrome.runtime.getURL("sidepanel.html")
-      
+
       if (port.sender?.origin === EXTENSION_ORIGIN && port.sender?.url === SIDE_PANEL_URL) {
         return executionHandler.handleExecuteQuery(msg, port)
       } else {
@@ -66,12 +66,12 @@ function registerHandlers(): void {
       }
     }
   )
-  
+
   messageRouter.registerHandler(
     MessageType.CANCEL_TASK,
     (msg, port) => executionHandler.handleCancelTask(msg, port)
   )
-  
+
   messageRouter.registerHandler(
     MessageType.RESET_CONVERSATION,
     (msg, port) => executionHandler.handleResetConversation(msg, port)
@@ -98,49 +98,49 @@ function registerHandlers(): void {
     MessageType.GET_LLM_PROVIDERS,
     (msg, port) => providersHandler.handleGetProviders(msg, port)
   )
-  
+
   messageRouter.registerHandler(
     MessageType.SAVE_LLM_PROVIDERS,
     (msg, port) => providersHandler.handleSaveProviders(msg, port)
   )
-  
+
   // MCP handlers
   messageRouter.registerHandler(
     MessageType.GET_MCP_SERVERS,
     (msg, port) => mcpHandler.handleGetMCPServers(msg, port)
   )
-  
+
   messageRouter.registerHandler(
     MessageType.CONNECT_MCP_SERVER,
     (msg, port) => mcpHandler.handleConnectMCPServer(msg, port)
   )
-  
+
   messageRouter.registerHandler(
     MessageType.DISCONNECT_MCP_SERVER,
     (msg, port) => mcpHandler.handleDisconnectMCPServer(msg, port)
   )
-  
+
   messageRouter.registerHandler(
     MessageType.CALL_MCP_TOOL,
     (msg, port) => mcpHandler.handleCallMCPTool(msg, port)
   )
-  
+
   messageRouter.registerHandler(
     MessageType.MCP_INSTALL_SERVER,
     (msg, port) => mcpHandler.handleInstallServer(msg, port)
   )
-  
+
   messageRouter.registerHandler(
     MessageType.MCP_DELETE_SERVER,
     (msg, port) => mcpHandler.handleDeleteServer(msg, port)
   )
-  
+
   messageRouter.registerHandler(
     MessageType.MCP_GET_INSTALLED_SERVERS,
     (msg, port) => mcpHandler.handleGetInstalledServers(msg, port)
   )
-  
-  
+
+
   // Plan generation handlers (for AI plan generation in newtab)
   messageRouter.registerHandler(
     MessageType.GENERATE_PLAN,
@@ -226,7 +226,7 @@ function registerHandlers(): void {
       Logging.log(logMsg.source || 'Unknown', logMsg.message, logMsg.level || 'info')
     }
   )
-  
+
   // Metrics handler
   messageRouter.registerHandler(
     MessageType.LOG_METRIC,
@@ -235,7 +235,7 @@ function registerHandlers(): void {
       Logging.logMetric(event, properties)
     }
   )
-  
+
   // Heartbeat handler - acknowledge heartbeats to keep connection alive
   messageRouter.registerHandler(
     MessageType.HEARTBEAT,
@@ -248,7 +248,7 @@ function registerHandlers(): void {
       })
     }
   )
-  
+
   // Panel close handler
   messageRouter.registerHandler(
     MessageType.CLOSE_PANEL,
@@ -308,26 +308,26 @@ function handlePortConnection(port: chrome.runtime.Port): void {
     Logging.log('Background', `Side panel connected`)
     Logging.logMetric('side_panel_opened', { source: 'port_connection' })
   }
-  
+
   // Register with logging system
   Logging.registerPort(port.name, port)
-  
+
   // Set up message listener
   port.onMessage.addListener((message: PortMessage) => {
     messageRouter.routeMessage(message, port)
   })
-  
+
   // Set up disconnect listener
   port.onDisconnect.addListener(() => {
     portManager.unregisterPort(port)
-    
+
     // Update panel state if this was the sidepanel
     if (port.name === 'sidepanel') {
       isPanelOpen = false
       Logging.log('Background', `Side panel disconnected`)
       Logging.logMetric('side_panel_closed', { source: 'port_disconnection' })
     }
-    
+
     // Unregister from logging
     Logging.unregisterPort(port.name)
   })
@@ -338,13 +338,13 @@ function handlePortConnection(port: chrome.runtime.Port): void {
  */
 async function toggleSidePanel(tabId: number): Promise<void> {
   if (isPanelToggling) return
-  
+
   isPanelToggling = true
-  
+
   try {
     if (isPanelOpen) {
       // Signal sidepanel to close itself
-      chrome.runtime.sendMessage({ type: MessageType.CLOSE_PANEL }).catch(() => {})
+      chrome.runtime.sendMessage({ type: MessageType.CLOSE_PANEL }).catch(() => { })
       isPanelOpen = false
       Logging.log('Background', 'Panel toggled off')
     } else {
@@ -356,7 +356,7 @@ async function toggleSidePanel(tabId: number): Promise<void> {
     }
   } catch (error) {
     Logging.log('Background', `Error toggling side panel: ${error}`, 'error')
-    
+
     // Try fallback with windowId
     if (!isPanelOpen) {
       try {
@@ -398,7 +398,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     }
   }
   // On update: do nothing (user has already seen it or can revisit from settings)
-  
+
   // Security: Restrict storage access
   try {
     // @ts-ignore - setAccessLevel might not be in the types yet but is supported
@@ -422,7 +422,7 @@ function initialize(): void {
 
   // Set up port connection listener
   chrome.runtime.onConnect.addListener(handlePortConnection)
-  
+
   // Set up extension icon click handler
   chrome.action.onClicked.addListener(async (tab) => {
     Logging.log('Background', 'Extension icon clicked')
@@ -430,7 +430,7 @@ function initialize(): void {
       await toggleSidePanel(tab.id)
     }
   })
-  
+
   // Set up keyboard shortcut handler
   chrome.commands.onCommand.addListener(async (command) => {
     if (command === 'toggle-panel') {
@@ -441,25 +441,25 @@ function initialize(): void {
       }
     }
   })
-  
+
   // Clean up on tab removal
   chrome.tabs.onRemoved.addListener(async (tabId) => {
     // With singleton execution, just log the tab removal
     Logging.log('Background', `Tab ${tabId} removed`)
   })
-  
+
   // Handle messages from newtab only
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.type === 'NEWTAB_EXECUTE_QUERY') {
       executionHandler.handleNewtabQuery(message, sendResponse)
       return true  // Keep message channel open for async response
     }
-    
+
     // Secure storage access for content scripts
     if (message.type === 'getStorageValue') {
       const { key } = message
       const SAFE_KEYS = new Set(['nxtscape-glow-enabled', 'theme'])
-      
+
       if (SAFE_KEYS.has(key)) {
         chrome.storage.local.get(key, (result) => {
           sendResponse({ status: 'success', value: result[key] })
@@ -470,7 +470,16 @@ function initialize(): void {
       }
     }
   })
-  
+
+  // Redirect native first run page to extension onboarding
+  chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === 'loading' && tab.url?.startsWith('chrome://browseros-first-run')) {
+      const onboardingUrl = chrome.runtime.getURL('onboarding.html')
+      Logging.log('Background', `Redirecting native first run to: ${onboardingUrl}`)
+      chrome.tabs.update(tabId, { url: onboardingUrl })
+    }
+  })
+
   Logging.log('Background', 'Nxtscape extension initialized successfully')
 }
 
