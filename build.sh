@@ -1,8 +1,8 @@
 #!/bin/bash
 ################################################################################
-# BrowserOS Optimized Incremental Build Script
+# e-GovernmentOS Optimized Incremental Build Script
 # 
-# This script builds BrowserOS with all customizations using the official
+# This script builds e-GovernmentOS with all customizations using the official
 # Python build system. It supports incremental builds via ninja.
 #
 # Usage:
@@ -66,9 +66,34 @@ log_warning() {
     echo -e "${YELLOW}⚠${NC} $1"
 }
 
+cleanup_old_builds() {
+    echo "════════════════════════════════════════════════════════════════════════"
+    log_info "Checking for conflicting build processes..."
+    
+    # List of process names to kill
+    local procs=("autoninja" "siso" "ninja" "build.e_governmentos" "build.sh")
+    
+    for proc in "${procs[@]}"; do
+        # Find PIDs (excluding current process and grep)
+        pids=$(pgrep -f "$proc" | grep -v "$$" | tr '\n' ' ')
+        
+        if [[ -n "$pids" ]]; then
+            log_warning "Killing existing '$proc' processes: $pids"
+            # Try terminate first
+            kill $pids 2>/dev/null || true
+            sleep 1
+            # Force kill if still alive
+            kill -9 $pids 2>/dev/null || true
+        fi
+    done
+    
+    log_success "Build environment clean."
+    echo "════════════════════════════════════════════════════════════════════════"
+}
+
 show_help() {
     cat << EOF
-BrowserOS Optimized Incremental Build Script
+e-GovernmentOS Optimized Incremental Build Script
 
 USAGE:
     ./build.sh [OPTIONS]
@@ -163,7 +188,7 @@ ARCH="${CLI_ARCH:-$DEFAULT_ARCH}"
 #===============================================================================
 
 echo "════════════════════════════════════════════════════════════════════════"
-echo "  BrowserOS Optimized Build System"
+echo "  e-GovernmentOS Optimized Build System"
 echo "════════════════════════════════════════════════════════════════════════"
 
 log_info "Validating build environment..."
@@ -238,12 +263,12 @@ if ! command -v ninja &> /dev/null && ! command -v autoninja &> /dev/null; then
 fi
 log_success "Build tools found (ninja: $(which ninja 2>/dev/null || echo 'via chromium'))"
 
-# Check if we're in the BrowserOS repo
-if [[ ! -d "$SCRIPT_DIR/packages/browseros" ]]; then
-    log_error "This script must be run from the BrowserOS repository root"
+# Check if we're in the e-GovernmentOS repo
+if [[ ! -d "$SCRIPT_DIR/packages/e-governmentos" ]]; then
+    log_error "This script must be run from the e-GovernmentOS repository root"
     exit 1
 fi
-log_success "BrowserOS repository: $SCRIPT_DIR"
+log_success "e-GovernmentOS repository: $SCRIPT_DIR"
 
 #===============================================================================
 # Build Configuration
@@ -256,26 +281,26 @@ echo "  • Chromium src: $CHROMIUM_SRC"
 echo "  • Mode:         $([ "$FULL_BUILD" = true ] && echo "FULL REBUILD" || echo "INCREMENTAL")"
 
 #===============================================================================
-# Build BrowserOS-server
+# Build e-GovernmentOS-server
 #===============================================================================
 
 build_server() {
-    log_info "Building BrowserOS-server..."
+    log_info "Building e-GovernmentOS-server..."
     
-    SERVER_DIR="$SCRIPT_DIR/BrowserOS-server"
+    SERVER_DIR="$SCRIPT_DIR/e-GovernmentOS-server"
     
     # Check if server directory exists
     if [[ ! -d "$SERVER_DIR" ]]; then
-        log_warning "BrowserOS-server not found at: $SERVER_DIR"
-        log_info "Cloning BrowserOS-server repository..."
-        git clone https://github.com/browseros-ai/BrowserOS-server.git "$SERVER_DIR"
+        log_warning "e-GovernmentOS-server not found at: $SERVER_DIR"
+        log_info "Cloning e-GovernmentOS-server repository..."
+        git clone https://github.com/e-governmentos-ai/e-GovernmentOS-server.git "$SERVER_DIR"
     fi
     
     cd "$SERVER_DIR"
     
     # Check for bun
     if ! command -v bun &> /dev/null; then
-        log_error "Bun is required for BrowserOS-server"
+        log_error "Bun is required for e-GovernmentOS-server"
         log_error "Install from: https://bun.sh"
         return 1
     fi
@@ -290,7 +315,7 @@ build_server() {
     if [[ ! -f ".env.dev" ]]; then
         log_info "Creating server configuration (.env.dev)..."
         cat > .env.dev << 'EOF'
-# BrowserOS Server Configuration
+# e-GovernmentOS Server Configuration
 HTTP_MCP_PORT=9223
 AGENT_PORT=3000
 EXTENSION_PORT=9224
@@ -315,15 +340,15 @@ EOF
 #===============================================================================
 
 build_agent() {
-    log_info "Building BrowserOS Agent extension..."
+    log_info "Building e-GovernmentOS Agent extension..."
     
-    AGENT_DIR="$SCRIPT_DIR/packages/browseros-agent"
+    AGENT_DIR="$SCRIPT_DIR/packages/e-governmentos-agent"
     
     # Check if agent submodule is initialized
     if [[ ! -d "$AGENT_DIR" ]] || [[ ! -f "$AGENT_DIR/package.json" ]]; then
         log_warning "Agent submodule not initialized, initializing..."
         cd "$SCRIPT_DIR"
-        git submodule update --init --recursive packages/browseros-agent
+        git submodule update --init --recursive packages/e-governmentos-agent
     fi
     
     # Check if agent directory exists after init
@@ -367,13 +392,13 @@ build_agent() {
 }
 
 #===============================================================================
-# Build BrowserOS (Chromium)
+# Build e-GovernmentOS (Chromium)
 #===============================================================================
 
-build_browseros() {
-    log_info "Building BrowserOS Chromium..."
+build_e_governmentos() {
+    log_info "Building e-GovernmentOS Chromium..."
     
-    cd "$SCRIPT_DIR/packages/browseros"
+    cd "$SCRIPT_DIR/packages/e-governmentos"
     
     # Check if build is already configured
     # Capitalize build type (debug -> Debug, release -> Release)
@@ -385,7 +410,7 @@ build_browseros() {
         log_info "Running FULL BUILD (setup + prep + build)..."
         
         # Full build pipeline
-        python3 -m build.browseros build \
+        python3 -m build.e_governmentos build \
             --setup \
             --prep \
             --build \
@@ -398,8 +423,28 @@ build_browseros() {
             log_info "Configuration exists, running INCREMENTAL BUILD..."
             log_info "Using existing configuration: $ARGS_FILE"
             
+            # --- SMART SYNC START ---
+            log_info "⚡ Syncing User Assets (BrowserOS -> Chromium)..."
+            
+            # 1. Sync Source Overlays (Code, patches, etc.)
+            if [[ -d "$SCRIPT_DIR/packages/e-governmentos/chromium_files" ]]; then
+                 rsync -av --update "$SCRIPT_DIR/packages/e-governmentos/chromium_files/" "$CHROMIUM_SRC/" || log_warning "Overlay sync had warnings"
+            fi
+            
+            # 2. Sync Branding Icons (Explicit User Request)
+            if [[ -d "$SCRIPT_DIR/packages/e-governmentos/resources/icons/mac" ]]; then
+                 log_info "Updating App Icons..."
+                 cp -v "$SCRIPT_DIR/packages/e-governmentos/resources/icons/mac/"*.icns "$CHROMIUM_SRC/chrome/app/theme/chromium/mac/" || log_warning "Icon update failed"
+            fi
+            
+            # 3. Force Branding File update (Ensure name is always correct)
+             if [[ -f "$SCRIPT_DIR/packages/e-governmentos/chromium_files/chrome/app/theme/chromium/BRANDING" ]]; then
+                 cp -v "$SCRIPT_DIR/packages/e-governmentos/chromium_files/chrome/app/theme/chromium/BRANDING" "$CHROMIUM_SRC/chrome/app/theme/chromium/BRANDING"
+             fi
+            # --- SMART SYNC END ---
+
             # Only run compile phase
-            python3 -m build.browseros build \
+            python3 -m build.e_governmentos build \
                 --build \
                 --build-type "$BUILD_TYPE" \
                 --arch "$ARCH" \
@@ -409,7 +454,7 @@ build_browseros() {
             log_info "This will take longer (setting up + applying patches + building)..."
             
             # First time build - need setup and prep
-            python3 -m build.browseros build \
+            python3 -m build.e_governmentos build \
                 --setup \
                 --prep \
                 --build \
@@ -422,8 +467,14 @@ build_browseros() {
     cd "$SCRIPT_DIR"
     
     # Verify build output
-    if [[ -d "$OUT_DIR/BrowserOS.app" ]] || [[ -f "$OUT_DIR/chrome" ]]; then
-        log_success "BrowserOS built successfully!"
+    # Check for Default_x64 (Common for this project configuration)
+    if [[ ! -d "$OUT_DIR" ]] && [[ -d "$CHROMIUM_SRC/out/Default_x64" ]]; then
+         log_warning "Redirecting verification to out/Default_x64..."
+         OUT_DIR="$CHROMIUM_SRC/out/Default_x64"
+    fi
+
+    if [[ -d "$OUT_DIR/e-GovernmentOS.app" ]] || [[ -f "$OUT_DIR/chrome" ]]; then
+        log_success "e-GovernmentOS built successfully!"
         log_info "Output directory: $OUT_DIR"
     else
         log_error "Build completed but output not found in: $OUT_DIR"
@@ -441,6 +492,8 @@ main() {
     echo ""
     
     # Build based on mode
+    cleanup_old_builds
+
     if [[ "$AGENT_ONLY" = true ]]; then
         # Only build agent
         build_agent
@@ -448,21 +501,21 @@ main() {
         # Build all components: server, agent, and browser
         
         # 1. Build server (fastest, does not depend on others)
-        log_info "Building BrowserOS-server..."
+        log_info "Building e-GovernmentOS-server..."
         build_server || {
             log_warning "Server build failed, continuing..."
         }
         
         # 2. Build agent extension
-        log_info "Building BrowserOS-agent extension..."
+        log_info "Building e-GovernmentOS-agent extension..."
         build_agent || {
             log_warning "Agent build failed, continuing..."
         }
         
         # 3. Build browser (slowest, can take minutes to hours)
-        log_info "Building BrowserOS browser..."
-        build_browseros || {
-            log_error "BrowserOS build failed"
+        log_info "Building e-GovernmentOS browser..."
+        build_e_governmentos || {
+            log_error "e-GovernmentOS build failed"
             exit 1
         }
     fi
@@ -485,24 +538,24 @@ main() {
         BUILD_TYPE_CAP="$(tr '[:lower:]' '[:upper:]' <<< "${BUILD_TYPE:0:1}")${BUILD_TYPE:1}"
         
         log_info "Build outputs:"
-        echo "  • Server:  $SCRIPT_DIR/BrowserOS-server (runs from source)"
-        echo "  • Agent:   $SCRIPT_DIR/packages/browseros-agent/dist"
+        echo "  • Server:  $SCRIPT_DIR/e-GovernmentOS-server (runs from source)"
+        echo "  • Agent:   $SCRIPT_DIR/packages/e-governmentos-agent/dist"
         echo "  • Browser: $CHROMIUM_SRC/out/$BUILD_TYPE_CAP"
         echo ""
-        log_info "To run the complete BrowserOS stack:"
-        echo "  ./launch-browseros.sh"
+        log_info "To run the complete e-GovernmentOS stack:"
+        echo "  ./launch-e-governmentos.sh"
         echo ""
         log_info "Or run components individually:"
-        echo "  • Server:  cd BrowserOS-server && bun start"
+        echo "  • Server:  cd e-GovernmentOS-server && bun start"
         
-        if [[ -d "$CHROMIUM_SRC/out/$BUILD_TYPE_CAP/BrowserOS.app" ]]; then
-            echo "  • Browser: $CHROMIUM_SRC/out/$BUILD_TYPE_CAP/BrowserOS.app/Contents/MacOS/BrowserOS"
+        if [[ -d "$CHROMIUM_SRC/out/$BUILD_TYPE_CAP/e-GovernmentOS.app" ]]; then
+            echo "  • Browser: $CHROMIUM_SRC/out/$BUILD_TYPE_CAP/e-GovernmentOS.app/Contents/MacOS/e-GovernmentOS"
         elif [[ -f "$CHROMIUM_SRC/out/$BUILD_TYPE_CAP/chrome" ]]; then
             echo "  • Browser: $CHROMIUM_SRC/out/$BUILD_TYPE_CAP/chrome"
         fi
     else
         log_info "Agent output:"
-        echo "  • $SCRIPT_DIR/packages/browseros-agent/dist"
+        echo "  • $SCRIPT_DIR/packages/e-governmentos-agent/dist"
     fi
 }
 

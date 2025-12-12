@@ -1,35 +1,35 @@
-# BrowserOS Unified Stack
+# e-GovernmentOS Unified Stack
 
-This document explains how all BrowserOS components work together.
+This document explains how all e-GovernmentOS components work together.
 
 ## Components
 
-### 1. **BrowserOS Browser** (Chromium + Patches)
-- Location: `/Users/Mukira/chromium/src/out/Release/BrowserOS.app`
-- What: Custom Chromium build with BrowserOS branding and features
+### 1. **e-GovernmentOS Browser** (Chromium + Patches)
+- Location: `/Users/Mukira/chromium/src/out/Release/e-GovernmentOS.app`
+- What: Custom Chromium build with e-GovernmentOS branding and features
 - Built with: `./build.sh`
 
-### 2. **BrowserOS-agent Extension**
-- Location: `packages/browseros-agent/dist/`
+### 2. **e-GovernmentOS-agent Extension**
+- Location: `packages/e-governmentos-agent/dist/`
 - What: Chrome extension providing AI agent UI and browser control
-- Built with: `cd packages/browseros-agent && yarn build`
+- Built with: `cd packages/e-governmentos-agent && yarn build`
 
-### 3. **BrowserOS-server** (MCP Server)
-- Location: `BrowserOS-server/`
+### 3. **e-GovernmentOS-server** (MCP Server)
+- Location: `e-GovernmentOS-server/`
 - What: Server providing browser automation tools via MCP protocol
 - Runs with: `bun start`
 
 ## How They Connect
 
 ```
-User runs ./launch-browseros.sh
+User runs ./launch-e-governmentos.sh
          │
-         ├─► Starts BrowserOS-server
+         ├─► Starts e-GovernmentOS-server
          │   ├─ HTTP MCP Server (port 9223)
          │   ├─ Agent Server (port 3000)  
          │   └─ WebSocket Manager (port 9224)
          │
-         └─► Starts BrowserOS browser
+         └─► Starts e-GovernmentOS browser
              └─ Loads agent extension
                 └─ Connects to server via WebSocket (port 9224)
 ```
@@ -37,7 +37,7 @@ User runs ./launch-browseros.sh
 ## Data Flow
 
 1. **AI Agent wants to control browser**
-   - Sends request to BrowserOS-server (port 9223 or 3000)
+   - Sends request to e-GovernmentOS-server (port 9223 or 3000)
    
 2. **Server executes browser automation**
    - Uses WebSocket (port 9224) to communicate with agent extension
@@ -52,28 +52,28 @@ User runs ./launch-browseros.sh
 ### Single Command (Recommended)
 
 ```bash
-./launch-browseros.sh
+./launch-e-governmentos.sh
 ```
 
 This starts:
-- ✅ BrowserOS-server in background
-- ✅ BrowserOS browser with extension loaded
+- ✅ e-GovernmentOS-server in background
+- ✅ e-GovernmentOS browser with extension loaded
 - ✅ All connections configured automatically
 
 ### Advanced Usage
 
 ```bash
 # Start only server (background)
-./launch-browseros.sh --server-only
+./launch-e-governmentos.sh --server-only
 
 # Start only browser (assumes server running)
-./launch-browseros.sh --browser-only
+./launch-e-governmentos.sh --browser-only
 
 # Check server status
-./launch-browseros.sh --status
+./launch-e-governmentos.sh --status
 
 # Stop server
-./launch-browseros.sh --stop
+./launch-e-governmentos.sh --stop
 ```
 
 ## Development Workflow
@@ -85,17 +85,17 @@ This starts:
 ./build.sh
 
 # 2. Build agent extension (after extension changes)
-cd packages/browseros-agent
+cd packages/e-governmentos-agent
 yarn build
 cd ../..
 
 # 3. Build server binary (optional, for distribution)
-cd BrowserOS-server
+cd e-GovernmentOS-server
 bun run dev:server:macos
 cd ..
 
 # 4. Launch everything
-./launch-browseros.sh
+./launch-e-governmentos.sh
 ```
 
 ### Incremental Development
@@ -107,11 +107,11 @@ For daily development:
 ./build.sh  # Incremental, only rebuilds changed files
 
 # Agent extension changes
-cd packages/browseros-agent && yarn build && cd ../..
+cd packages/e-governmentos-agent && yarn build && cd ../..
 
 # Server code changes (no build needed, just restart)
-./launch-browseros.sh --stop
-./launch-browseros.sh
+./launch-e-governmentos.sh --stop
+./launch-e-governmentos.sh
 ```
 
 ## Ports Reference
@@ -124,9 +124,9 @@ cd packages/browseros-agent && yarn build && cd ../..
 
 ## Environment Variables
 
-### For BrowserOS-server
+### For e-GovernmentOS-server
 
-Create `BrowserOS-server/.env.dev`:
+Create `e-GovernmentOS-server/.env.dev`:
 
 ```bash
 # Required for AI agent functionality
@@ -159,10 +159,10 @@ lsof -i :3000
 lsof -i :9224
 
 # View server logs
-tail -f browseros-server.log
+tail -f e-governmentos-server.log
 
 # Check dependencies
-cd BrowserOS-server
+cd e-GovernmentOS-server
 bun install
 ```
 
@@ -170,19 +170,19 @@ bun install
 
 ```bash
 # Rebuild extension
-cd packages/browseros-agent
+cd packages/e-governmentos-agent
 rm -rf dist node_modules
 yarn install
 yarn build
 
 # Check extension directory exists
-ls -la packages/browseros-agent/dist/
+ls -la packages/e-governmentos-agent/dist/
 ```
 
 ### Browser not connecting to server
 
-1. Make sure server is running: `./launch-browseros.sh --status`
-2. Check server logs: `tail -f browseros-server.log`
+1. Make sure server is running: `./launch-e-governmentos.sh --status`
+2. Check server logs: `tail -f e-governmentos-server.log`
 3. Verify extension loaded in browser: `chrome://extensions`
 4. Check WebSocket connection in browser console
 
@@ -215,11 +215,11 @@ ls -la packages/browseros-agent/dist/
 
 ## Production Deployment
 
-For distributing BrowserOS:
+For distributing e-GovernmentOS:
 
 ```bash
 # Build production server binaries
-cd BrowserOS-server
+cd e-GovernmentOS-server
 bun run dist:server
 
 # Build production extension
@@ -230,8 +230,8 @@ bun run dist:ext
 ```
 
 Distribute:
-- `BrowserOS.app` (or .exe on Windows)
-- `BrowserOS-server` binary
+- `e-GovernmentOS.app` (or .exe on Windows)
+- `e-GovernmentOS-server` binary
 - Pre-configured launcher script
 
-Users just run: `./launch-browseros.sh`
+Users just run: `./launch-e-governmentos.sh`

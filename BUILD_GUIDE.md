@@ -1,13 +1,13 @@
-# BrowserOS Build Script Documentation
+# e-GovernmentOS Build Script Documentation
 
 ## Overview
 
-The new `build.sh` script provides an optimized build system for BrowserOS with:
+The new `build.sh` script provides an optimized build system for e-GovernmentOS with:
 - **Incremental builds** - Only rebuilds changed files (via ninja)
-- **Official build system** - Uses the Python-based BrowserOS build system
+- **Official build system** - Uses the Python-based e-GovernmentOS build system
 - **Auto-configuration** - Detects Chromium source and build settings
-- **Proper customizations** - Applies all patches and BrowserOS customizations
-- **Agent building** - Builds the BrowserOS agent extension
+- **Proper customizations** - Applies all patches and e-GovernmentOS customizations
+- **Agent building** - Builds the e-GovernmentOS agent extension
 
 ## Quick Start
 
@@ -18,13 +18,13 @@ The new `build.sh` script provides an optimized build system for BrowserOS with:
 export CHROMIUM_SRC=$HOME/chromium/src
 
 # Run full build - builds ALL components:
-#   1. BrowserOS-server (MCP server binary)
-#   2. BrowserOS-agent (Chrome extension)  
-#   3. BrowserOS browser (Chromium with patches)
+#   1. e-GovernmentOS-server (MCP server binary)
+#   2. e-GovernmentOS-agent (Chrome extension)  
+#   3. e-GovernmentOS browser (Chromium with patches)
 ./build.sh --full
 ```
 
-This single command builds the complete BrowserOS stack!
+This single command builds the complete e-GovernmentOS stack!
 
 ### Daily Development (Incremental)
 
@@ -93,7 +93,7 @@ export ARCHITECTURE=arm64
 
 **What it does:**
 - Builds agent extension (if needed)
-- Checks if BrowserOS is already configured
+- Checks if e-GovernmentOS is already configured
 - If configured: Only runs compile phase (ninja)
 - If not configured: Runs setup + prep + compile
 
@@ -132,7 +132,7 @@ export ARCHITECTURE=arm64
 ```
 
 **What it does:**
-- Only builds the BrowserOS agent extension
+- Only builds the e-GovernmentOS agent extension
 - Skips Chromium build entirely
 
 **Use when:**
@@ -186,7 +186,7 @@ export CHROMIUM_SRC=$HOME/chromium/src
 
 ### Build Phases
 
-The script uses the official BrowserOS build system with these phases:
+The script uses the official e-GovernmentOS build system with these phases:
 
 1. **Setup Phase** (`--setup`)
    - Cleans previous builds
@@ -195,7 +195,7 @@ The script uses the official BrowserOS build system with these phases:
 
 2. **Prep Phase** (`--prep`)
    - Applies Chromium patches
-   - Copies BrowserOS resources
+   - Copies e-GovernmentOS resources
    - Replaces strings and branding
    - Applies series patches
 
@@ -259,7 +259,7 @@ cd $CHROMIUM_SRC
 rm -rf out/
 
 # Run full build
-cd /path/to/BrowserOS
+cd /path/to/e-GovernmentOS
 ./build.sh --full
 ```
 
@@ -268,19 +268,19 @@ cd /path/to/BrowserOS
 After a successful build:
 
 ```
-BrowserOS/
-├── packages/browseros-agent/dist/     # Agent extension
-└── (Chromium source)/out/Release/     # BrowserOS binary
-    ├── BrowserOS.app/                 # macOS
+e-GovernmentOS/
+├── packages/e-governmentos-agent/dist/     # Agent extension
+└── (Chromium source)/out/Release/     # e-GovernmentOS binary
+    ├── e-GovernmentOS.app/                 # macOS
     ├── chrome.exe                     # Windows
     └── chrome                         # Linux
 ```
 
-## Running BrowserOS
+## Running e-GovernmentOS
 
 ### macOS
 ```bash
-$CHROMIUM_SRC/out/Release/BrowserOS.app/Contents/MacOS/BrowserOS
+$CHROMIUM_SRC/out/Release/e-GovernmentOS.app/Contents/MacOS/e-GovernmentOS
 ```
 
 ### Linux
@@ -295,11 +295,11 @@ $CHROMIUM_SRC/out/Release/chrome.exe
 
 ### Load Agent Extension
 
-1. Open BrowserOS
+1. Open e-GovernmentOS
 2. Go to `chrome://extensions/`
 3. Enable "Developer mode"
 4. Click "Load unpacked"
-5. Select `packages/browseros-agent/dist/`
+5. Select `packages/e-governmentos-agent/dist/`
 
 ## Comparison with Old Scripts
 
@@ -310,7 +310,7 @@ $CHROMIUM_SRC/out/Release/chrome.exe
 
 ### Old build_worker.sh
 - Hardcoded paths for single machine
-- Referenced BrowserOS-agent and BrowserOS-server (don't exist)
+- Referenced e-GovernmentOS-agent and e-GovernmentOS-server (don't exist)
 - Only ran ninja (no patches, no setup)
 - No validation or error handling
 
@@ -337,20 +337,20 @@ $CHROMIUM_SRC/out/Release/chrome.exe
 ### Build Specific Module
 
 ```bash
-cd packages/browseros
-python3 -m build.browseros build --modules compile --chromium-src $CHROMIUM_SRC
+cd packages/e-governmentos
+python3 -m build.e_governmentos build --modules compile --chromium-src $CHROMIUM_SRC
 ```
 
 ### List Available Modules
 
 ```bash
-cd packages/browseros  
-python3 -m build.browseros build --list
+cd packages/e-governmentos  
+python3 -m build.e_governmentos build --list
 ```
 
 ### Use Config File
 
 ```bash
-cd packages/browseros
-python3 -m build.browseros build --config build/config/release.macos.yaml
+cd packages/e-governmentos
+python3 -m build.e_governmentos build --config build/config/release.macos.yaml
 ```

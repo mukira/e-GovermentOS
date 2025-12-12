@@ -8,7 +8,7 @@ World-class satellite intelligence Chrome extension built with Material UI and G
 1. Open Chrome: `chrome://extensions/`
 2. Enable "Developer mode"
 3. Click "Load unpacked"
-4. Select: `/Users/Mukira/Downloads/BrowserOS/geointel-extension/dist`
+4. Select: `/Users/Mukira/Downloads/e-GovernmentOS/geointel-extension/dist`
 
 ### Usage
 - Click GeoIntel icon in toolbar

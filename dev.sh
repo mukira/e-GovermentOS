@@ -1,6 +1,6 @@
 #!/bin/bash
 ################################################################################
-# BrowserOS Development Mode with Hot Reload
+# e-GovernmentOS Development Mode with Hot Reload
 #
 # Watches for file changes and automatically rebuilds/reloads components
 # - Agent extension: Auto-rebuild on file changes
@@ -16,8 +16,8 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-AGENT_DIR="$SCRIPT_DIR/packages/browseros-agent"
-SERVER_DIR="$SCRIPT_DIR/BrowserOS-server"
+AGENT_DIR="$SCRIPT_DIR/packages/e-governmentos-agent"
+SERVER_DIR="$SCRIPT_DIR/e-GovernmentOS-server"
 BROWSER_OUT="/Users/Mukira/chromium/src/out/Release"
 
 # Colors
@@ -73,10 +73,10 @@ watch_server() {
 watch_browser_resources() {
     log_info "Starting browser resources watcher..."
     
-    # Watch for changes in BrowserOS resource directories
+    # Watch for changes in e-GovernmentOS resource directories
     RESOURCE_DIRS=(
-        "$SCRIPT_DIR/packages/browseros/resources"
-        "$SCRIPT_DIR/packages/browseros/app"
+        "$SCRIPT_DIR/packages/e-governmentos/resources"
+        "$SCRIPT_DIR/packages/e-governmentos/app"
     )
     
     # Install fswatch if not available
@@ -94,8 +94,8 @@ watch_browser_resources() {
                     fswatch -1 "$dir" && {
                         log_info "Resource changed, copying to output..."
                         # Trigger resource copy (part of build process)
-                        cd "$SCRIPT_DIR/packages/browseros"
-                        python3 -m build.browseros build --prep-only
+                        cd "$SCRIPT_DIR/packages/e-governmentos"
+                        python3 -m build.e-governmentos build --prep-only
                         log_success "Resources updated! Restart browser to see changes."
                     }
                 fi
@@ -151,7 +151,7 @@ elif [[ "$1" == "--resources" ]]; then
 fi
 
 echo "════════════════════════════════════════════════════════════════════════"
-echo "  BrowserOS Development Mode - Hot Reload"
+echo "  e-GovernmentOS Development Mode - Hot Reload"
 echo "════════════════════════════════════════════════════════════════════════"
 echo ""
 

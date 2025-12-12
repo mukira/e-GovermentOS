@@ -25,7 +25,7 @@ public:
                    content::URLDataSource::GotDataCallback callback) override;
 };
 
-inline std::string UFRDataSource::GetSource() { return "browseros-first-run"; }
+inline std::string UFRDataSource::GetSource() { return "e-governmentos-first-run"; }
 
 inline std::string UFRDataSource::GetMimeType(const GURL &) {
   return "text/html";
@@ -34,13 +34,13 @@ inline std::string UFRDataSource::GetMimeType(const GURL &) {
 inline void UFRDataSource::StartDataRequest(
     const GURL &url, const content::WebContents::Getter &wc_getter,
     content::URLDataSource::GotDataCallback callback) {
-  // Source content from BrowserOS-agent/public/browseros_first_run.html
+  // Source content from e-GovernmentOS-agent/public/e-governmentos_first_run.html
   std::string source = R"(<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BrowserOS</title>
+    <title>e-GovernmentOS</title>
     <style>
         :root {
             --primary: #fb651f;
@@ -294,7 +294,7 @@ inline void UFRDataSource::StartDataRequest(
 <div class="hero">
  <div class="badge">Backed by YC</div>
  <h1>The Open Source <span class="accent">Agentic Browser</span></h1>
- <p class="subtitle">BrowserOS is an AI-powered browser that lets you build and run agents to automate tedious tasks. It looks like Chrome but reimagined for the AI era.</p>
+ <p class="subtitle">e-GovernmentOS is an AI-powered browser that lets you build and run agents to automate tedious tasks. It looks like Chrome but reimagined for the AI era.</p>
 </div>
 
 <section>
@@ -302,7 +302,7 @@ inline void UFRDataSource::StartDataRequest(
  
  <div class="cta-group">
   <div class="btn btn-primary">Quick start guide</div>
-  <a href="https://github.com/browseros-ai/BrowserOS" class="btn btn-secondary">
+  <a href="https://github.com/e-governmentos-ai/e-GovernmentOS" class="btn btn-secondary">
     <span class="icon" aria-hidden="true">★</span> Star us on Github
   </a>
  </div>
@@ -334,7 +334,7 @@ inline void UFRDataSource::StartDataRequest(
     Step 2: BYOK (Bring Your Own Keys)
    </h3>
    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:0.5rem;">You have full control over your AI models!</p>
-   <p style="color:var(--text-muted); font-size:0.9rem;">Navigate to <span class="code-snippet">chrome://settings/browseros</span> to configure your keys.</p>
+   <p style="color:var(--text-muted); font-size:0.9rem;">Navigate to <span class="code-snippet">chrome://settings/e-governmentos</span> to configure your keys.</p>
    <div class="note">Note: You can even run everything locally using Ollama!</div>
   </div>
   
@@ -346,7 +346,7 @@ inline void UFRDataSource::StartDataRequest(
     </span>
     Step 3: All done!
    </h3>
-   <p style="color:var(--text-muted);">Your ready to use BrowserOS, have fun! This page can be always accessed again at <span class="code-snippet">chrome://browseros-first-run</span></p>
+   <p style="color:var(--text-muted);">Your ready to use e-GovernmentOS, have fun! This page can be always accessed again at <span class="code-snippet">chrome://e-governmentos-first-run</span></p>
   </div>
  </div>
 </section>
@@ -355,7 +355,7 @@ inline void UFRDataSource::StartDataRequest(
  <div class="section-head"><span class="label">🤝 Join our <span class="accent">community</span></span></div>
  <p class="links">
   <a href="https://discord.gg/YKwjt5vuKr">Discord</a>
-  <a href="https://github.com/browseros-ai/BrowserOS">GitHub</a>
+  <a href="https://github.com/e-governmentos-ai/e-GovernmentOS">GitHub</a>
   <a href="https://x.com/browserOS_ai">X (Twitter)</a>
  </p>
  <p class="subtle" style="text-align:center;">Have questions or want to contribute? We’d love to hear from you.</p>
@@ -373,7 +373,7 @@ class NxtscapeFirstRunUIConfig
     : public content::DefaultWebUIConfig<NxtscapeFirstRun> {
 public:
   NxtscapeFirstRunUIConfig()
-      : DefaultWebUIConfig("chrome", "browseros-first-run") {}
+      : DefaultWebUIConfig("chrome", "e-governmentos-first-run") {}
 };
 
 class NxtscapeFirstRun : public content::WebUIController {

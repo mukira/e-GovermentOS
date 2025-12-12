@@ -15,7 +15,7 @@ When you change a logo or UI element, you don't want to wait for full rebuilds. 
 
 ```bash
 # Terminal 1: Start watch mode
-cd packages/browseros-agent
+cd packages/e-governmentos-agent
 yarn watch
 
 # Now: Edit files and see instant recompiles!
@@ -26,22 +26,22 @@ yarn watch
 1. Make your change (edit logo, CSS, component)
 2. Wait 5 seconds (auto-rebuild)
 3. Go to `chrome://extensions`
-4. Click reload button on BrowserOS extension
+4. Click reload button on e-GovernmentOS extension
 5. Refresh the page you're testing
 
 ### 🖥️ For Browser Resources (App Icon, Branding)  
 
-**What:** BrowserOS.app icon, splash screens, branding
-**Location:** `packages/browseros/resources/`
+**What:** e-GovernmentOS.app icon, splash screens, branding
+**Location:** `packages/e-governmentos/resources/`
 
 ```bash
 # After changing resources:
-cd packages/browseros
-python3 -m build.browseros build --prep-only
+cd packages/e-governmentos
+python3 -m build.e-governmentos build --prep-only
 
 # Restart browser to see changes
-pkill -f "BrowserOS.app"
-./launch-browseros.sh --browser-only
+pkill -f "e-GovernmentOS.app"
+./launch-e-governmentos.sh --browser-only
 ```
 
 **Time:** ~30 seconds
@@ -53,7 +53,7 @@ pkill -f "BrowserOS.app"
 
 ```bash
 # Terminal 1: Run with watch mode
-cd BrowserOS-server  
+cd e-GovernmentOS-server  
 bun --watch start
 
 # Server auto-restarts on any code change
@@ -65,7 +65,7 @@ bun --watch start
 
 ```bash
 # 1. Start watch mode (one time)
-cd packages/browseros-agent
+cd packages/e-governmentos-agent
 yarn watch &
 
 # 2. Edit the logo
@@ -76,19 +76,19 @@ open src/assets/logo.svg  # or .png
 # 5. Done! Logo updated instantly
 ```
 
-### Changing the BrowserOS App Icon
+### Changing the e-GovernmentOS App Icon
 
 ```bash
 # 1. Replace icon file
-cp new-icon.icns packages/browseros/app/app.icns
+cp new-icon.icns packages/e-governmentos/app/app.icns
 
 # 2. Copy resources
-cd packages/browseros
-python3 -m build.browseros build --prep-only
+cd packages/e-governmentos
+python3 -m build.e-governmentos build --prep-only
 
 # 3. Restart browser
-pkill -f "BrowserOS.app"
-open /Users/Mukira/chromium/src/out/Release/BrowserOS.app
+pkill -f "e-GovernmentOS.app"
+open /Users/Mukira/chromium/src/out/Release/e-GovernmentOS.app
 ```
 
 ## Development Mode Script
@@ -124,7 +124,7 @@ See console errors and test changes live.
 ./build.sh
 
 # ✅ Fast (watches and rebuilds only changes)
-cd packages/browseros-agent && yarn watch
+cd packages/e-governmentos-agent && yarn watch
 ```
 
 ### 4. Separate Terminals
@@ -149,13 +149,13 @@ Terminal 3: Your testing/commands
 
 ```bash
 # Agent changes (CSS, components, logos)
-cd packages/browseros-agent && yarn watch
+cd packages/e-governmentos-agent && yarn watch
 
 # Server changes
-cd BrowserOS-server && bun --watch start
+cd e-GovernmentOS-server && bun --watch start
 
 # Browser resources (icons, branding)
-cd packages/browseros && python3 -m build.browseros build --prep-only
+cd packages/e-governmentos && python3 -m build.e-governmentos build --prep-only
 
 # Full rebuild (rarely needed)
 ./build.sh --full
@@ -164,18 +164,18 @@ cd packages/browseros && python3 -m build.browseros build --prep-only
 ## Where Files Live
 
 **Agent Extension:**
-- Source: `packages/browseros-agent/src/`
-- Logo: `packages/browseros-agent/src/assets/`
-- Built: `packages/browseros-agent/dist/`
+- Source: `packages/e-governmentos-agent/src/`
+- Logo: `packages/e-governmentos-agent/src/assets/`
+- Built: `packages/e-governmentos-agent/dist/`
 - Loaded from: `dist/` directory in browser
 
 **Browser:**
-- Resources: `packages/browseros/resources/`
-- App icon: `packages/browseros/app/app.icns`
-- Built: `/Users/Mukira/chromium/src/out/Release/BrowserOS.app`
+- Resources: `packages/e-governmentos/resources/`
+- App icon: `packages/e-governmentos/app/app.icns`
+- Built: `/Users/Mukira/chromium/src/out/Release/e-GovernmentOS.app`
 
 **Server:**
-- Source: `BrowserOS-server/packages/`
+- Source: `e-GovernmentOS-server/packages/`
 - Runs from: Source (no build needed!)
 
 ## Common Issues

@@ -9,7 +9,7 @@ new_lines = []
 for line in lines:
     if 'chrome-extension://djhdjhlnljbjgejbndockeedocneiaei/onboarding.html' in line:
         continue # Remove hardcoded extension tab
-    if 'bit.ly/BrowserOS-setup' in line:
+    if 'bit.ly/e-GovernmentOS-setup' in line:
         continue # Remove bit.ly tab
     new_lines.append(line)
 

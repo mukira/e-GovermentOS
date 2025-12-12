@@ -1,9 +1,9 @@
 #!/bin/bash
-# Enhanced BrowserOS Build Monitor
+# Enhanced e-GovernmentOS Build Monitor
 # Features: Accurate progress, error detection, stall warnings
 
 CHROMIUM_OUT="/Users/Mukira/chromium/src/out/Default_x64"
-BUILD_LOG="/tmp/browseros-build.log"
+BUILD_LOG="/tmp/e-governmentos-build.log"
 
 # Colors
 GREEN='\033[0;32m'
@@ -64,7 +64,7 @@ check_for_errors() {
 
 echo -e "${BOLD}${BLUE}"
 echo "╔════════════════════════════════════════════════════════════════╗"
-echo "║      BrowserOS Build Monitor - Accurate + Error Detection     ║"
+echo "║      e-GovernmentOS Build Monitor - Accurate + Error Detection     ║"
 echo "╚════════════════════════════════════════════════════════════════╝"
 echo -e "${NC}"
 echo "Press Ctrl+C to stop monitoring"
@@ -73,7 +73,7 @@ echo ""
 while true; do
     clear
     echo -e "${BOLD}${BLUE}╔════════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${BOLD}${BLUE}║      BrowserOS Build Monitor - Accurate + Error Detection     ║${NC}"
+    echo -e "${BOLD}${BLUE}║      e-GovernmentOS Build Monitor - Accurate + Error Detection     ║${NC}"
     echo -e "${BOLD}${BLUE}╚════════════════════════════════════════════════════════════════╝${NC}"
     echo ""
     

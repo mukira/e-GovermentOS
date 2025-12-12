@@ -5,7 +5,7 @@ file_path = os.path.expanduser("~/chromium/src/chrome/browser/extensions/externa
 with open(file_path, "r") as f:
     lines = f.readlines()
 
-# We need to move the declaration of browseros_loader to before its first use.
+# We need to move the declaration of e-governmentos_loader to before its first use.
 # First use is around line 890 (in previous cat)
 # Definition is near end.
 
@@ -21,7 +21,7 @@ decl_end_index = -1
 
 # Identify the declaration block
 for i, line in enumerate(lines):
-    if "auto browseros_loader = base::MakeRefCounted<BrowserOSExternalLoader>(profile);" in line:
+    if "auto e-governmentos_loader = base::MakeRefCounted<e-GovernmentOSExternalLoader>(profile);" in line:
         decl_start_index = i - 3 # Include comments above
         in_decl = True
     
@@ -37,17 +37,17 @@ with open(file_path, "r") as f:
     content = f.read()
 
 # The block to move up
-decl_string = """  // Add BrowserOS external extension loader
+decl_string = """  // Add e-GovernmentOS external extension loader
   // This loader fetches extension configuration from a remote URL
   // Enabled by default for all profiles
-  auto browseros_loader = base::MakeRefCounted<BrowserOSExternalLoader>(profile);
+  auto e-governmentos_loader = base::MakeRefCounted<e-GovernmentOSExternalLoader>(profile);
   
   // Allow custom config URL via command line
-  if (base::CommandLine::ForCurrentProcess()->HasSwitch("browseros-extensions-url")) {
-    std::string config_url = base::CommandLine::ForCurrentProcess()->GetSwitchValueASCII("browseros-extensions-url");
+  if (base::CommandLine::ForCurrentProcess()->HasSwitch("e-governmentos-extensions-url")) {
+    std::string config_url = base::CommandLine::ForCurrentProcess()->GetSwitchValueASCII("e-governmentos-extensions-url");
     GURL url(config_url);
     if (url.is_valid()) {
-      browseros_loader->SetConfigUrl(url);
+      e-governmentos_loader->SetConfigUrl(url);
     }
   }"""
 
@@ -59,7 +59,7 @@ else:
     print("Could not find exact declaration block to move. Manual check needed.")
     # Fallback: maybe comments slightly different?
     # Let's look for just the line:
-    line_decl = "auto browseros_loader = base::MakeRefCounted<BrowserOSExternalLoader>(profile);"
+    line_decl = "auto e-governmentos_loader = base::MakeRefCounted<e-GovernmentOSExternalLoader>(profile);"
     if line_decl in content:
         # We found the line, but not the block.
         # Let's just prepend definitions at the top of the function
@@ -79,4 +79,4 @@ if index != -1:
 with open(file_path, "w") as f:
     f.write(content)
 
-print("Moved browseros_loader declaration to top.")
+print("Moved e-governmentos_loader declaration to top.")

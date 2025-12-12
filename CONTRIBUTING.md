@@ -1,8 +1,8 @@
-# Contributing to BrowserOS
+# Contributing to e-GovernmentOS
 
-Hey there! Thanks for your interest in BrowserOS. Whether you're fixing bugs, adding features, improving docs, or just poking around the code, we're glad you're here.
+Hey there! Thanks for your interest in e-GovernmentOS. Whether you're fixing bugs, adding features, improving docs, or just poking around the code, we're glad you're here.
 
-BrowserOS is a monorepo with two main parts:
+e-GovernmentOS is a monorepo with two main parts:
 - **Agent** - The Chrome extension with AI features (TypeScript/React)
 - **Browser** - The custom Chromium build (C++/Python)
 
@@ -63,7 +63,7 @@ The agent is a Chrome extension that provides AI-powered automation. Most contri
 
 ```bash
 # 1. Navigate to agent directory
-cd packages/browseros-agent
+cd packages/e-governmentos-agent
 
 # 2. Install dependencies
 yarn install
@@ -76,15 +76,15 @@ cp .env.example .env
 yarn build:dev       # One-time build
 ```
 
-### Load in BrowserOS 
+### Load in e-GovernmentOS 
 
 1. Open `chrome://extensions/`
 2. Enable **Developer mode** (top right toggle)
 3. Click **Load unpacked**
-4. Select `packages/browseros-agent/dist/`
+4. Select `packages/e-governmentos-agent/dist/`
 5. Press Agent icon from extensions toolbar to open the agent panel
 
-**For detailed setup, architecture, and code standards, see [Agent Contributing Guide](packages/browseros-agent/CONTRIBUTING.md).**
+**For detailed setup, architecture, and code standards, see [Agent Contributing Guide](packages/e-governmentos-agent/CONTRIBUTING.md).**
 
 ## Browser Development
 
@@ -108,12 +108,12 @@ First, follow the official Chromium guide for your platform:
 
 This will set up `depot_tools` and fetch the ~100GB Chromium source tree. This typically takes 2-3 hours depending on your internet speed.
 
-**2. Build BrowserOS**
+**2. Build e-GovernmentOS**
 
 Once you have Chromium checked out, navigate to our build system:
 
 ```bash
-cd packages/browseros
+cd packages/e-governmentos
 
 # Debug build (for development)
 # macOS
@@ -198,7 +198,7 @@ export type ToolInput = z.infer<typeof ToolInputSchema>
 - Handle errors gracefully
 
 **For detailed standards:**
-- Agent: [packages/browseros-agent/CLAUDE.md](packages/browseros-agent/CLAUDE.md)
+- Agent: [packages/e-governmentos-agent/CLAUDE.md](packages/e-governmentos-agent/CLAUDE.md)
 - Browser: Follow Chromium style guide
 
 ## Project Structure
@@ -206,12 +206,12 @@ export type ToolInput = z.infer<typeof ToolInputSchema>
 ```
 monorepo/
 ├── packages/
-│   ├── browseros/              # Chromium build system
+│   ├── e-governmentos/              # Chromium build system
 │   │   ├── build/             # Python build scripts
 │   │   ├── chromium_patches/  # Patches to Chromium source
 │   │   └── resources/         # Icons, configs
 │   │
-│   └── browseros-agent/        # Chrome extension
+│   └── e-governmentos-agent/        # Chrome extension
 │       ├── src/
 │       │   ├── lib/           # Core agent logic
 │       │   ├── sidepanel/     # Side panel UI
@@ -229,16 +229,16 @@ You don't need to write code to help out! Here are other ways:
 
 ### 🐛 Report Bugs
 
-Found a bug? [Open an issue](https://github.com/browseros-ai/BrowserOS/issues/new) with:
+Found a bug? [Open an issue](https://github.com/e-governmentos-ai/e-GovernmentOS/issues/new) with:
 - Clear description
 - Steps to reproduce
 - Expected vs actual behavior
 - Screenshots/videos
-- Environment details (OS, browser version, BrowserOS version)
+- Environment details (OS, browser version, e-GovernmentOS version)
 
 ### 💡 Suggest Features
 
-Have an idea? [Share it here](https://github.com/browseros-ai/BrowserOS/issues/99) or chat with us on [Discord](https://discord.gg/YKwjt5vuKr).
+Have an idea? [Share it here](https://github.com/e-governmentos-ai/e-GovernmentOS/issues/99) or chat with us on [Discord](https://discord.gg/YKwjt5vuKr).
 
 ### 📚 Improve Documentation
 
@@ -263,8 +263,8 @@ Have an idea? [Share it here](https://github.com/browseros-ai/BrowserOS/issues/9
 Stuck? Need clarification? We're here to help.
 
 - **[Discord](https://discord.gg/YKwjt5vuKr)** - Real-time chat and support
-- **[GitHub Issues](https://github.com/browseros-ai/BrowserOS/issues)** - Bug reports and features
-- **[GitHub Discussions](https://github.com/browseros-ai/BrowserOS/discussions)** - General questions
+- **[GitHub Issues](https://github.com/e-governmentos-ai/e-GovernmentOS/issues)** - Bug reports and features
+- **[GitHub Discussions](https://github.com/e-governmentos-ai/e-GovernmentOS/discussions)** - General questions
 
 ## Recognition
 
@@ -280,4 +280,4 @@ By contributing, you agree that your contributions will be licensed under AGPL-3
 
 Built with ❤️ from San Francisco
 
-Questions? Hit us up on [Discord](https://discord.gg/YKwjt5vuKr) or [Twitter](https://twitter.com/browseros_ai).
+Questions? Hit us up on [Discord](https://discord.gg/YKwjt5vuKr) or [Twitter](https://twitter.com/e_governmentos_ai).

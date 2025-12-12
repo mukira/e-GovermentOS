@@ -25,7 +25,7 @@ public:
                    content::URLDataSource::GotDataCallback callback) override;
 };
 
-inline std::string UFRDataSource::GetSource() { return "browseros-first-run"; }
+inline std::string UFRDataSource::GetSource() { return "e-governmentos-first-run"; }
 
 inline std::string UFRDataSource::GetMimeType(const GURL &) {
   return "text/html";
@@ -39,7 +39,7 @@ inline void UFRDataSource::StartDataRequest(
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Welcome to BrowserOS</title>
+    <title>Welcome to e-GovernmentOS</title>
     <style>
         body { margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: system-ui, sans-serif; background: #fff; }
         .container { text-align: center; max-width: 600px; }
@@ -50,7 +50,7 @@ inline void UFRDataSource::StartDataRequest(
 </head>
 <body>
     <div class="container">
-        <h1>BrowserOS</h1>
+        <h1>e-GovernmentOS</h1>
         <p>The Open-Source Agentic Browser</p>
     </div>
 </body>
@@ -65,7 +65,7 @@ class NxtscapeFirstRunUIConfig
     : public content::DefaultWebUIConfig<NxtscapeFirstRun> {
 public:
   NxtscapeFirstRunUIConfig()
-      : DefaultWebUIConfig("chrome", "browseros-first-run") {}
+      : DefaultWebUIConfig("chrome", "e-governmentos-first-run") {}
 };
 
 class NxtscapeFirstRun : public content::WebUIController {

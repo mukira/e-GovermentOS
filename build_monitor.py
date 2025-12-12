@@ -172,7 +172,7 @@ def main():
                 filled = int(60 * cur / tot)
                 prog = bar(filled, 60, GREEN if pct > 50 else YELLOW)
                 
-                print(f"\n  {BOLD}{CYAN}━━━ BrowserOS Build Monitor ━━━{RESET}\n")
+                print(f"\n  {BOLD}{CYAN}━━━ e-GovernmentOS Build Monitor ━━━{RESET}\n")
                 print(f"  Progress:  {prog} {BOLD}{YELLOW}{pct:.4f}%{RESET}")
                 print(f"             {GRAY}{cur:,} / {tot:,} files{RESET}\n")
                 

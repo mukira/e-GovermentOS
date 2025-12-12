@@ -7,7 +7,7 @@ with open(file_path, "r") as f:
 
 new_lines = []
 for line in lines:
-    if 'GURL("chrome://browseros-first-run")' in line:
+    if 'GURL("chrome://e-governmentos-first-run")' in line:
         continue # Skip this line
     new_lines.append(line)
 

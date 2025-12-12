@@ -12,7 +12,7 @@ content = """// Copyright 2025 E-Nation OS. All rights reserved.
 
 namespace {
 
-// BrowserOS Basic Colors
+// e-GovernmentOS Basic Colors
 [[maybe_unused]] const SkColor kPrimaryColor = SkColorSetRGB(74, 144, 226);   // #4A90E2
 [[maybe_unused]] const SkColor kSecondaryColor = SkColorSetRGB(142, 68, 173); // #8E44AD
 [[maybe_unused]] const SkColor kAccentColor = SkColorSetRGB(52, 152, 219);    // #3498DB

@@ -27,10 +27,13 @@ class MyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header('Expires', '0')
         super().end_headers()
 
+class ReusableTCPServer(socketserver.TCPServer):
+    allow_reuse_address = True
+
 if __name__ == '__main__':
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     
-    with socketserver.TCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
+    with ReusableTCPServer(("", PORT), MyHTTPRequestHandler) as httpd:
         print(f"\n✅ GeoIntel Extension Server Running!")
         print(f"📍 Open in browser: http://localhost:{PORT}/index.html")
         print(f"\n🛑 Press Ctrl+C to stop\n")

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-DIR="packages/browseros-agent"
+DIR="packages/e-governmentos-agent"
 BRANCH="${1:-main}"
 
 git -C "$DIR" fetch origin "$BRANCH" --tags
@@ -10,6 +10,6 @@ git -C "$DIR" pull -q --ff-only origin "$BRANCH"
 
 NEW_SHA=$(git -C "$DIR" rev-parse --short HEAD)
 git add "$DIR"
-git commit -m "chore: sync packages/browseros-agent submodule (to $NEW_SHA)" || { echo "No changes"; exit 0; }
+git commit -m "chore: sync packages/e-governmentos-agent submodule (to $NEW_SHA)" || { echo "No changes"; exit 0; }
 echo "Bumped $DIR to $NEW_SHA"
 

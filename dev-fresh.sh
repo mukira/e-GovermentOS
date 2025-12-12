@@ -1,8 +1,8 @@
 #!/bin/bash
 ################################################################################
-# BrowserOS Fresh Profile + Hot Reload Development
+# e-GovernmentOS Fresh Profile + Hot Reload Development
 #
-# Launches BrowserOS with a clean profile AND enables hot-reload for:
+# Launches e-GovernmentOS with a clean profile AND enables hot-reload for:
 # - Agent extension (auto-rebuild on changes)
 # - Server (auto-restart on changes)
 #
@@ -15,15 +15,15 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PROFILE_DIR="$HOME/Library/Application Support/BrowserOS"
-AGENT_DIR="$SCRIPT_DIR/packages/browseros-agent"
-SERVER_DIR="$SCRIPT_DIR/BrowserOS-server"
+PROFILE_DIR="$HOME/Library/Application Support/e-GovernmentOS"
+AGENT_DIR="$SCRIPT_DIR/packages/e-governmentos-agent"
+SERVER_DIR="$SCRIPT_DIR/e-GovernmentOS-server"
 
-# Auto-detect the correct BrowserOS build directory
-if [[ -d "/Users/Mukira/chromium/src/out/Default_x64/BrowserOS.app" ]]; then
-    BROWSER_BINARY="/Users/Mukira/chromium/src/out/Default_x64/BrowserOS.app/Contents/MacOS/BrowserOS"
-elif [[ -d "/Users/Mukira/chromium/src/out/Release/BrowserOS.app" ]]; then
-    BROWSER_BINARY="/Users/Mukira/chromium/src/out/Release/BrowserOS.app/Contents/MacOS/BrowserOS"
+# Auto-detect the correct e-GovernmentOS build directory
+if [[ -d "/Users/Mukira/chromium/src/out/Default_x64/e-GovernmentOS.app" ]]; then
+    BROWSER_BINARY="/Users/Mukira/chromium/src/out/Default_x64/e-GovernmentOS.app/Contents/MacOS/e-GovernmentOS"
+elif [[ -d "/Users/Mukira/chromium/src/out/Release/e-GovernmentOS.app" ]]; then
+    BROWSER_BINARY="/Users/Mukira/chromium/src/out/Release/e-GovernmentOS.app/Contents/MacOS/e-GovernmentOS"
     echo "Please run ./build.sh first"
     exit 1
 fi
@@ -66,7 +66,7 @@ cleanup() {
     }
     
     # Stop server
-    ./launch-browseros.sh --stop 2>/dev/null || true
+    ./launch-e-governmentos.sh --stop 2>/dev/null || true
     
     log_success "Cleanup complete"
     exit 0
@@ -75,14 +75,14 @@ cleanup() {
 trap cleanup SIGINT SIGTERM
 
 echo "════════════════════════════════════════════════════════════════════════"
-echo "  BrowserOS Fresh Profile + Hot Reload Development"
+echo "  e-GovernmentOS Fresh Profile + Hot Reload Development"
 echo "════════════════════════════════════════════════════════════════════════"
 echo ""
 
 # Step 1: Stop everything
 log_info "Stopping any running instances..."
-pkill -f "BrowserOS.app" 2>/dev/null || true
-./launch-browseros.sh --stop 2>/dev/null || true
+pkill -f "e-GovernmentOS.app" 2>/dev/null || true
+./launch-e-governmentos.sh --stop 2>/dev/null || true
 sleep 2
 
 # Step 2: Delete existing profile
@@ -106,7 +106,7 @@ cd "$SCRIPT_DIR"
 # Step 4: Start server watcher
 log_info "Starting server with auto-restart..."
 cd "$SERVER_DIR"
-bun --watch start > "$SCRIPT_DIR/browseros-server.log" 2>&1 &
+bun --watch start > "$SCRIPT_DIR/e-governmentos-server.log" 2>&1 &
 SERVER_WATCHER_PID=$!
 echo $SERVER_WATCHER_PID > "$SCRIPT_DIR/.server-watcher.pid"
 log_success "Server started (PID: $SERVER_WATCHER_PID)"
@@ -123,7 +123,7 @@ for i in {1..30}; do
 done
 
 # Step 5: Launch browser with fresh profile
-log_info "Launching BrowserOS with fresh profile..."
+log_info "Launching e-GovernmentOS with fresh profile..."
 log_info "Profile location: $PROFILE_DIR"
 
 "$BROWSER_BINARY" \
@@ -136,7 +136,7 @@ BROWSER_PID=$!
 
 echo ""
 echo "════════════════════════════════════════════════════════════════════════"
-log_success "BrowserOS Fresh Development Environment Running!"
+log_success "e-GovernmentOS Fresh Development Environment Running!"
 echo "════════════════════════════════════════════════════════════════════════"
 echo ""
 log_info "What's active:"
@@ -153,7 +153,7 @@ echo ""
 log_warning "Profile will be deleted on next run!"
 log_info "Perfect for testing first-time user experience"
 echo ""
-log_info "Server logs: tail -f $SCRIPT_DIR/browseros-server.log"
+log_info "Server logs: tail -f $SCRIPT_DIR/e-governmentos-server.log"
 log_info "Press Ctrl+C to stop all components"
 echo ""
 

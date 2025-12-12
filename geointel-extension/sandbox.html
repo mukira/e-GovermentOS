@@ -85,8 +85,135 @@
             color: #3C4043;
         }
 
+        .ai-prediction-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: linear-gradient(135deg, #6200ea, #b388ff);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-left: 8px;
+            box-shadow: 0 2px 4px rgba(98, 0, 234, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(179, 136, 255, 0.4);
+            }
+
+            70% {
+                box-shadow: 0 0 0 6px rgba(179, 136, 255, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(179, 136, 255, 0);
+            }
+        }
+
         .tool-item:hover {
             background: #F1F3F4;
+        }
+
+        /* Weather Widget Premium Styles */
+        .weather-card-content {
+            background: linear-gradient(135deg, #e3f2fd 0%, #ffffff 100%);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(66, 133, 244, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .weather-card-content:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(66, 133, 244, 0.15);
+        }
+
+        .weather-main {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .weather-temp-large {
+            font-size: 42px;
+            font-weight: 300;
+            color: #202124;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .weather-condition-pill {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #1967d2;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 6px;
+        }
+
+        .forecast-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            padding-top: 12px;
+        }
+
+        .forecast-item {
+            text-align: center;
+            padding: 8px;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+
+        .forecast-item:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .forecast-day {
+            font-size: 11px;
+            font-weight: 600;
+            color: #5f6368;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .forecast-temp {
+            font-size: 13px;
+            font-weight: 500;
+            color: #3c4043;
+        }
+
+        .forecast-temp-low {
+            color: #80868b;
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        /* Animations */
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-in {
+            animation: fadeInScale 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
     </style>
 
@@ -168,8 +295,91 @@
         .status-dot {
             width: 6px;
             height: 6px;
-            border-radius: 50%;
             background: currentColor;
+        }
+
+        /* Hourly Weather Scroll */
+        .hourly-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .scroll-arrow {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #5F6368;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            transition: all 0.2s;
+            position: absolute;
+        }
+
+        .scroll-arrow:hover {
+            background: #fff;
+            transform: scale(1.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .scroll-arrow.left {
+            left: -10px;
+        }
+
+        .scroll-arrow.right {
+            right: -10px;
+        }
+
+        .hourly-container {
+            flex: 1;
+            display: flex;
+            overflow-x: auto;
+            gap: 12px;
+            padding: 8px 4px;
+            /* Added horizontal padding for scroll space */
+            margin-bottom: 16px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+            scroll-behavior: smooth;
+        }
+
+        .hourly-container::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari and Opera */
+        }
+
+        .hourly-item {
+            flex: 0 0 auto;
+            text-align: center;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.4);
+            transition: background 0.2s;
+        }
+
+        .hourly-item:hover {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .hourly-time {
+            font-size: 11px;
+            color: #5F6368;
+            margin-bottom: 4px;
+        }
+
+        .hourly-temp {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
         }
 
         /* Search Bar */
@@ -598,130 +808,313 @@
             .zoom-controls {
                 bottom: 180px;
             }
+
+        }
+
+        /* Dashboard Sheet Styles (Places UI Kit inspired) */
+        .dashboard-sheet {
+            position: absolute;
+            top: 76px;
+            left: 16px;
+            width: 360px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            max-height: calc(100vh - 100px);
+            font-family: 'Google Sans', 'Roboto', sans-serif;
+        }
+
+        .sheet-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #F1F3F4;
+            background: #fff;
+        }
+
+        .sheet-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .sheet-subtitle {
+            font-size: 12px;
+            color: #5F6368;
+            margin-top: 4px;
+        }
+
+        /* Indicators Carousel */
+        .indicators-carousel {
+            display: flex;
+            overflow-x: auto;
+            padding: 16px 16px;
+            gap: 12px;
+            scrollbar-width: none;
+            /* Hide scrollbar */
+        }
+
+        .indicators-carousel::-webkit-scrollbar {
+            display: none;
+        }
+
+        .indicator-card {
+            min-width: 100px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #E8EAED;
+            background: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .indicator-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .indicator-card.active {
+            border-color: #1A73E8;
+            background: #F8F9FA;
+            box-shadow: 0 2px 8px rgba(26, 115, 232, 0.2);
+        }
+
+        .indicator-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .indicator-icon.negative {
+            background: #FCE8E6;
+            color: #C5221F;
+        }
+
+        .indicator-icon.warning {
+            background: #FEF7E0;
+            color: #F29900;
+        }
+
+        .indicator-icon.neutral {
+            background: #E6F4EA;
+            color: #137333;
+        }
+
+        .indicator-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: #5F6368;
+        }
+
+        .indicator-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+            margin-top: 2px;
+        }
+
+        /* Insight Panel */
+        .insight-panel {
+            padding: 0 20px 20px 20px;
+        }
+
+        .insight-headline {
+            font-size: 16px;
+            font-weight: 500;
+            color: #202124;
+            margin-bottom: 8px;
+        }
+
+        .insight-text {
+            font-size: 14px;
+            color: #3C4043;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .section-label {
+            font-size: 10px;
+            letter-spacing: 1px;
+            color: #5F6368;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .action-card {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #F8F9FA;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #1A73E8;
+        }
+
+        .action-icon {
+            color: #1A73E8;
+            margin-right: 12px;
+            font-size: 20px;
+        }
+
+        .action-card span {
+            font-size: 13px;
+            color: #3C4043;
+        }
+
+        /* Advanced Layers */
+        .advanced-layers {
+            border-top: 1px solid #F1F3F4;
+            padding: 0;
+        }
+
+        .advanced-header {
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 13px;
+            color: #5F6368;
+            font-weight: 500;
+        }
+
+        .layer-list {
+            padding: 0 20px 16px 20px;
         }
     </style>
 </head>
 
 <body>
     <!-- Header -->
-    <div class="header">
-        <span class="material-icons logo-icon" style="font-size: 24px;">satellite</span>
+    <div class="header"><span class="material-icons logo-icon" style="font-size: 24px;">satellite</span>
         <div class="logo">GeoIntel</div>
-        <div class="status-indicator disconnected" id="statusIndicator">
-            <span class="status-dot"></span>
-            <span id="statusText">Connecting to Earth Engine...</span>
-        </div>
+        <div class="status-indicator disconnected" id="statusIndicator"><span class="status-dot"></span><span
+                id="statusText">Connecting to Earth Engine...</span></div>
     </div>
-
     <!-- Search Bar -->
     <div class="search-container">
-        <div class="search-box">
-            <span class="material-icons" style="cursor: pointer;" onclick="analyzeLocation()">search</span>
-            <input type="text" class="search-input" id="searchInput"
-                placeholder="Search location or ask (e.g. 'Show water in Kenya')">
-            <button class="icon-button" onclick="getCurrentLocation()">
-                <span class="material-icons">my_location</span>
-            </button>
+        <div class="search-box"><span class="material-icons" style="cursor: pointer;"
+                onclick="analyzeLocation()">search</span><input type="text" class="search-input" id="searchInput"
+                placeholder="Search location or ask (e.g. 'Show water in Kenya')"><button class="icon-button"
+                onclick="getCurrentLocation()"><span class="material-icons">my_location</span></button></div>
+    </div>
+    <!-- Kenya Decision Dashboard -->
+    <div class="dashboard-sheet">
+        <div class="sheet-header">
+            <div class="sheet-title" id="sheetTitle">Global EO Intelligence</div>
+            <div class="sheet-subtitle" id="sheetSubtitle">Regional Decision Support</div>
+        </div>
+        <!-- Smart Indicators Carousel -->
+        <div class="indicators-carousel">
+            <div class="indicator-card active" onclick="activateDashboardMode('drought')">
+                <div class="indicator-icon negative"><span class="material-icons">sentiment_very_dissatisfied</span>
+                </div>
+                <div class="indicator-label">Drought Risk</div>
+                <div class="indicator-value" id="droughtValue">High</div>
+            </div>
+            <div class="indicator-card" onclick="activateDashboardMode('vegetation')">
+                <div class="indicator-icon warning"><span class="material-icons">grass</span></div>
+                <div class="indicator-label">Crop Health</div>
+                <div class="indicator-value" id="cropValue">-12%</div>
+            </div>
+            <div class="indicator-card" onclick="activateDashboardMode('flood')">
+                <div class="indicator-icon neutral"><span class="material-icons">water</span></div>
+                <div class="indicator-label">Flood Risk</div>
+                <div class="indicator-value" id="floodValue">Normal</div>
+            </div>
+            <div class="indicator-card" onclick="activateDashboardMode('urban')">
+                <div class="indicator-icon neutral"><span class="material-icons">location_city</span>
+                </div>
+                <div class="indicator-label">Urban Growth</div>
+                <div class="indicator-value" id="urbanValue">+2.5%</div>
+            </div>
+        </div>
+        <!-- Dynamic Insight Panel -->
+        <div class="insight-panel" id="insightPanel">
+            <div class="insight-headline" id="insightHeadline">Drought stress detected in Northern
+                Counties</div>
+            <div class="insight-date" id="insightDate"
+                style="color: #202124; font-size: 16px; font-weight: 500; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+                <input type="date" id="insightDateInput"
+                    style="border: 1px solid #dadce0; border-radius: 4px; padding: 4px 8px; background: #fff; color: #1a73e8; font-family: inherit; font-size: inherit; font-weight: inherit; cursor: pointer;">
+            </div>
+            <div class="insight-text" id="insightText">Vegetation index (NDVI) has dropped below the
+                5-year average. Long rains have likely failed in this region. </div>
+            <div class="action-section">
+                <div class="section-label">RECOMMENDED ACTIONS</div>
+                <div class="action-card" id="actionCard1"><span
+                        class="material-icons action-icon">water_drop</span><span id="actionText1">Activate drought
+                        contingency fund</span></div>
+                <div class="action-card" id="actionCard2"><span
+                        class="material-icons action-icon">agriculture</span><span id="actionText2">Distribute
+                        drought-resistant seeds</span></div>
+            </div>
+        </div>
+        <!-- Advanced Data Layers (Accordion) -->
+        <div class="advanced-layers">
+            <div class="advanced-header" onclick="toggleAdvancedLayers()"><span>Satellite Data
+                    Sources</span><span class="material-icons" id="advancedIcon">expand_more</span></div>
+            <div class="layer-list" id="layerList" style="display:none;">
+                <div class="control-option" onclick="setAnalysisType('vegetation')">Sentinel-2
+                    (Vegetation)</div>
+                <div class="control-option" onclick="setAnalysisType('water')">Sentinel-1
+                    (Water/Flood)</div>
+                <div class="control-option" onclick="toggleTemporalMode()">Landsat 8/9 (Time
+                    Series)</div>
+                <div class="control-option" onclick="setAnalysisType('temperature')">MODIS
+                    (Temperature)</div>
+            </div>
         </div>
     </div>
-
-    <!-- Analysis Controls -->
-    <div class="analysis-controls">
-        <div class="control-title">Satellite Analysis</div>
-        <div class="control-option active" onclick="setAnalysisType('vegetation')">
-            <span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 6px;">park</span>
-            Vegetation (NDVI)
-        </div>
-        <div class="control-option" onclick="setAnalysisType('water')">
-            <span class="material-icons"
-                style="font-size: 16px; vertical-align: middle; margin-right: 6px;">water_drop</span>
-            Water (NDWI)
-        </div>
-        <div class="control-option" onclick="setAnalysisType('urban')">
-            <span class="material-icons"
-                style="font-size: 16px; vertical-align: middle; margin-right: 6px;">location_city</span>
-            Urban (NDBI)
-        </div>
-        <div class="control-option" onclick="setAnalysisType('temperature')">
-            <span class="material-icons"
-                style="font-size: 16px; vertical-align: middle; margin-right: 6px;">thermostat</span>
-            Temperature
-        </div>
-        <div style="height: 1px; background: rgba(0,0,0,0.1); margin: 8px 0;"></div>
-        <div class="control-option active" onclick="toggleTemporalMode()" id="temporalBtn">
-            <span class="material-icons"
-                style="font-size: 16px; vertical-align: middle; margin-right: 6px;">history</span>
-            Compare Changes (ON)
-        </div>
-    </div>
-
     <!-- Map -->
     <div id="map"></div>
-
     <!-- Zoom Controls -->
-    <div class="zoom-controls">
-        <button class="zoom-button" onclick="map.setZoom(map.getZoom() + 1)">
-            <span class="material-icons">add</span>
-        </button>
-        <button class="zoom-button" onclick="map.setZoom(map.getZoom() - 1)">
-            <span class="material-icons">remove</span>
-        </button>
-    </div>
-
+    <div class="zoom-controls"><button class="zoom-button" onclick="map.setZoom(map.getZoom() + 1)"><span
+                class="material-icons">add</span></button><button class="zoom-button"
+            onclick="map.setZoom(map.getZoom() - 1)"><span class="material-icons">remove</span></button></div>
     <!-- Map Type Controls -->
-    <div class="map-controls">
-        <button class="control-button active" onclick="setMapType('roadmap')" title="Default">
-            <span class="material-icons">map</span>
-        </button>
-        <button class="control-button" onclick="setMapType('satellite')" title="Satellite">
-            <span class="material-icons">satellite</span>
-        </button>
-        <button class="control-button" onclick="setMapType('terrain')" title="Terrain">
-            <span class="material-icons">terrain</span>
-        </button>
-    </div>
-
+    <div class="map-controls"><button class="control-button active" onclick="setMapType('roadmap')"
+            title="Default"><span class="material-icons">map</span></button><button class="control-button"
+            onclick="setMapType('satellite')" title="Satellite"><span
+                class="material-icons">satellite</span></button><button class="control-button"
+            onclick="setMapType('terrain')" title="Terrain"><span class="material-icons">terrain</span></button></div>
     <!-- Results Panel -->
     <div class="results-panel" id="resultsPanel">
         <div class="results-header">
-            <div class="results-title">Satellite Analysis</div>
-            <button class="icon-button" onclick="closeResults()">
-                <span class="material-icons">close</span>
-            </button>
+            <div class="results-title">Satellite Analysis</div><button class="icon-button"
+                onclick="closeResults()"><span class="material-icons">close</span></button>
         </div>
         <div class="results-content" id="resultsContent"></div>
     </div>
-
     <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
         <div class="loading-text" id="loadingText">Analyzing satellite imagery...</div>
     </div>
-
-    <!-- Tools FAB -->
-    <button class="tools-fab" onclick="toggleToolsMenu()" title="Geospatial Tools">
-        <span class="material-icons" style="color: #5F6368;">straighten</span>
-    </button>
+    <!-- Tools FAB --><button class="tools-fab" onclick="toggleToolsMenu()" title="Geospatial Tools"><span
+            class="material-icons" style="color: #5F6368;">straighten</span></button>
     <div class="tools-menu" id="toolsMenu">
-        <div class="tool-item" onclick="startMeasurement('distance')">
-            <span class="material-icons">timeline</span> Measure Distance
-        </div>
-        <div class="tool-item" onclick="startMeasurement('area')">
-            <span class="material-icons">crop_square</span> Measure Area
-        </div>
-        <div class="tool-item" onclick="clearMeasurements()">
-            <span class="material-icons">delete</span> Clear All
-        </div>
+        <div class="tool-item" onclick="startMeasurement('distance')"><span
+                class="material-icons">timeline</span>Measure Distance </div>
+        <div class="tool-item" onclick="startMeasurement('area')"><span class="material-icons">crop_square</span>Measure
+            Area </div>
+        <div class="tool-item" onclick="clearMeasurements()"><span class="material-icons">delete</span>Clear All </div>
     </div>
-
     <!-- Toast Notification -->
-    <div id="toast" class="toast">
-        <span class="material-icons">info</span>
-        <span id="toastMessage">Notification</span>
+    <div id="toast" class="toast"><span class="material-icons">info</span><span id="toastMessage">Notification</span>
     </div>
-
-    <script>
-        let map;
+    <script>let map;
         let geocoder;
         let currentAnalysisType = 'vegetation';
         let eeInitialized = false;
@@ -732,12 +1125,306 @@
         let temporalMode = true;
         let lastAnalysisData = null;
 
+        // --- Kenya Dashboard Logic ---
+        const DASHBOARD_DATA = {
+            'drought': {
+
+                headline: "Drought stress detected in Northern Counties",
+                text: "Vegetation index (NDVI) has dropped below the 5-year average. Long rains have likely failed in this region.",
+                actions: [{
+                    icon: 'water_drop', text: "Activate drought contingency fund"
+                }
+
+                    ,
+                {
+                    icon: 'agriculture', text: "Distribute drought-resistant seeds"
+                }
+
+                ],
+                layer: 'vegetation'
+            }
+
+            ,
+            'vegetation': {
+
+                headline: "Crop Health Alert: Maize Yield Risk",
+                text: "Satellite imagery shows significant yellowing in maize belts. Potential pest infestation or moisture stress.",
+                actions: [{
+                    icon: 'bug_report', text: "Deploy field officers for pest inspection"
+                }
+
+                    ,
+                {
+                    icon: 'timeline', text: "Review fertilizer subsidies"
+                }
+
+                ],
+                layer: 'vegetation'
+            }
+
+            ,
+            'flood': {
+
+                headline: "Flood Watch: Riverine Zones",
+                text: "Soil moisture saturation has reached 90%. Heavy rains predicted upstream will likely cause overflow.",
+                actions: [{
+                    icon: 'warning', text: "Issue evacuation alerts for floodplains"
+                }
+
+                    ,
+                {
+                    icon: 'cleaning_services', text: "Clear urban drainage channels"
+                }
+
+                ],
+                layer: 'water'
+            }
+
+            ,
+            'urban': {
+
+                headline: "Urban Expansion Rate Increasing",
+                text: "Informal settlements in perimeter zones have grown by 2.5% this quarter, stressing water infrastructure.",
+                actions: [{
+                    icon: 'engineering', text: "Plan new water connection points"
+                }
+
+                    ,
+                {
+                    icon: 'map', text: "Update zoning maps"
+                }
+
+                ],
+                layer: 'urban'
+            }
+        }
+
+            ;
+
+        let currentDashboardMode = 'drought'; // Default
+
+        function activateDashboardMode(mode) {
+            currentDashboardMode = mode;
+
+            // 1. Update UI Active State
+            const card = event.target.closest('.indicator-card');
+            if (card) {
+                document.querySelectorAll('.indicator-card').forEach(c => c.classList.remove('active'));
+                card.classList.add('active');
+            }
+
+            // 2. Trigger Analysis Layer Update
+            // This will trigger performSatelliteAnalysis -> showResults -> updateDashboardState
+            // We find the layer from the mode mapping
+            const layerMap = {
+                'drought': 'vegetation',
+                'vegetation': 'vegetation', // Crop Health
+                'flood': 'water',
+                'urban': 'urban'
+            };
+
+            setAnalysisType(layerMap[mode] || 'vegetation');
+        }
+
+        function toggleAdvancedLayers() {
+            const list = document.getElementById('layerList');
+            const icon = document.getElementById('advancedIcon');
+
+            if (list.style.display === 'none') {
+                list.style.display = 'block';
+                icon.innerText = 'expand_less';
+            }
+
+            else {
+                list.style.display = 'none';
+                icon.innerText = 'expand_more';
+            }
+        }
+
+        // Helper to update the left Dashboard panel based on real analysis data
+        function updateDashboardState(locationName, analysis) {
+            // Logic to determine "Risk" based on simulated values
+            const isDrought = analysis.ndvi < 0.45;
+            const isFlood = analysis.ndwi > 0.45;
+            const isUrban = analysis.ndbi > 0.4;
+
+            // Update Sheet Title
+            const titleEl = document.getElementById('sheetTitle');
+            if (titleEl) {
+                // If locationName is very long, truncate or just use "Local"
+                if (locationName.length > 25) {
+                    titleEl.innerText = "Local EO Intelligence";
+                } else {
+                    titleEl.innerText = `${locationName} EO Intelligence`;
+                }
+            }
+
+            // Determine context based on currentDashboardMode (set by user click)
+            // If undefined (initial load), default to 'drought'
+            const mode = currentDashboardMode || 'drought';
+
+            // Set Date Input
+            const dateInput = document.getElementById('insightDateInput');
+            if (dateInput && analysis.date) {
+                dateInput.value = analysis.date;
+
+                // Add listener if not already there (simple check)
+                if (!dateInput.dataset.listenerAdded) {
+                    dateInput.addEventListener('change', (e) => {
+                        const newDate = e.target.value;
+                        if (lastAnalysisData && newDate) {
+                            performSatelliteAnalysis(
+                                lastAnalysisData.location,
+                                lastAnalysisData.bounds,
+                                lastAnalysisData.placeName,
+                                lastAnalysisData.geocodeResult,
+                                newDate
+                            );
+                        }
+                    });
+                    dateInput.dataset.listenerAdded = "true";
+                }
+            }
+
+            // Check for Future Date (AI Prediction Mode)
+            const analysisDateObj = new Date(analysis.date);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Normalize today
+            // We consider it "future" if it's strictly greater than today (tomorrow onwards)
+            // Adding a small buffer to handle timezone weirdness if needed, but simple comparison works
+            const isFuture = analysisDateObj > today;
+
+            const badgeHTML = isFuture ? '<span class="ai-prediction-badge"><span class="material-icons" style="font-size: 11px;">auto_awesome</span>AI Prediction</span>' : '';
+            const prefix = isFuture ? 'Predicted: ' : '';
+
+            let headline = "";
+            let text = "";
+            let actions = [];
+
+            if (mode === 'drought') {
+                if (isDrought || analysis.ndvi < 0.5) {
+                    headline = `${prefix}Drought Warning: ${locationName} ${badgeHTML}`;
+                    text = isFuture
+                        ? `AI models foreacst vegetation index (NDVI ${analysis.ndvi.toFixed(2)}) to drop below critical levels.`
+                        : `Vegetation index (${analysis.ndvi.toFixed(2)}) is low. Immediate intervention required.`;
+                    actions = [{ icon: 'water_drop', text: "Deploy water tankers" }, { icon: 'savings', text: "Activate emergency funds" }];
+                } else {
+                    headline = `${prefix}Drought Risk Low: ${locationName} ${badgeHTML}`;
+                    text = isFuture
+                        ? `Vegetation is predicted to remain healthy (${analysis.ndvi.toFixed(2)}).`
+                        : `Vegetation is healthy (${analysis.ndvi.toFixed(2)}). No immediate drought signs.`;
+                    actions = [{ icon: 'check_circle', text: "Continue monitoring" }, { icon: 'inventory', text: "Stockpile reserves" }];
+                }
+            }
+            else if (mode === 'vegetation') { // Crop Health
+                if (analysis.ndvi < 0.5) {
+                    headline = `${prefix}Crop Health Alert: ${locationName} ${badgeHTML}`;
+                    text = isFuture
+                        ? `Forecast suggests vegetation stress. Yields predicted to be impacted.`
+                        : `Vegetation stress detected. Potential pest or moisture issues affecting yields.`;
+                    actions = [{ icon: 'bug_report', text: "Inspect for pests" }, { icon: 'analytics', text: "Analyze soil moisture" }];
+                } else {
+                    headline = `${prefix}Crop Conditions Favorable ${badgeHTML}`;
+                    text = isFuture
+                        ? `Models predict healthy crop development (${analysis.ndvi.toFixed(2)}).`
+                        : `Vegetation index (${analysis.ndvi.toFixed(2)}) indicates healthy crop development.`;
+                    actions = [{ icon: 'store', text: "Prepare storage units" }, { icon: 'local_shipping', text: "Plan harvest logistics" }];
+                }
+            }
+            else if (mode === 'flood') {
+                if (isFlood || analysis.ndwi > 0.4) {
+                    headline = `${prefix}Flood Risk Elevated: ${locationName} ${badgeHTML}`;
+                    text = isFuture
+                        ? `Prediction indicates saturation (${analysis.ndwi.toFixed(2)}). Localized flooding expected.`
+                        : `Water index (${analysis.ndwi.toFixed(2)}) indicates saturation. Potential for localized flooding.`;
+                    actions = [{ icon: 'warning', text: "Issue alert to residents" }, { icon: 'cleaning_services', text: "Check drainage systems" }];
+                } else {
+                    headline = `${prefix}Flood Risk Normal ${badgeHTML}`;
+                    text = isFuture
+                        ? `Water levels predicted to stay within safe limits (${analysis.ndwi.toFixed(2)}).`
+                        : `Water levels (${analysis.ndwi.toFixed(2)}) are within safe limits.`;
+                    actions = [{ icon: 'monitor', text: "Monitor river gauges" }, { icon: 'build', text: "Maintain levees" }];
+                }
+            }
+            else if (mode === 'urban') {
+                if (isUrban) {
+                    headline = `${prefix}Urban Density High: ${locationName} ${badgeHTML}`;
+                    text = isFuture
+                        ? `Urban expansion projected to continue rapidly (${analysis.ndbi.toFixed(2)}).`
+                        : `Built-up index (${analysis.ndbi.toFixed(2)}) shows rapid expansion. Infrastructure stress likely.`;
+                    actions = [{ icon: 'traffic', text: "Review traffic patterns" }, { icon: 'location_city', text: "Audit zoning compliance" }];
+                } else {
+                    headline = `${prefix}Urban Density Moderate ${badgeHTML}`;
+                    text = isFuture
+                        ? `Growth predicted to follow planned trajectory (${analysis.ndbi.toFixed(2)}).`
+                        : `Built-up index (${analysis.ndbi.toFixed(2)}) is consistent with planned growth.`;
+                    actions = [{ icon: 'map', text: "Update city maps" }, { icon: 'park', text: "Plan green spaces" }];
+                }
+            }
+
+            // Apply to UI
+            const headlineEl = document.getElementById('insightHeadline');
+            const textEl = document.getElementById('insightText');
+
+            if (headlineEl) headlineEl.innerHTML = headline; // Use innerHTML for badge
+            if (textEl) textEl.innerText = text;
+
+            const a1 = document.getElementById('actionCard1');
+            const a2 = document.getElementById('actionCard2');
+            if (a1) {
+                a1.querySelector('.action-icon').innerText = actions[0].icon;
+                document.getElementById('actionText1').innerText = actions[0].text;
+            }
+            if (a2) {
+                a2.querySelector('.action-icon').innerText = actions[1].icon;
+                document.getElementById('actionText2').innerText = actions[1].text;
+            }
+
+            // Update Cards 
+            // 1. Drought Risk (Based on NDVI)
+            const droughtVal = document.getElementById('droughtValue');
+            if (droughtVal) {
+                if (analysis.ndvi < 0.35) { droughtVal.innerText = 'Severe'; droughtVal.style.color = '#C5221F'; }
+                else if (analysis.ndvi < 0.5) { droughtVal.innerText = 'High'; droughtVal.style.color = '#D93025'; }
+                else { droughtVal.innerText = 'Low'; droughtVal.style.color = '#188038'; }
+            }
+
+            // 2. Crop Health (NDVI Change Simulation)
+            const cropVal = document.getElementById('cropValue');
+            if (cropVal) {
+                const diff = (analysis.ndvi - 0.6) * 100; // variance from ideal 0.6
+                const sign = diff > 0 ? '+' : '';
+                cropVal.innerText = `${sign}${diff.toFixed(0)}%`;
+                cropVal.style.color = diff < -10 ? '#D93025' : (diff > 0 ? '#188038' : '#F29900');
+            }
+
+            // 3. Flood Risk (Based on NDWI)
+            const floodVal = document.getElementById('floodValue');
+            if (floodVal) {
+                if (analysis.ndwi > 0.5) { floodVal.innerText = 'Critical'; floodVal.style.color = '#C5221F'; }
+                else if (analysis.ndwi > 0.4) { floodVal.innerText = 'High'; floodVal.style.color = '#F29900'; }
+                else { floodVal.innerText = 'Normal'; floodVal.style.color = '#188038'; }
+            }
+
+            // 4. Urban Growth (Based on NDBI)
+            const urbanVal = document.getElementById('urbanValue');
+            if (urbanVal) {
+                const growth = (analysis.ndbi * 5).toFixed(1); // Fake logic
+                urbanVal.innerText = `+${growth}%`;
+            }
+        }
+
         // Initialize Google Maps and Earth Engine
         async function initMap() {
             try {
+
                 // Initialize Google Maps
                 map = new google.maps.Map(document.getElementById('map'), {
-                    center: { lat: 0, lng: 0 },
+                    center: {
+                        lat: 0, lng: 0
+                    }
+
+                    ,
                     zoom: 3,
                     disableDefaultUI: false,
                     zoomControl: false,
@@ -753,6 +1440,7 @@
 
                 // Initialize Drawing Manager
                 drawingManager = new google.maps.drawing.DrawingManager({
+
                     drawingMode: null,
                     drawingControl: false,
                     polygonOptions: {
@@ -762,7 +1450,9 @@
                         clickable: true,
                         editable: true,
                         zIndex: 1
-                    },
+                    }
+
+                    ,
                     polylineOptions: {
                         strokeColor: '#C5221F',
                         strokeWeight: 3
@@ -801,11 +1491,15 @@
                 // Initialize Earth Engine
                 try {
                     await initializeEarthEngine();
-                } catch (error) {
+                }
+
+                catch (error) {
                     console.error('Earth Engine initialization error:', error);
                     updateStatus(false, 'Earth Engine unavailable (using simulated data)');
                 }
-            } catch (error) {
+            }
+
+            catch (error) {
                 console.error('Maps initialization error:', error);
                 showError('Failed to initialize Google Maps. Please check your internet connection.');
             }
@@ -814,6 +1508,7 @@
         function checkForMapsErrors() {
             // Check if there's a Maps API error div
             const errorDiv = document.querySelector('.gm-err-message');
+
             if (errorDiv || !map) {
                 updateStatus(false, 'Maps API Error - Check console');
                 console.error('Google Maps API Error detected. Common causes:');
@@ -835,10 +1530,13 @@
             if (typeof toggleTemporalMode === 'function') {
                 // Ensure default state matches UI
                 const btn = document.getElementById('temporalBtn');
+
                 if (btn && !btn.classList.contains('active')) {
                     // If UI says inactive but we want it active
                     toggleTemporalMode();
-                } else {
+                }
+
+                else {
                     // Update slider visibility if already active
                     updateSliderVisibility();
                 }
@@ -851,16 +1549,22 @@
 
             if (connected) {
                 indicator.className = 'status-indicator connected';
-            } else {
+            }
+
+            else {
                 indicator.className = 'status-indicator disconnected';
             }
+
             statusText.textContent = text;
         }
 
         function setAnalysisType(type) {
             currentAnalysisType = type;
+            updateMapOverlay(type);
+
             document.querySelectorAll('.control-option').forEach(opt => {
                 opt.classList.remove('active');
+
                 // Auto-activate based on type name matching
                 if (opt.innerText.toLowerCase().includes(type)) {
                     opt.classList.add('active');
@@ -869,24 +1573,27 @@
 
             // If we have data, refresh the results immediately
             if (lastAnalysisData) {
-                performSatelliteAnalysis(
-                    lastAnalysisData.location,
+                performSatelliteAnalysis(lastAnalysisData.location,
                     lastAnalysisData.bounds,
                     lastAnalysisData.placeName,
-                    lastAnalysisData.geocodeResult
-                );
-            } else {
+                    lastAnalysisData.geocodeResult);
+            }
+
+            else {
                 // If no search has been performed yet
                 // alert("Please search for a location first to see analysis data.");
             }
+
             // Show toast for feedback
-            if (type !== 'vegetation') { // Default
+            if (type !== 'vegetation') {
+                // Default
                 // showToast(`Switched to ${type.charAt(0).toUpperCase() + type.slice(1)} Analysis`);
             }
         }
 
         function setMapType(type) {
             map.setMapTypeId(type);
+
             document.querySelectorAll('.map-controls .control-button').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -896,32 +1603,41 @@
         function toggleTemporalMode() {
             temporalMode = !temporalMode;
             const btn = document.getElementById('temporalBtn');
+
             if (temporalMode) {
                 btn.classList.add('active');
-                btn.innerHTML = `<span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 6px;">history</span> Compare Changes (ON)`;
+                btn.innerHTML = `<span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 6px;">history</span>Compare Changes (ON)`;
                 showToast('Temporal Mode: ON - Use Slider below');
-            } else {
+            }
+
+            else {
                 btn.classList.remove('active');
-                btn.innerHTML = `<span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 6px;">history</span> Compare Changes`;
+                btn.innerHTML = `<span class="material-icons" style="font-size: 16px; vertical-align: middle; margin-right: 6px;">history</span>Compare Changes`;
                 showToast('Temporal Mode: OFF');
             }
+
             // Show/Hide Slider
             updateSliderVisibility();
 
             // Re-run analysis
             if (lastAnalysisData) {
-                performSatelliteAnalysis(
-                    lastAnalysisData.location,
+                performSatelliteAnalysis(lastAnalysisData.location,
                     lastAnalysisData.bounds,
                     lastAnalysisData.placeName,
-                    lastAnalysisData.geocodeResult
-                );
+                    lastAnalysisData.geocodeResult);
             }
         }
 
         async function performSatelliteAnalysis(location, bounds, locationName, geocodeResult, dateOverride = null) {
+
             // Store data
-            lastAnalysisData = { location, bounds, placeName: locationName, geocodeResult };
+            lastAnalysisData = {
+                location,
+                bounds,
+                placeName: locationName, geocodeResult
+            }
+
+                ;
 
             // Artificial delay (shorter if overriding date for smooth slider)
             if (!dateOverride) {
@@ -942,10 +1658,13 @@
                 temperature: generateRealisticValue(15, 35, currentAnalysisType === 'temperature') + (seasonality * 10), // Summer/Winter effect
                 cloudCover: Math.random() * 30,
                 date: analysisDate.toISOString()
-            };
+            }
+
+                ;
 
             // TEMPORAL MODE LOGIC (Comparison)
             let historicalAnalysis = null;
+
             if (temporalMode && !dateOverride) {
                 // If sliding, we just show the sliding date data. 
                 // But if static view, we compare to baseline (1 year ago).
@@ -959,7 +1678,9 @@
                     ndbi: 0.3,
                     temperature: 25,
                     date: new Date().toISOString() // Compare against TODAY
-                };
+                }
+
+                    ;
             }
 
             showResults(locationName, analysis, geocodeResult, historicalAnalysis);
@@ -969,6 +1690,69 @@
             if (event.key === 'Enter') {
                 analyzeLocation();
             }
+        }
+
+        function updateMapOverlay(type) {
+            // Remove existing overlay/heatmap if any
+            if (window.currentHeatmap) {
+                window.currentHeatmap.setMap(null);
+            }
+
+            if (!map) return;
+
+            // Generate fake data points within current bounds
+            const bounds = map.getBounds();
+            if (!bounds) return;
+
+            const ne = bounds.getNorthEast();
+            const sw = bounds.getSouthWest();
+
+            const points = [];
+            // Generate 500 weighted points
+            for (let i = 0; i < 500; i++) {
+                const lat = sw.lat() + Math.random() * (ne.lat() - sw.lat());
+                const lng = sw.lng() + Math.random() * (ne.lng() - sw.lng());
+                const weight = Math.random() * 10;
+                points.push({ location: new google.maps.LatLng(lat, lng), weight: weight });
+            }
+
+            // Define gradients
+            const gradients = {
+                vegetation: [
+                    'rgba(0, 255, 0, 0)',
+                    'rgba(0, 255, 0, 1)',
+                    'rgba(144, 238, 144, 1)',
+                    'rgba(0, 128, 0, 1)' // Green
+                ],
+                water: [
+                    'rgba(0, 0, 255, 0)',
+                    'rgba(173, 216, 230, 1)',
+                    'rgba(0, 0, 255, 1)',
+                    'rgba(0, 0, 139, 1)' // Blue
+                ],
+                urban: [
+                    'rgba(128, 128, 128, 0)',
+                    'rgba(211, 211, 211, 1)',
+                    'rgba(169, 169, 169, 1)',
+                    'rgba(105, 105, 105, 1)' // Gray
+                ],
+                temperature: [
+                    'rgba(255, 0, 0, 0)',
+                    'rgba(255, 165, 0, 1)',
+                    'rgba(255, 69, 0, 1)',
+                    'rgba(255, 0, 0, 1)' // Red/Orange
+                ]
+            };
+
+            const gradient = gradients[type] || gradients['vegetation'];
+
+            window.currentHeatmap = new google.maps.visualization.HeatmapLayer({
+                data: points,
+                map: map,
+                radius: 40,
+                opacity: 0.6,
+                gradient: gradient
+            });
         }
 
         function showLoading(text) {
@@ -986,7 +1770,9 @@
                 showError('Operation timed out. Please check your internet connection or API billing status. Using simulated data for map.');
                 // Even on timeout, try to close overlay to allow user to retry
                 console.warn('Loading timed out.');
-            }, 15000);
+            }
+
+                , 15000);
         }
 
         function hideLoading() {
@@ -994,6 +1780,7 @@
                 clearTimeout(loadingTimeout);
                 loadingTimeout = null;
             }
+
             document.getElementById('loadingOverlay').classList.remove('show');
         }
 
@@ -1009,7 +1796,10 @@
             const placeName = place.formatted_address || place.name;
 
             map.panTo(location);
-            map.fitBounds(bounds || new google.maps.Circle({ center: location, radius: 2000 }).getBounds());
+
+            map.fitBounds(bounds || new google.maps.Circle({
+                center: location, radius: 2000
+            }).getBounds());
 
             // Remove old marker
             if (currentMarker) {
@@ -1018,6 +1808,7 @@
 
             // Add new marker
             currentMarker = new google.maps.Marker({
+
                 position: location,
                 map: map,
                 animation: google.maps.Animation.DROP,
@@ -1036,14 +1827,19 @@
 
             // Use setTimeout to allow UI to update before heavy processing
             setTimeout(async () => {
-                await performSatelliteAnalysis(location, bounds, placeName, { formatted_address: placeName });
+                await performSatelliteAnalysis(location, bounds, placeName, {
+                    formatted_address: placeName
+                });
                 hideLoading();
-            }, 100);
+            }
+
+                , 100);
         }
 
         async function analyzeLocation() {
             try {
                 let query = document.getElementById('searchInput').value;
+
                 if (!query) {
                     showError('Please enter a location to search');
                     return;
@@ -1066,111 +1862,201 @@
                 if (lowerQuery.match(/water|lake|dam|river|pan|flood/)) {
                     newType = 'water';
                     intentFound = true;
-                } else if (lowerQuery.match(/veg|forest|tree|crop|farm|agriculture/)) {
+                }
+
+                else if (lowerQuery.match(/veg|forest|tree|crop|farm|agriculture/)) {
                     newType = 'vegetation';
                     intentFound = true;
-                } else if (lowerQuery.match(/urban|city|build|house|road/)) {
+                }
+
+                else if (lowerQuery.match(/urban|city|build|house|road/)) {
                     newType = 'urban';
                     intentFound = true;
-                } else if (lowerQuery.match(/temp|heat|hot|fire/)) {
+                }
+
+                else if (lowerQuery.match(/temp|heat|hot|fire/)) {
                     newType = 'temperature';
                     intentFound = true;
                 }
 
                 if (intentFound && newType) {
                     setAnalysisType(newType);
-                    showToast(`Detected intent: ${newType.toUpperCase()} Analysis`);
+
+                    showToast(`Detected intent: $ {
+                            newType.toUpperCase()
+                        }
+
+                        Analysis`);
 
                     // 2. Extract Location (Simple: Remove keywords)
                     // This is a basic approach; in production use a real Named Entity Recognition (NER)
-                    let cleanQuery = lowerQuery
-                        .replace(/show|me|find|where|is|the|analyze|check|search|for|map|of/g, '')
-                        .replace(/water|vegetation|urban|temperature|forests|levels|pans|dams|crops|heat/g, '')
-                        .replace(/ in | at | near | around /g, ' ')
-                        .trim();
+                    let cleanQuery = lowerQuery.replace(/show|me|find|where|is|the|analyze|check|search|for|map|of/g, '').replace(/water|vegetation|urban|temperature|forests|levels|pans|dams|crops|heat/g, '').replace(/ in | at | near | around /g, ' ').trim();
 
                     if (cleanQuery.length > 2) {
                         query = cleanQuery; // Use cleaned location
                         console.log("Extracted Location:", cleanQuery);
                     }
                 }
+
                 // -----------------------------
 
-                showLoading(`Searching for "${query}"...`);
+                showLoading(`Searching for "${query}" ...`);
 
-                geocoder.geocode({ address: query }, async (results, status) => {
-                    try {
-                        if (status === 'OK' && results && results[0]) {
-                            handlePlaceSelection(results[0]);
-                        } else {
-                            hideLoading();
-                            let errorMsg = 'Location not found. Please try a different search term.';
-                            if (status === 'ZERO_RESULTS') {
-                                errorMsg = 'No results found for "' + query + '". Try being more specific.';
-                            } else if (status === 'REQUEST_DENIED') {
-                                errorMsg = 'Geocoding request denied. Check API key permissions and billing.';
-                            } else if (status === 'OVER_QUERY_LIMIT') {
-                                errorMsg = 'Too many requests. Please wait and try again.';
-                            } else if (status === 'ERROR') {
-                                errorMsg = 'Google Maps API error. Check if billing is enabled.';
+                geocoder.geocode({
+                    address: query
+                }
+
+                    , async (results, status) => {
+                        try {
+                            if (status === 'OK' && results && results[0]) {
+                                handlePlaceSelection(results[0]);
                             }
-                            showError(errorMsg);
+
+                            else {
+                                hideLoading();
+                                let errorMsg = 'Location not found. Please try a different search term.';
+
+                                if (status === 'ZERO_RESULTS') {
+                                    errorMsg = 'No results found for "' + query + '". Try being more specific.';
+                                }
+
+                                else if (status === 'REQUEST_DENIED') {
+                                    errorMsg = 'Geocoding request denied. Check API key permissions and billing.';
+                                }
+
+                                else if (status === 'OVER_QUERY_LIMIT') {
+                                    errorMsg = 'Too many requests. Please wait and try again.';
+                                }
+
+                                else if (status === 'ERROR') {
+                                    errorMsg = 'Google Maps API error. Check if billing is enabled.';
+                                }
+
+                                showError(errorMsg);
+                            }
                         }
-                    } catch (error) {
-                        hideLoading();
-                        console.error('Geocoding processing error:', error);
-                        showError('Failed to process location data. Please try again.');
-                    }
-                });
-            } catch (error) {
+
+                        catch (error) {
+                            hideLoading();
+                            console.error('Geocoding processing error:', error);
+                            showError('Failed to process location data. Please try again.');
+                        }
+                    });
+            }
+
+            catch (error) {
                 hideLoading();
                 console.error('Analysis initialization error:', error);
                 showError('An error occurred starting the analysis. Please try again.');
             }
         }
 
-        async function performSatelliteAnalysis(location, bounds, locationName, geocodeResult) {
+        async function performSatelliteAnalysis(location, bounds, locationName, geocodeResult, dateOverride = null) {
+
             // Store data for refreshing when types change
-            lastAnalysisData = { location, bounds, placeName: locationName, geocodeResult };
+            lastAnalysisData = {
+                location,
+                bounds,
+                placeName: locationName,
+                geocodeResult,
+                dateOverride // Store this so refreshes keep the date
+            }
+
+                ;
 
             // Simulate Earth Engine analysis
             // In production, this would query actual Earth Engine data
 
-            // Artificial delay to show loading state
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            // Delay ensures the loading screen doesn't look like a glitch
+            // Artificial delay removed for responsiveness
+            // await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // Determine date to use
+            const analysisDate = dateOverride || new Date().toISOString().split('T')[0];
 
             const analysis = {
-                ndvi: generateRealisticValue(0.3, 0.8, currentAnalysisType === 'vegetation'),
-                ndwi: generateRealisticValue(0.2, 0.6, currentAnalysisType === 'water'),
-                ndbi: generateRealisticValue(0.1, 0.5, currentAnalysisType === 'urban'),
-                temperature: generateRealisticValue(15, 35, currentAnalysisType === 'temperature'),
-                cloudCover: Math.random() * 30,
-                date: new Date().toISOString()
-            };
+                ndvi: generateRealisticValue(0.3, 0.8, currentAnalysisType === 'vegetation', location, analysisDate),
+                ndwi: generateRealisticValue(0.2, 0.6, currentAnalysisType === 'water', location, analysisDate),
+                ndbi: generateRealisticValue(0.1, 0.5, currentAnalysisType === 'urban', location, analysisDate),
+                temperature: generateRealisticValue(15, 35, currentAnalysisType === 'temperature', location, analysisDate),
+                cloudCover: Math.random() * 30, // Cloud cover can remain random or seeded if preferred
+                date: analysisDate
+            }
+
+                ;
 
             // TEMPORAL MODE LOGIC
             let historicalAnalysis = null;
+
             if (temporalMode) {
-                // Simulate data from 1 year ago (often creates a contrast)
+
+                // Simulate data from 1 year ago (Deterministic)
+                // Use a seeded modifier based on the location
+                let hSeed = 0;
+                if (location && location.lat) hSeed = (typeof location.lat === 'function' ? location.lat() : location.lat) * 20000;
+                const hMod = (Math.sin(hSeed) * 0.4); // -0.4 to 0.4
+
                 historicalAnalysis = {
-                    ndvi: analysis.ndvi * (0.8 + Math.random() * 0.4), // Random change +/-
-                    ndwi: analysis.ndwi * (0.8 + Math.random() * 0.4),
-                    ndbi: analysis.ndbi * (0.8 + Math.random() * 0.4),
-                    temperature: analysis.temperature - 1.5, // Cooler in past?
-                    date: new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString()
-                };
+                    ndvi: analysis.ndvi * (1.0 + hMod), // Stable historical variance
+                    ndwi: analysis.ndwi * (1.0 - hMod),
+                    ndbi: analysis.ndbi * (1.0 + (hMod * 0.5)),
+                    temperature: analysis.temperature - 1.5,
+                    date: new Date(new Date().setFullYear(new Date().getFullYear() - 1)).toISOString().split('T')[0]
+                }
+
+                    ;
             }
 
             showResults(locationName, analysis, geocodeResult, historicalAnalysis);
         }
 
-        function generateRealisticValue(min, max, emphasized) {
-            const base = Math.random() * (max - min) + min;
-            return emphasized ? Math.max(base, (min + max) / 2) : base;
+        function generateRealisticValue(min, max, emphasized, location, dateString = null) {
+            // 1. Create a stable seed from location
+            // We use lat/lng * 10000 to capture enough variance
+            let seed = 0;
+            if (location && typeof location.lat === 'function') {
+                seed = (location.lat() * 10000) + (location.lng() * 10000);
+            } else if (location && location.lat) { // Handle raw object if any
+                seed = (location.lat * 10000) + (location.lng * 10000);
+            }
+
+            // Mix in Date String to Seed if present
+            if (dateString) {
+                // Simple hash of date string
+                let dateHash = 0;
+                for (let i = 0; i < dateString.length; i++) {
+                    dateHash = ((dateHash << 5) - dateHash) + dateString.charCodeAt(i);
+                    dateHash |= 0; // Convert to 32bit integer
+                }
+                seed += dateHash;
+                console.log(`Date: ${dateString}, Seed: ${seed}, DateHash: ${dateHash}`);
+            }
+
+            // 2. Simple deterministic pseudo-random function (Sine wave based)
+            // Math.sin(seed) gives deterministic -1 to 1. 
+            // We take absolute fractional part to get 0 to 1 equivalent to Math.random()
+            const x = Math.sin(seed++) * 10000;
+            const deterministicRandom = x - Math.floor(x);
+
+            // 3. Generate Value
+            // If emphasized (e.g. searching for 'drought' and getting bad news), bump it
+            // But for consistency, we just use the seed range
+            const range = max - min;
+            let value = min + (deterministicRandom * range);
+
+            // 4. Emphasis modifier (optional, but keep it deterministic)
+            if (emphasized) {
+                // Bias towards the extreme of the range based on another simple hash
+                // This ensures 'drought' mode doesn't just look random
+                // For now, let's keep it simple: just use the base value to avoid jumping
+            }
+
+            return value;
         }
 
         function showResults(location, analysis, geocodeResult, historical = null) {
+            // Update the Left Panel (Dashboard) to match the data
+            updateDashboardState(location, analysis);
+
             const panel = document.getElementById('resultsPanel');
             const content = document.getElementById('resultsContent');
 
@@ -1179,7 +2065,10 @@
             const formatPct = (n) => (n * 100).toFixed(0) + '%';
 
             // Calculate changes safely
-            let ndviChange = 0, ndwiChange = 0, ndbiChange = 0;
+            let ndviChange = 0,
+                ndwiChange = 0,
+                ndbiChange = 0;
+
             if (historical) {
                 ndviChange = (analysis.ndvi - historical.ndvi) / historical.ndvi;
                 ndwiChange = (analysis.ndwi - historical.ndwi) / historical.ndwi;
@@ -1187,13 +2076,36 @@
             }
 
             let comparisonHTML = '';
+
             if (historical) {
                 // Calculate primary metric change based on current type
-                let currentVal, pastVal, label;
-                if (currentAnalysisType === 'vegetation') { currentVal = analysis.ndvi; pastVal = historical.ndvi; label = 'NDVI (Vegetation)'; }
-                else if (currentAnalysisType === 'water') { currentVal = analysis.ndwi; pastVal = historical.ndwi; label = 'NDWI (Water)'; }
-                else if (currentAnalysisType === 'urban') { currentVal = analysis.ndbi; pastVal = historical.ndbi; label = 'NDBI (Urban)'; }
-                else { currentVal = analysis.temperature; pastVal = historical.temperature; label = 'Temp (°C)'; }
+                let currentVal,
+                    pastVal,
+                    label;
+
+                if (currentAnalysisType === 'vegetation') {
+                    currentVal = analysis.ndvi;
+                    pastVal = historical.ndvi;
+                    label = 'NDVI (Vegetation)';
+                }
+
+                else if (currentAnalysisType === 'water') {
+                    currentVal = analysis.ndwi;
+                    pastVal = historical.ndwi;
+                    label = 'NDWI (Water)';
+                }
+
+                else if (currentAnalysisType === 'urban') {
+                    currentVal = analysis.ndbi;
+                    pastVal = historical.ndbi;
+                    label = 'NDBI (Urban)';
+                }
+
+                else {
+                    currentVal = analysis.temperature;
+                    pastVal = historical.temperature;
+                    label = 'Temp (°C)';
+                }
 
                 const delta = currentVal - pastVal;
                 const deltaPct = ((delta / pastVal) * 100).toFixed(1);
@@ -1201,130 +2113,51 @@
                 const changeColor = isPositive ? '#188038' : '#D93025'; // Google Green/Red
                 const icon = isPositive ? 'trending_up' : 'trending_down';
 
-                comparisonHTML = `
-                <div class="result-card" style="border-left: 4px solid #FBBC04;">
-                    <div class="card-title">Temporal Change (vs 1 Year Ago)</div>
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 10px;">
-                        <div>
-                            <div style="font-size: 11px; color: #5F6368;">Current</div>
-                            <div style="font-size: 16px; font-weight: 500;">${format(currentVal)}</div>
-                        </div>
-                        <div style="text-align: center;">
-                            <span class="material-icons" style="color: ${changeColor};">${icon}</span>
-                            <div style="color: ${changeColor}; font-weight: bold; font-size: 14px;">${delta > 0 ? '+' : ''}${deltaPct}%</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="font-size: 11px; color: #5F6368;">Baseline</div>
-                            <div style="font-size: 16px; font-weight: 500;">${format(pastVal)}</div>
-                        </div>
-                    </div>
+                comparisonHTML = `<div id="weatherWidget" class="result-card" style="border-left: 4px solid #4285F4; min-height: 80px; display: flex; align-items: center; justify-content: center;">
+                    <div style="color: #5f6368; font-size: 13px;">Loading Weather Data...</div>
                 </div>`;
+
+                // Trigger async weather update after a short delay (so DOM is ready)
+                setTimeout(() => {
+                    const center = lastAnalysisData.bounds ? lastAnalysisData.bounds.getCenter() : { lat: () => 0, lng: () => 0 };
+                    // If bounds is not available (rare), fallback or use location if possible. 
+                    // Usually bounds is set.
+                    // Actually, generic check:
+                    let lat, lng;
+                    if (lastAnalysisData.bounds && typeof lastAnalysisData.bounds.getCenter === 'function') {
+                        const c = lastAnalysisData.bounds.getCenter();
+                        lat = c.lat();
+                        lng = c.lng();
+                    } else if (lastAnalysisData.location) {
+                        // Fallback to location object directly if bounds missing
+                        lat = typeof lastAnalysisData.location.lat === 'function' ? lastAnalysisData.location.lat() : lastAnalysisData.location.lat;
+                        lng = typeof lastAnalysisData.location.lng === 'function' ? lastAnalysisData.location.lng() : lastAnalysisData.location.lng;
+                    }
+
+                    if (lat !== undefined && lng !== undefined) {
+                        updateWeatherWidget(lat, lng, analysis.date);
+                    }
+                }, 100);
             }
 
-            content.innerHTML = `
-                <div class="result-card">
-                    <div class="card-title">Location</div>
-                    <div class="card-value">${location}</div>
-                    <div style="font-size: 12px; color: #5F6368; margin-top: 4px;">
-                        ${new Date(analysis.date).toLocaleDateString()}
-                    </div>
-                    <div style="font-size: 11px; color: #5F6368; margin-top: 8px;">
-                        ${geocodeResult.formatted_address}
-                    </div>
-                </div>
-
-                ${comparisonHTML}
-
-                <div class="result-card">
-                    <div class="card-title">Satellite Data</div>
-                    <div style="font-size: 12px; color: #5F6368; margin-bottom: 8px;">
-                        <span class="material-icons" style="font-size: 14px; vertical-align: middle;">satellite</span>
-                        Sentinel-2 / Landsat 8
-                    </div>
-                    <div style="font-size: 12px; color: #5F6368;">
-                        Cloud Cover: ${analysis.cloudCover.toFixed(1)}%
-                    </div>
-                </div>
-
-                <div class="result-card">
-                    <div class="metric-row">
-                        <div class="metric-icon" style="background: #E8F5E9;">
-                            <span class="material-icons" style="color: #34A853; font-size: 18px;">park</span>
-                        </div>
-                        <div class="metric-content">
-                            <div class="metric-label">Vegetation Index (NDVI)</div>
-                            <div class="metric-value">${analysis.ndvi.toFixed(3)}
-                                <span class="badge ${ndviChange > 0 ? 'positive' : 'negative'}">
-                                    ${ndviChange > 0 ? '+' : ''}${(ndviChange * 100).toFixed(1)}%
-                                </span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${analysis.ndvi * 100}%; background: #34A853;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="result-card">
-                    <div class="metric-row">
-                        <div class="metric-icon" style="background: #E3F2FD;">
-                            <span class="material-icons" style="color: #4285F4; font-size: 18px;">water_drop</span>
-                        </div>
-                        <div class="metric-content">
-                            <div class="metric-label">Water Index (NDWI)</div>
-                            <div class="metric-value">${analysis.ndwi.toFixed(3)}
-                                <span class="badge ${ndwiChange > 0 ? 'positive' : 'negative'}">
-                                    ${ndwiChange > 0 ? '+' : ''}${(ndwiChange * 100).toFixed(1)}%
-                                </span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${analysis.ndwi * 100}%; background: #4285F4;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="result-card">
-                    <div class="metric-row">
-                        <div class="metric-icon" style="background: #FEF7E0;">
-                            <span class="material-icons" style="color: #F29900; font-size: 18px;">location_city</span>
-                        </div>
-                        <div class="metric-content">
-                            <div class="metric-label">Urban Development (NDBI)</div>
-                            <div class="metric-value">${analysis.ndbi.toFixed(3)}
-                                <span class="badge neutral">
-                                    +${(ndbiChange * 100).toFixed(1)}%
-                                </span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${analysis.ndbi * 100}%; background: #F29900;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="result-card">
-                    <div class="metric-row">
-                        <div class="metric-icon" style="background: #FEEAE0;">
-                            <span class="material-icons" style="color: #EA4335; font-size: 18px;">thermostat</span>
-                        </div>
-                        <div class="metric-content">
-                            <div class="metric-label">Surface Temperature</div>
-                            <div class="metric-value">${analysis.temperature.toFixed(1)}°C</div>
-                            <div style="font-size: 12px; color: #5F6368; margin-top: 4px;">
-                                ${(analysis.temperature * 9 / 5 + 32).toFixed(1)}°F
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="result-card">
-                    <div class="card-title">Analysis Summary</div>
-                    <div class="card-value" style="font-size: 14px; line-height: 1.6;">
-                        ${generateAnalysisSummary(analysis, ndviChange, ndwiChange)}
-                    </div>
-                </div>
-            `;
+            content.innerHTML = ` <div class="result-card"><div class="card-title">Location</div><div class="card-value">${location
+                }</div><div style="font-size: 12px; color: #5F6368; margin-top: 4px;">${new Date(analysis.date).toLocaleDateString()
+                }</div><div style="font-size: 11px; color: #5F6368; margin-top: 8px;">${geocodeResult.formatted_address
+                }</div></div>${comparisonHTML
+                }
+            <div class="result-card"><div class="card-title">Satellite Data</div><div style="font-size: 12px; color: #5F6368; margin-bottom: 8px;"><span class="material-icons" style="font-size: 14px; vertical-align: middle;">satellite</span>Sentinel-2 / Landsat 8 </div><div style="font-size: 12px; color: #5F6368;">Cloud Cover: ${analysis.cloudCover.toFixed(1)
+                }% </div></div><div class="result-card"><div class="metric-row"><div class="metric-icon" style="background: #E8F5E9;"><span class="material-icons" style="color: #34A853; font-size: 18px;">park</span></div><div class="metric-content"><div class="metric-label">Vegetation Index (NDVI)</div><div class="metric-value">${analysis.ndvi.toFixed(3)
+                }<span class="badge ${ndviChange > 0 ? 'positive' : 'negative'}">${ndviChange > 0 ? '+' : ''
+                }${(ndviChange * 100).toFixed(1)
+                }% </span></div><div class="progress-bar"><div class="progress-fill" style="width: ${analysis.ndvi * 100}%; background: #34A853;"></div></div></div></div></div><div class="result-card"><div class="metric-row"><div class="metric-icon" style="background: #E3F2FD;"><span class="material-icons" style="color: #4285F4; font-size: 18px;">water_drop</span></div><div class="metric-content"><div class="metric-label">Water Index (NDWI)</div><div class="metric-value">${analysis.ndwi.toFixed(3)
+                }<span class="badge ${ndwiChange > 0 ? 'positive' : 'negative'}">${ndwiChange > 0 ? '+' : ''
+                }${(ndwiChange * 100).toFixed(1)
+                }% </span></div><div class="progress-bar"><div class="progress-fill" style="width: ${analysis.ndwi * 100}%; background: #4285F4;"></div></div></div></div></div><div class="result-card"><div class="metric-row"><div class="metric-icon" style="background: #FEF7E0;"><span class="material-icons" style="color: #F29900; font-size: 18px;">location_city</span></div><div class="metric-content"><div class="metric-label">Urban Development (NDBI)</div><div class="metric-value">${analysis.ndbi.toFixed(3)
+                }<span class="badge neutral">+${(ndbiChange * 100).toFixed(1)
+                }% </span></div><div class="progress-bar"><div class="progress-fill" style="width: ${analysis.ndbi * 100}%; background: #F29900;"></div></div></div></div></div><div class="result-card"><div class="metric-row"><div class="metric-icon" style="background: #FEEAE0;"><span class="material-icons" style="color: #EA4335; font-size: 18px;">thermostat</span></div><div class="metric-content"><div class="metric-label">Surface Temperature</div><div class="metric-value">${analysis.temperature.toFixed(1)
+                }°C</div><div style="font-size: 12px; color: #5F6368; margin-top: 4px;">${(analysis.temperature * 9 / 5 + 32).toFixed(1)
+                }°F </div></div></div></div><div class="result-card"><div class="card-title">Analysis Summary</div><div class="card-value" style="font-size: 14px; line-height: 1.6;">${generateAnalysisSummary(analysis, ndviChange, ndwiChange)
+                }</div></div>`;
 
             panel.classList.add('open');
         }
@@ -1334,13 +2167,17 @@
 
             if (analysis.ndvi > 0.6) {
                 summary.push('✓ High vegetation density detected');
-            } else if (analysis.ndvi < 0.3) {
+            }
+
+            else if (analysis.ndvi < 0.3) {
                 summary.push('⚠ Low vegetation cover');
             }
 
             if (ndviChange > 0.05) {
                 summary.push('✓ Vegetation increasing');
-            } else if (ndviChange < -0.05) {
+            }
+
+            else if (ndviChange < -0.05) {
                 summary.push('⚠ Vegetation declining');
             }
 
@@ -1369,7 +2206,9 @@
                     const pos = {
                         lat: position.coords.latitude,
                         lng: position.coords.longitude
-                    };
+                    }
+
+                        ;
                     map.panTo(pos);
                     map.setZoom(14);
 
@@ -1378,6 +2217,7 @@
                     }
 
                     currentMarker = new google.maps.Marker({
+
                         position: pos,
                         map: map,
                         icon: {
@@ -1391,17 +2231,22 @@
                     });
 
                     // Reverse geocode
-                    geocoder.geocode({ location: pos }, (results, status) => {
-                        if (status === 'OK' && results[0]) {
-                            document.getElementById('searchInput').value = results[0].formatted_address;
-                        }
-                    });
+                    geocoder.geocode({
+                        location: pos
+                    }
+
+                        , (results, status) => {
+                            if (status === 'OK' && results[0]) {
+                                document.getElementById('searchInput').value = results[0].formatted_address;
+                            }
+                        });
                 });
             }
         }
 
         // Initialize when page loads
         window.onload = initMap;
+
         // --- MEASUREMENT TOOLS ---
         function toggleToolsMenu() {
             const menu = document.getElementById('toolsMenu');
@@ -1410,6 +2255,7 @@
 
         function startMeasurement(type) {
             toggleToolsMenu();
+
             if (currentShape) {
                 currentShape.setMap(null); // Clear previous
             }
@@ -1417,7 +2263,9 @@
             if (type === 'distance') {
                 drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYLINE);
                 showToast("Click on map to measure distance. Double-click to finish.");
-            } else {
+            }
+
+            else {
                 drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
                 showToast("Click to draw area. Double-click to finish.");
             }
@@ -1431,12 +2279,32 @@
                 const length = google.maps.geometry.spherical.computeLength(currentShape.getPath());
                 let km = (length / 1000).toFixed(2);
                 let miles = (length * 0.000621371).toFixed(2);
-                message = `Distance: ${km} km (${miles} miles)`;
-            } else if (event.type === 'polygon') {
+
+                message = `Distance: $ {
+                    km
+                }
+
+                km ($ {
+                        miles
+                    }
+
+                    miles)`;
+            }
+
+            else if (event.type === 'polygon') {
                 const area = google.maps.geometry.spherical.computeArea(currentShape.getPath());
                 let sqKm = (area / 1000000).toFixed(2);
                 let hectares = (area / 10000).toFixed(2);
-                message = `Area: ${sqKm} sq km (${hectares} hectares)`;
+
+                message = `Area: $ {
+                    sqKm
+                }
+
+                sq km ($ {
+                        hectares
+                    }
+
+                    hectares)`;
             }
 
             showToast(message);
@@ -1449,10 +2317,12 @@
 
         function clearMeasurements() {
             toggleToolsMenu();
+
             if (currentShape) {
                 currentShape.setMap(null);
                 currentShape = null;
             }
+
             drawingManager.setDrawingMode(null);
             showToast("Measurements cleared");
         }
@@ -1461,9 +2331,12 @@
             const toast = document.getElementById('toast');
             document.getElementById('toastMessage').textContent = msg;
             toast.classList.add('show');
+
             setTimeout(() => {
                 toast.classList.remove('show');
-            }, 4000);
+            }
+
+                , 4000);
         }
 
         function toggleTemporalMode() {
@@ -1475,75 +2348,108 @@
                 btn.style.color = '#137333';
                 showToast("Temporal Mode: ON (Comparing 2023 vs 2024)");
                 // visual simulation could go here
-            } else {
+            }
+
+            else {
                 btn.style.background = '';
                 btn.style.color = '';
                 showToast("Temporal Mode: OFF");
             }
         }
+
     </script>
     <!-- ArcGIS Style Time Slider (Pixel Perfect Match) -->
     <div class="esri-time-slider" id="temporalSliderContainer">
         <!-- Section 1: Playback -->
-        <div class="esri-section playback">
-            <button class="esri-play-btn" onclick="toggleTimelinePlay()" title="Play/Pause">
-                <span class="material-icons" id="playIcon">play_arrow</span>
-            </button>
-        </div>
-
-        <!-- Section 2: Current Date info -->
-        <div class="esri-section current-info">
-            <div class="esri-current-label date-large" id="sliderDateDisplay">Jan 1, 2024</div>
-            <div class="esri-current-sublabel">Current Display</div>
-        </div>
-
+        <div class="esri-section playback"><button class="esri-play-btn" onclick="toggleTimelinePlay()"
+                title="Play/Pause"><span class="material-icons" id="playIcon">play_arrow</span></button></div>
         <!-- Section 3: Timeline -->
-        <div class="esri-section timeline-area">
-            <div class="esri-limit-label start" id="startDateLabel">1/1/2024</div>
-            
-            <div class="esri-slider-track">
-                 <!-- Thumb and Track -->
-                 <input type="range" min="0" max="365" value="0" class="esri-range-input" id="temporalRange" 
-                    oninput="handleSliderInput(this.value)">
-                 
-                 <!-- Ticks and Labels (Jan - Dec) -->
-                 <div class="esri-tick-container">
+        <div class="esri-section timeline-area"><input type="date" class="esri-date-input start" id="startDateInput"
+                value="2024-01-01" onchange="handleInputDateChange('start')">
+            <div class="esri-slider-track" id="sliderTrackContainer">
+                <div class="range-highlight" id="rangeHighlight">
+                </div>
+                <div class="esri-timeline-ruler"></div>
+                <!-- Dual Inputs --><input type="range" min="0" max="365" value="0" class="esri-range-input dual-input"
+                    id="temporalRangeStart" oninput="handleDualSliderInput('start', this.value)"><input type="range"
+                    min="0" max="365" value="365" class="esri-range-input dual-input" id="temporalRangeEnd"
+                    oninput="handleDualSliderInput('end', this.value)">
+                <!-- Ticks and Labels (Jan - Dec) -->
+                <div class="esri-tick-container">
                     <!-- Q1 -->
-                    <div class="esri-tick-group"><div class="tick major"></div><div class="tick-text">Jan</div></div>
-                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Feb</div></div>
-                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Mar</div></div>
+                    <div class="esri-tick-group">
+                        <div class="tick major"></div>
+                        <div class="tick-text">Jan</div>
+                    </div>
+                    <div class="esri-tick-group">
+                        <div class="tick"></div>
+                        <div class="tick-text">Feb</div>
+                    </div>
+                    <div class="esri-tick-group">
+                        <div class="tick"></div>
+                        <div class="tick-text">Mar</div>
+                    </div>
                     <!-- Q2 -->
-                    <div class="esri-tick-group"><div class="tick major"></div><div class="tick-text">Apr</div></div>
-                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">May</div></div>
-                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Jun</div></div>
+                    <div class="esri-tick-group">
+                        <div class="tick major">
+                        </div>
+                        <div class="tick-text">Apr
+                        </div>
+                    </div>
+                    <div class="esri-tick-group">
+                        <div class="tick"></div>
+                        <div class="tick-text">May
+                        </div>
+                    </div>
+                    <div class="esri-tick-group">
+                        <div class="tick"></div>
+                        <div class="tick-text">Jun
+                        </div>
+                    </div>
                     <!-- Q3 -->
-                    <div class="esri-tick-group"><div class="tick major"></div><div class="tick-text">Jul</div></div>
-                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Aug</div></div>
-                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Sep</div></div>
+                    <div class="esri-tick-group">
+                        <div class="tick major">
+                        </div>
+                        <div class="tick-text">
+                            Jul</div>
+                    </div>
+                    <div class="esri-tick-group">
+                        <div class="tick"></div>
+                        <div class="tick-text">
+                            Aug</div>
+                    </div>
+                    <div class="esri-tick-group">
+                        <div class="tick"></div>
+                        <div class="tick-text">
+                            Sep</div>
+                    </div>
                     <!-- Q4 -->
-                    <div class="esri-tick-group"><div class="tick major"></div><div class="tick-text">Oct</div></div>
-                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Nov</div></div>
-                    <div class="esri-tick-group"><div class="tick"></div><div class="tick-text">Dec</div></div>
-                 </div>
-            </div>
-
-            <div class="esri-limit-label end" id="endDateLabel">12/31/2024</div>
+                    <div class="esri-tick-group">
+                        <div class="tick major">
+                        </div>
+                        <div class="tick-text">
+                            Oct</div>
+                    </div>
+                    <div class="esri-tick-group">
+                        <div class="tick">
+                        </div>
+                        <div class="tick-text">
+                            Nov</div>
+                    </div>
+                    <div class="esri-tick-group">
+                        <div class="tick">
+                        </div>
+                        <div class="tick-text">
+                            Dec</div>
+                    </div>
+                </div>
+            </div><input type="date" class="esri-date-input end" id="endDateInput" value="2024-12-31"
+                onchange="handleInputDateChange('end')">
         </div>
-
         <!-- Section 4: Navigation -->
-        <div class="esri-section navigation">
-            <button class="esri-nav-btn" onclick="stepTimeline(-30)" title="Previous Month">
-                <span class="material-icons">skip_previous</span>
-            </button>
-            <button class="esri-nav-btn" onclick="stepTimeline(30)" title="Next Month">
-                <span class="material-icons">skip_next</span>
-            </button>
-        </div>
     </div>
-
-    <!-- Hidden date input for picker -->
-    <input type="date" id="temporalDateInput" style="display:none;" onchange="handleDateInput(this.value)">
-
+    <!-- Hidden date input for picker --><input type="date" id="temporalDateInput" style="display:none;"
+        onchange="handleDateInput(this.value)">
     <style>
         /* Container */
         .esri-time-slider {
@@ -1551,13 +2457,15 @@
             bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
-            width: 90%; /* Wide layout */
+            width: 90%;
+            /* Wide layout */
             max-width: 1200px;
             height: 80px;
             background: #FFFFFF;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
             display: flex;
-            align-items: stretch; /* Full height sections */
+            align-items: stretch;
+            /* Full height sections */
             z-index: 1000;
             font-family: 'Avenir Next', 'Helvetica Neue', Arial, sans-serif;
             border: 1px solid #e0e0e0;
@@ -1573,7 +2481,10 @@
             padding: 0 16px;
             border-right: 1px solid #f0f0f0;
         }
-        .esri-section:last-child { border-right: none; }
+
+        .esri-section:last-child {
+            border-right: none;
+        }
 
         /* Play Button */
         .esri-play-btn {
@@ -1584,8 +2495,16 @@
             padding: 8px;
             transition: color 0.2s;
         }
-        .esri-play-btn:hover { color: #000; }
-        .esri-play-btn span { font-size: 36px; } /* Large icon */
+
+        .esri-play-btn:hover {
+            color: #000;
+        }
+
+        .esri-play-btn span {
+            font-size: 36px;
+        }
+
+        /* Large icon */
 
         /* Current Date Info */
         .esri-current-info {
@@ -1594,12 +2513,15 @@
             min-width: 140px;
             align-items: flex-start;
         }
+
         .esri-current-label {
-            color: #005e95; /* ArcGIS Blue */
+            color: #005e95;
+            /* ArcGIS Blue */
             font-weight: 700;
             font-size: 15px;
             margin-bottom: 4px;
         }
+
         .esri-current-sublabel {
             color: #6e6e6e;
             font-size: 11px;
@@ -1618,7 +2540,30 @@
             font-size: 12px;
             font-weight: 600;
             color: #323232;
+            font-size: 12px;
+            font-weight: 600;
+            color: #323232;
             white-space: nowrap;
+        }
+
+        .esri-date-input {
+            font-family: 'Avenir Next', 'Helvetica Neue', Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: #323232;
+            border: 1px solid transparent;
+            background: transparent;
+            width: 105px;
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 2px 4px;
+        }
+
+        .esri-date-input:hover,
+        .esri-date-input:focus {
+            border: 1px solid #ccc;
+            background: #fff;
+            outline: none;
         }
 
         .esri-slider-track {
@@ -1638,41 +2583,104 @@
             position: relative;
             cursor: pointer;
         }
-        
+
         /* Thumb */
         .esri-range-input::-webkit-slider-thumb {
             -webkit-appearance: none;
-            height: 16px; 
+            height: 16px;
             width: 16px;
             border-radius: 50%;
             background: #fff;
             border: 4px solid #005e95;
-            margin-top: -6px; /* Center on track */
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            margin-top: -6px;
+            /* Center on track */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
             transition: transform 0.1s;
         }
+
         .esri-range-input::-webkit-slider-thumb:hover {
             transform: scale(1.2);
         }
 
         /* Track Line */
+        /* Track Line */
         .esri-range-input::-webkit-slider-runnable-track {
             width: 100%;
             height: 4px;
-            background: #bbbbbb;
+            background: transparent;
+            /* Handled by container */
             border-radius: 2px;
+        }
+
+        /* Dual Slider Overrides */
+        .esri-slider-track {
+            position: relative;
+            background: #e0e0e0;
+            height: 4px;
+            border-radius: 2px;
+        }
+
+        /* Intermediate Ticks (Ruler) */
+        .esri-timeline-ruler {
+            position: absolute;
+            top: 50%;
+            /* Align with track center or slightly below? */
+            left: 0;
+            width: 100%;
+            height: 12px;
+            /* Made longer */
+            transform: translateY(-50%);
+            background-image: repeating-linear-gradient(90deg,
+                    #a0a0a0,
+                    /* Made darker */
+                    #a0a0a0 1px,
+                    transparent 1px,
+                    transparent 2%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .range-highlight {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            background: #005e95;
+            /* Active Range Color */
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .esri-range-input.dual-input {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 100%;
+            pointer-events: none;
+            /* Let clicks pass through track */
+            background: transparent;
+            margin: 0;
+            z-index: 2;
+        }
+
+        /* Enable pointer events on thumbs */
+        .esri-range-input.dual-input::-webkit-slider-thumb {
+            pointer-events: auto;
+            position: relative;
+            z-index: 10;
         }
 
         /* Ticks Container */
         .esri-tick-container {
             position: absolute;
-            top: 55%; /* Below the line */
+            top: 55%;
+            /* Below the line */
             left: 0;
             width: 100%;
             display: flex;
             justify-content: space-between;
             pointer-events: none;
-            padding: 0 6px; /* Align with thumb center */
+            padding: 0 6px;
+            /* Align with thumb center */
             box-sizing: border-box;
         }
 
@@ -1680,7 +2688,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 1px; /* Center point */
+            width: 1px;
+            /* Center point */
         }
 
         .tick {
@@ -1689,13 +2698,18 @@
             background: #bbbbbb;
             margin-bottom: 4px;
         }
-        .tick.major { height: 8px; background: #888; }
+
+        .tick.major {
+            height: 8px;
+            background: #888;
+        }
 
         .tick-text {
             font-size: 10px;
             color: #666;
             margin-top: 2px;
-            transform: translateX(-10%); /* Slight visual centering */
+            transform: translateX(-10%);
+            /* Slight visual centering */
         }
 
         /* Navigation Buttons */
@@ -1706,106 +2720,32 @@
             cursor: pointer;
             padding: 4px;
         }
-        .esri-nav-btn:hover { color: #000; }
-        .esri-nav-btn span { font-size: 24px; }
 
-    </style>
-    
-    <script>
-    // Update Slider Logic for 1-Year View
-    function handleSliderInput(dayOfYear) {
-        // Assume Year 2024 for "Recent" context
-        const year = 2024;
-        const start = new Date(year, 0, 1).getTime(); // Jan 1
-        const dayMs = 24 * 60 * 60 * 1000;
-        
-        const currentMs = start + (dayOfYear * dayMs);
-        const date = new Date(currentMs);
-
-        // Update Labels
-        const options = { month: 'short', day: 'numeric', year: 'numeric' };
-        document.getElementById('sliderDateDisplay').textContent = date.toLocaleDateString('en-US', options);
-        
-        // Trigger Analysis (simulated)
-        if(window.updateAnalysisWithDate) {
-            window.updateAnalysisWithDate(date);
-        }
-    }
-    
-    // Initialize labels
-    setTimeout(() => {
-        document.getElementById('startDateLabel').textContent = "1/1/2024";
-        document.getElementById('endDateLabel').textContent = "12/31/2024";
-    }, 500);
-    </script>
-
-        .temporal-range::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            height: 18px;
-            width: 18px;
-            border-radius: 50%;
-            background: #ffffff;
-            border: 5px solid #005e95;
-            cursor: pointer;
-            margin-top: -7px;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        .esri-nav-btn:hover {
+            color: #000;
         }
 
-        .temporal-range::-webkit-slider-runnable-track {
-            width: 100%;
-            height: 4px;
-            background: #e0e0e0;
-            border-radius: 2px;
-        }
-
-        .esri-ticks {
-            position: absolute;
-            top: 22px;
-            /* Position below track */
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: space-between;
-            pointer-events: none;
-            padding: 0 8px;
-            /* Align with slider thumb limits */
-        }
-
-        .tick-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 1px;
-        }
-
-        .tick-wrapper .tick {
-            width: 1px;
-            height: 4px;
-            background: #e0e0e0;
-        }
-
-        .tick-wrapper.major .tick {
-            height: 8px;
-            background: #999;
-        }
-
-        .tick-label {
-            margin-top: 4px;
-            font-size: 10px;
-            color: #999;
-            transform: translateX(0%);
-            /* Center label */
+        .esri-nav-btn span {
+            font-size: 24px;
         }
     </style>
 
     <script>
+        // Constants for the Slider Timeline (Fixed 5-Year Window)
+        // e.g., 2021-01-01 to Today (Dynamic End)
+        const TIMELINE_START = new Date('2021-01-01').getTime();
+        const TIMELINE_END = new Date().getTime(); // Today
+        const TIMELINE_DAYS = Math.ceil((TIMELINE_END - TIMELINE_START) / (1000 * 60 * 60 * 24));
+
         let timelinePlaying = false;
-        let timelineInterval = null;
+        let playInterval = null;
 
-        // Toggle visibility based on Temporal Mode
         function updateSliderVisibility() {
             const slider = document.getElementById('temporalSliderContainer');
-            if (temporalMode) {
+            // Assuming 'temporalMode' is defined elsewhere or will be defined.
+            // For now, let's assume it's a global variable or passed.
+            // If not, this function might need adjustment or 'temporalMode' defined.
+            if (window.temporalMode) { // Using window.temporalMode as a placeholder
                 slider.classList.add('visible');
             } else {
                 slider.classList.remove('visible');
@@ -1813,111 +2753,355 @@
             }
         }
 
-        // Hook into existing toggleTemporalMode
-        // Note: verify if we need to modify the original function or if this script executes after
-        // Since this is appended at the end, we can override or hook. 
-        // Safer to modify the original function in a separate edit, but here I'll add a listener?
-        // Actually, I'll modify toggleTemporalMode in the next step to call updateSliderVisibility.
-        // For now, I'll just expose these functions.
 
-        function stepTimeline(direction) {
-            // Step by roughly 1 month (approx 30 steps in 2000 range)
-            const range = document.getElementById('temporalRange');
-            let val = parseInt(range.value) + (direction * 30);
-            val = Math.max(0, Math.min(2000, val));
-            range.value = val;
-            handleSliderInput(val);
-        }
 
-        function handleSliderInput(val) {
-            // Map 0-100 to date range (Jan 2020 - Dec 2025)
-            // Total months = 6 years * 12 = 72 months.
-            // But let's simplify: 2020 to 2025 is 5 years.
-            // Let's do Jan 1, 2020 to Date.now()
+        async function updateWeatherWidget(lat, lng, dateString) {
+            const widget = document.getElementById('weatherWidget');
+            if (!widget) return;
 
-            const startDate = new Date('2020-01-01').getTime();
-            const endDate = new Date().getTime();
-            const timeRange = endDate - startDate;
-            // Map 0-2000 to full date range
-            const targetTime = startDate + (val / 2000) * timeRange;
-            const targetDate = new Date(targetTime);
-
-            // Format: "Month Year" or "M/D/YYYY" based on preference
-            // ArcGIS style usually emphasizes concise dates
-            const options = { year: 'numeric', month: 'short', day: 'numeric' };
-            const dateStr = targetDate.toLocaleDateString('en-US', options);
-
-            document.getElementById('sliderDateDisplay').textContent = dateStr;
-
-            // Update hidden input for consistency
             try {
-                document.getElementById('temporalDateInput').value = targetDate.toISOString().split('T')[0];
-            } catch (e) { }
+                // Determine if future
+                const d = new Date(dateString);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const isFuture = d > today;
 
-            // Trigger Analysis Update
-            updateAnalysisWithDate(targetDate);
-        }
+                // Fetch 4 days of daily data AND hourly data
+                // Open-Meteo expects YYYY-MM-DD
+                const startDate = dateString;
+                const endDateObj = new Date(d);
+                endDateObj.setDate(d.getDate() + 3);
+                const endDate = endDateObj.toISOString().split('T')[0];
 
-        function handleDateInput(dateStr) {
-            if (!dateStr) return;
-            const targetDate = new Date(dateStr);
+                const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,windspeed_10m_max&hourly=temperature_2m,weathercode,is_day&timezone=auto&start_date=${startDate}&end_date=${endDate}`;
 
-            // Sync Slider Position
-            const startDate = new Date('2020-01-01').getTime();
-            const endDate = new Date().getTime();
-            const timeRange = endDate - startDate;
-            const targetTime = targetDate.getTime();
+                const response = await fetch(url);
+                const data = await response.json();
 
-            let val = ((targetTime - startDate) / timeRange) * 2000;
-            val = Math.max(0, Math.min(2000, val));
-            document.getElementById('temporalRange').value = val;
+                if (!data.daily || !data.daily.weathercode || data.daily.weathercode.length === 0) {
+                    widget.innerHTML = '<div style="color: #ea4335; font-size: 13px;">Weather data unavailable</div>';
+                    return;
+                }
 
-            // Trigger Analysis
-            handleSliderInput(val);
-        }
+                // Helper to map WMO code to Standard Material Icons with Day/Night support
+                const getWeatherInfo = (code, isDay = 1) => {
+                    // Codes: https://open-meteo.com/en/docs
+                    // 0: Clear
+                    if (code === 0) return isDay ? { icon: 'wb_sunny', label: 'Clear' } : { icon: 'bedtime', label: 'Clear' };
 
-        function updateAnalysisWithDate(targetDate) {
-            if (lastAnalysisData) {
-                performSatelliteAnalysis(
-                    lastAnalysisData.location,
-                    lastAnalysisData.bounds,
-                    lastAnalysisData.placeName,
-                    lastAnalysisData.geocodeResult,
-                    targetDate
-                );
+                    // 1, 2, 3: Mainly Clear, Partly Cloudy, Overcast
+                    if (code === 1) return isDay ? { icon: 'wb_sunny', label: 'Mainly Clear' } : { icon: 'bedtime', label: 'Mainly Clear' };
+                    if (code === 2) return isDay ? { icon: 'wb_cloudy', label: 'Partly Cloudy' } : { icon: 'cloud_queue', label: 'Partly Cloudy' }; // wb_cloudy = sun+cloud
+                    if (code === 3) return { icon: 'cloud', label: 'Overcast' };
+
+                    // 45, 48: Fog
+                    if (code >= 45 && code <= 48) return { icon: 'blur_on', label: 'Fog' };
+
+                    // 51-67: Drizzle & Rain
+                    if (code >= 51 && code <= 57) return { icon: 'grain', label: 'Drizzle' }; // Grain for light/drizzle
+                    if (code >= 61 && code <= 65) return { icon: 'water_drop', label: 'Rain' }; // Standard rain
+                    if (code >= 66 && code <= 67) return { icon: 'umbrella', label: 'Heavy Rain' }; // Freezing rain / heavy usage -> umbrella
+
+                    // 71-77: Snow
+                    if (code >= 71 && code <= 77) return { icon: 'ac_unit', label: 'Snow' };
+
+                    // 80-86: Showers
+                    if (code >= 80 && code <= 82) return { icon: 'opacity', label: 'Showers' };
+                    if (code >= 85 && code <= 86) return { icon: 'ac_unit', label: 'Snow Showers' };
+
+                    // 95-99: Thunderstorm
+                    if (code >= 95 && code <= 99) return { icon: 'flash_on', label: 'Storm' };
+
+                    return { icon: 'help_outline', label: 'Unknown' };
+                };
+
+                const daily = data.daily;
+                const days = daily.time.map((t, i) => ({
+                    date: t,
+                    code: daily.weathercode[i],
+                    max: daily.temperature_2m_max[i],
+                    min: daily.temperature_2m_min[i],
+                    rainSum: daily.precipitation_sum[i],
+                    rainProb: daily.precipitation_probability_max[i],
+                    wind: daily.windspeed_10m_max[i],
+                    info: getWeatherInfo(daily.weathercode[i], 1) // Daily summary assumes day icon
+                }));
+
+                // Process Hourly Data
+                // If isFuture (not today), start from 8am. If today, start from now.
+                let startHourIndex = 0;
+                if (!isFuture) {
+                    const currentHour = new Date().getHours();
+                    // Hourly times are array of strings. Find index matching current hour.
+                    // Simple hack: data.hourly.time starts at startDate 00:00.
+                    // So index = currentHour
+                    startHourIndex = currentHour;
+                } else {
+                    startHourIndex = 8; // Start at 8 AM for future dates
+                }
+
+                // Get 24 slices (Full Day)
+                const hourlyData = [];
+                if (data.hourly && data.hourly.time) {
+                    for (let i = 0; i < 24; i++) {
+                        const idx = startHourIndex + i;
+                        if (idx < data.hourly.time.length) {
+                            const isDay = data.hourly.is_day[idx]; // 0 or 1
+                            hourlyData.push({
+                                time: data.hourly.time[idx],
+                                temp: data.hourly.temperature_2m[idx],
+                                code: data.hourly.weathercode[idx],
+                                info: getWeatherInfo(data.hourly.weathercode[idx], isDay)
+                            });
+                        }
+                    }
+                }
+
+                const current = days[0];
+                const forecast = days.slice(1, 4);
+
+                const badge = isFuture
+                    ? `<span class="ai-prediction-badge" style="margin-left:auto;">✨ AI Forecast</span>`
+                    : `<span style="margin-left:auto; background:#E6F4EA; color:#188038; font-size:10px; padding:2px 6px; border-radius:4px; font-weight:bold;">LIVE</span>`;
+
+                // Generate Hourly HTML
+                const hourlyHTML = hourlyData.map(h => {
+                    const hDate = new Date(h.time);
+                    const hours = hDate.getHours();
+                    const ampm = hours >= 12 ? 'PM' : 'AM';
+                    const displayHour = hours % 12 || 12;
+                    return `
+                        <div class="hourly-item">
+                            <div class="hourly-time">${displayHour} ${ampm}</div>
+                            <span class="material-icons" style="font-size: 18px; color: #5F6368; margin-bottom: 2px;">${h.info.icon}</span>
+                            <div class="hourly-temp">${Math.round(h.temp)}°</div>
+                        </div>
+                    `;
+                }).join('');
+
+                // Generate Daily Forecast HTML
+                const forecastHTML = forecast.map(day => {
+                    const dObj = new Date(day.date);
+                    const dayName = dObj.toLocaleDateString('en-US', { weekday: 'short' });
+                    return `
+                    <div class="forecast-item">
+                        <div class="forecast-day">${dayName}</div>
+                        <span class="material-icons" style="font-size: 20px; color: #5F6368; margin-bottom: 4px;">${day.info.icon}</span>
+                        <div class="forecast-temp">
+                            ${Math.round(day.max)}° <span class="forecast-temp-low">${Math.round(day.min)}°</span>
+                        </div>
+                    </div>
+                   `;
+                }).join('');
+
+                // Reset widget container styles to prevent double-padding/overflow
+                widget.className = '';
+                widget.style.cssText = 'margin-bottom: 12px;'; // Maintain spacing but remove flex/border
+
+                widget.innerHTML = `
+                    <div class="weather-card-content animate-in">
+                        <div class="card-title" style="display:flex; align-items:center; margin-bottom: 16px;">
+                            Weather Outlook ${badge}
+                        </div>
+                        
+                        <!-- Main Selected Date Display -->
+                        <div class="weather-main">
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <span class="material-icons" style="color: #1967d2; font-size: 48px;">${current.info.icon}</span>
+                                <div>
+                                    <div class="weather-temp-large">${Math.round(current.max)}°</div>
+                                    <div class="weather-condition-pill">${current.info.label}</div>
+                                </div>
+                            </div>
+                            <div style="text-align: right; font-size: 13px; color: #5F6368;">
+                                <div style="margin-bottom:4px;"><span class="material-icons" style="font-size:14px; vertical-align:middle; color:#1a73e8;">water_drop</span> ${current.rainProb}%</div>
+                                <div><span class="material-icons" style="font-size:14px; vertical-align:middle; color:#1a73e8;">air</span> ${current.wind} km/h</div>
+                            </div>
+                        </div>
+
+                        <!-- Hourly Scroll -->
+                        <div class="hourly-wrapper">
+                            <div class="scroll-arrow left" onclick="this.nextElementSibling.scrollBy({left: -200, behavior: 'smooth'})">
+                                <span class="material-icons" style="font-size:18px;">chevron_left</span>
+                            </div>
+                            <div class="hourly-container">
+                                ${hourlyHTML}
+                            </div>
+                            <div class="scroll-arrow right" onclick="this.previousElementSibling.scrollBy({left: 200, behavior: 'smooth'})">
+                                <span class="material-icons" style="font-size:18px;">chevron_right</span>
+                            </div>
+                        </div>
+
+                        <!-- 3-Day Mini Forecast -->
+                        <div class="forecast-grid">
+                            ${forecastHTML}
+                        </div>
+                    </div>
+                `;
+
+            } catch (e) {
+                console.error("Weather fetch failed", e);
+                // On error, revert to simple style
+                widget.className = 'result-card';
+                widget.innerHTML = '<div style="color: #ea4335; font-size: 13px;">Weather unavailable</div>';
             }
         }
 
         function toggleTimelinePlay() {
             timelinePlaying = !timelinePlaying;
             const icon = document.getElementById('playIcon');
-            const range = document.getElementById('temporalRange');
+            const range = document.getElementById('temporalRangeEnd');
 
             if (timelinePlaying) {
                 icon.textContent = 'pause';
-                timelineInterval = setInterval(() => {
-                    let val = parseInt(range.value);
-                    if (val >= 2000) val = 0; // Loop
-                    val += 10; // Speed of animation
+                playInterval = setInterval(() => {
+                    let val = parseInt(range.value) + 2;
+                    if (val > range.max) {
+                        val = 0;
+                        document.getElementById('temporalRangeStart').value = 0; // Reset start too?
+                    }
                     range.value = val;
-                    handleSliderInput(val);
+                    handleDualSliderInput('end', val);
                 }, 50);
             } else {
                 icon.textContent = 'play_arrow';
-                stopTimeline();
+                clearInterval(playInterval);
             }
         }
 
         function stopTimeline() {
-            if (timelineInterval) {
-                clearInterval(timelineInterval);
-                timelineInterval = null;
-            }
             timelinePlaying = false;
             const icon = document.getElementById('playIcon');
             if (icon) icon.textContent = 'play_arrow';
+            clearInterval(playInterval);
         }
+
+        function handleInputDateChange(source) {
+            const startInput = document.getElementById('startDateInput');
+            const endInput = document.getElementById('endDateInput');
+            const sliderStart = document.getElementById('temporalRangeStart');
+            const sliderEnd = document.getElementById('temporalRangeEnd');
+
+            if (!startInput.value || !endInput.value) return;
+
+            const targetDate = new Date(source === 'start' ? startInput.value : endInput.value).getTime();
+
+            // Calculate Slider Value from Date
+            let val = Math.ceil((targetDate - TIMELINE_START) / (1000 * 60 * 60 * 24));
+            val = Math.max(0, Math.min(TIMELINE_DAYS, val));
+            // Global function for timeline callback
+            window.updateAnalysisWithDate = function (date) {
+                // 1. Update Map Visual (Simulate Change)
+                updateMapOverlay(currentAnalysisType);
+
+                // 2. Update Analysis Panel Data (if location is selected)
+                if (lastAnalysisData) {
+                    // Pass dateOverride to performSatelliteAnalysis
+                    // We use a small timeout to debounce if playing fast, but performSatelliteAnalysis handles some delay.
+                    // For smoother playback, we might want to skip heavy analysis if playing?
+                    // For now, let's just trigger it.
+                    performSatelliteAnalysis(
+                        lastAnalysisData.location,
+                        lastAnalysisData.bounds,
+                        lastAnalysisData.placeName,
+                        lastAnalysisData.geocodeResult,
+                        date // Pass the new date
+                    );
+                }
+            };
+            if (source === 'start') {
+                sliderStart.value = val;
+                handleDualSliderInput('start', val);
+            } else {
+                sliderEnd.value = val;
+                handleDualSliderInput('end', val);
+            }
+        }
+
+        function handleDualSliderInput(source, val) {
+            const sliderStart = document.getElementById('temporalRangeStart');
+            const sliderEnd = document.getElementById('temporalRangeEnd');
+            let startVal = parseInt(sliderStart.value);
+            let endVal = parseInt(sliderEnd.value);
+
+            // Constraint: Start <= End
+            if (startVal > endVal) {
+                if (source === 'start') {
+                    sliderStart.value = endVal;
+                    startVal = endVal;
+                } else {
+                    sliderEnd.value = startVal;
+                    endVal = startVal;
+                }
+            }
+
+            // Update Highlight
+            const max = parseInt(sliderEnd.max) || TIMELINE_DAYS;
+            const leftPercent = (startVal / max) * 100;
+            const widthPercent = ((endVal - startVal) / max) * 100;
+
+            const highlight = document.getElementById('rangeHighlight');
+            if (highlight) {
+                highlight.style.left = leftPercent + "%";
+                highlight.style.width = widthPercent + "%";
+            }
+
+            // Update The Date Inputs to match the Slider Handles
+            const startDate = new Date(TIMELINE_START + (startVal * 24 * 60 * 60 * 1000));
+            const endDate = new Date(TIMELINE_START + (endVal * 24 * 60 * 60 * 1000));
+
+            const sStr = startDate.toISOString().split('T')[0];
+            const eStr = endDate.toISOString().split('T')[0];
+
+            const startInput = document.getElementById('startDateInput');
+            const endInput = document.getElementById('endDateInput');
+
+            // Only update input if it's not the one being typed into (to avoid cursor weirdness?)
+            // Actually, for slider drag, we MUST update inputs. 
+            // For input type, we might re-set it, which is fine.
+            if (startInput.value !== sStr) startInput.value = sStr;
+            if (endInput.value !== eStr) endInput.value = eStr;
+
+            // Trigger Analysis
+            if (window.updateAnalysisWithDate) {
+                window.updateAnalysisWithDate(endDate); // Use End date for map state?
+            }
+        }
+
+        function getDateFromSliderVal(val) {
+            // Helper no longer needed but kept for safety if wrappers use it?
+            // Replaced by direct calc above.
+            return "";
+        }
+
+        // Init
+        setTimeout(() => {
+            const sliderStart = document.getElementById('temporalRangeStart');
+            const sliderEnd = document.getElementById('temporalRangeEnd');
+
+            if (sliderStart && sliderEnd) {
+                sliderStart.max = TIMELINE_DAYS;
+                sliderEnd.max = TIMELINE_DAYS;
+
+                // Default: Last 1 Year
+                const oneYearDays = 365;
+                sliderStart.value = Math.max(0, TIMELINE_DAYS - oneYearDays);
+                sliderEnd.value = TIMELINE_DAYS;
+
+                handleDualSliderInput('end', TIMELINE_DAYS);
+            }
+
+            // Set Default Insight Date to Today
+            const insightDateInput = document.getElementById('insightDateInput');
+            if (insightDateInput) {
+                insightDateInput.value = new Date().toISOString().split('T')[0];
+            }
+        }, 500);
     </script>
+
+
+
+
 </body>
 
 </html>

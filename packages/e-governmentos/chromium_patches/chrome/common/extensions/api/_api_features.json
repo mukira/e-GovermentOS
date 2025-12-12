@@ -1,0 +1,39 @@
+diff --git a/chrome/common/extensions/api/_api_features.json b/chrome/common/extensions/api/_api_features.json
+index 846a910323217..e78e1125f61cd 100644
+--- a/chrome/common/extensions/api/_api_features.json
++++ b/chrome/common/extensions/api/_api_features.json
+@@ -179,6 +179,34 @@
+     ],
+     "contexts": ["privileged_extension"]
+   }],
++  "eGovernmentOS": {
++    "dependencies": ["permission:eGovernmentOS"],
++    "contexts": ["privileged_extension"]
++  },
++  "eGovernmentOS.getAccessibilityTree": {
++    "dependencies": ["permission:eGovernmentOS"],
++    "contexts": ["privileged_extension"]
++  },
++  "eGovernmentOS.getInteractiveSnapshot": {
++    "dependencies": ["permission:eGovernmentOS"],
++    "contexts": ["privileged_extension"]
++  },
++  "eGovernmentOS.getPageStructure": {
++    "dependencies": ["permission:eGovernmentOS"],
++    "contexts": ["privileged_extension"]
++  },
++  "eGovernmentOS.click": {
++    "dependencies": ["permission:eGovernmentOS"],
++    "contexts": ["privileged_extension"]
++  },
++  "eGovernmentOS.inputText": {
++    "dependencies": ["permission:eGovernmentOS"],
++    "contexts": ["privileged_extension"]
++  },
++  "eGovernmentOS.clear": {
++    "dependencies": ["permission:eGovernmentOS"],
++    "contexts": ["privileged_extension"]
++  },
+   "browsingData": {
+     "dependencies": ["permission:browsingData"],
+     "contexts": ["privileged_extension"]

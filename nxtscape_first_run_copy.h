@@ -305,7 +305,7 @@ section + section{padding-top:2.75rem;}
    </span>
    Discord
   </a>
-  <a href="https://github.com/browseros-ai/E-Nation OS">
+  <a href="https://github.com/e-governmentos-ai/E-Nation OS">
    <span class="icon" aria-hidden="true">
     <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
      <title>GitHub</title>
